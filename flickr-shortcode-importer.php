@@ -28,6 +28,11 @@ if ( ! defined( 'FSI_USE_OKAY' ) ) {
 	die( __( 'Flickr Shortcode Importer is NOT reaady for use', 'flickr-shortcode-importer' ) );
 }
 
+
+// Load dependencies
+require_once( dirname(__FILE__) . '/lib/inc.flickr.php' );
+
+
 class Flickr_Shortcode_Importer {
 	var $menu_id;
 
@@ -95,6 +100,10 @@ class Flickr_Shortcode_Importer {
 	<h2><?php _e('Flickr Shortcode Importer', 'flickr-shortcode-importer'); ?></h2>
 
 <?php
+		// TODO testing helper
+		if ( $_REQUEST['importflickrshortcode'] ) {
+			$this->ajax_process_shortcode();
+		}
 
 		// If the button was clicked
 		if ( ! empty( $_POST['flickr-shortcode-importer'] ) || ! empty( $_REQUEST['posts'] ) ) {
@@ -114,26 +123,29 @@ class Flickr_Shortcode_Importer {
 				// Directly querying the database is normally frowned upon, but all
 				// of the API functions will return the full post objects which will
 				// suck up lots of memory. This is best, just not as future proof.
-				if ( ! $results = $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_content LIKE '%[flickr%' ORDER BY ID DESC LIMIT 1" ) ) {
-					echo '	<p>' . _e( 'No [flickr] codes found in posts', 'flickr-shortcode-importer' ) . "</p></div>";
-					return;
-				}
-
-				$count			= count( $results );
+				$results		= $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_parent = 0 AND post_content LIKE '%[flickr %' ORDER BY ID DESC LIMIT 1" );
+				$count			= 0;
 
 				// Generate the list of IDs
 				$posts			= array();
 				foreach ( $results as $post ) {
 					$posts[]	= $post->ID;
+					$count++;
 				}
+
+				if ( ! $count ) {
+					echo '	<p>' . _e( 'All done. No [flickr] codes found in posts', 'flickr-shortcode-importer' ) . "</p></div>";
+					return;
+				}
+
 				$posts			= implode( ',', $posts );
 			}
 
-			echo '	<p>' . __( "Please be patient while the [flickr] shortcodes are imported. This can take a while if your server is slow or if you have many [flickr] shortcodes in your post content. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+			echo '	<p>' . __( "Please be patient while the [flickr] shortcodes are processed. This can take a while, up to 5 minutes per post, if your server is slow, have low bandwidth, or have many [flickr] shortcodes in your post content. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
 
 			$text_goback = ( ! empty( $_GET['goback'] ) ) ? sprintf( __( 'To go back to the previous page, <a href="%s">click here</a>.', 'flickr-shortcode-importer' ), 'javascript:history.go(-1)' ) : '';
-			$text_failures = sprintf( __( 'All done! %1$s [flickr](s) were successfully imported in %2$s seconds and there were %3$s failure(s). To try importing the failed [flickr]s again, <a href="%4$s">click here</a>. %5$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", "' + rt_errors + '", esc_url( wp_nonce_url( admin_url( 'tools.php?page=flickr-shortcode-importer&goback=1' ), 'flickr-shortcode-importer' ) . '&posts=' ) . "' + rt_failedlist + '", $text_goback );
-			$text_nofailures = sprintf( __( 'All done! %1$s [flickr](s) were successfully imported in %2$s seconds and there were 0 failures. %3$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", $text_goback );
+			$text_failures = sprintf( __( 'All done! %1$s [flickr](s) were successfully processed in %2$s seconds and there were %3$s failure(s). To try importing the failed [flickr]s again, <a href="%4$s">click here</a>. %5$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", "' + rt_errors + '", esc_url( wp_nonce_url( admin_url( 'tools.php?page=flickr-shortcode-importer&goback=1' ), 'flickr-shortcode-importer' ) . '&posts=' ) . "' + rt_failedlist + '", $text_goback );
+			$text_nofailures = sprintf( __( 'All done! %1$s [flickr](s) were successfully processed in %2$s seconds and there were no failures. %3$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", $text_goback );
 ?>
 
 	<noscript><p><em><?php _e( 'You must enable Javascript in order to proceed!', 'flickr-shortcode-importer' ) ?></em></p></noscript>
@@ -147,7 +159,7 @@ class Flickr_Shortcode_Importer {
 	<h3 class="title"><?php _e( 'Debugging Information', 'flickr-shortcode-importer' ) ?></h3>
 
 	<p>
-		<?php printf( __( 'Total [flickr]: %s', 'flickr-shortcode-importer' ), $count ); ?><br />
+		<?php printf( __( 'Total [flickr]s: %s', 'flickr-shortcode-importer' ), $count ); ?><br />
 		<?php printf( __( '[flickr]s Imported: %s', 'flickr-shortcode-importer' ), '<span id="fsiposts-debug-successcount">0</span>' ); ?><br />
 		<?php printf( __( 'Import Failures: %s', 'flickr-shortcode-importer' ), '<span id="fsiposts-debug-failurecount">0</span>' ); ?>
 	</p>
@@ -186,7 +198,7 @@ class Flickr_Shortcode_Importer {
 			// Clear out the empty list element that's there for HTML validation purposes
 			$("#fsiposts-debuglist li").remove();
 
-			// Called after each resize. Updates debug information and the progress bar.
+			// Called after each import. Updates debug information and the progress bar.
 			function FSIPostsUpdateStatus( id, success, response ) {
 				$("#fsiposts-bar").progressbar( "value", ( rt_count / rt_total ) * 100 );
 				$("#fsiposts-bar-percent").html( Math.round( ( rt_count / rt_total ) * 1000 ) / 10 + "%" );
@@ -293,43 +305,170 @@ class Flickr_Shortcode_Importer {
 	function ajax_process_shortcode() {
 		@error_reporting( 0 ); // Don't break the JSON result
 
-		header( 'Content-type: application/json' );
+		// header( 'Content-type: application/json' );
 
-		$id = (int) $_REQUEST['id'];
-		$image = get_post( $id );
-		die( json_encode( array( 'success' => sprintf( __( '&quot;%1$s&quot; (ID %2$s) was successfully imported in %3$s seconds.', 'flickr-shortcode-importer' ), esc_html( get_the_title( $image->ID ) ), $image->ID, timer_stop() ) ) ) );
+		// Peimic.com API key
+		$api_key				= 'd7a73fed961744db01c498ca910a003d';
+		$secret					= '7d8a757b8bc2b50b';
+		$this->flickr			= new phpFlickr($api_key, $secret);
 
+		// only use our shortcode handlers to prevent messing up post content 
+		remove_all_shortcodes();
+		add_shortcode('flickr', array( &$this, 'shortcode_flickr' ) );
 
-		if ( ! $image || 'attachment' != $image->post_type || 'image/' != substr( $image->post_mime_type, 0, 6 ) )
-			die( json_encode( array( 'error' => sprintf( __( 'Failed resize: %s is an invalid image ID.', 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
+		$id						= (int) $_REQUEST['id'];
+		$post					= get_post( $id );
+
+		if ( ! $post || 'post' != $post->post_type || ! stristr( $post->post_content, '[flickr' ) )
+			die( json_encode( array( 'error' => sprintf( __( 'Failed import: %s is an invalid image ID.', 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
 
 		if ( !current_user_can( 'manage_options' ) )
-			$this->die_json_error_msg( $image->ID, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
-
-		$fullsizepath = get_attached_file( $image->ID );
-
-		if ( false === $fullsizepath || ! file_exists( $fullsizepath ) )
-			$this->die_json_error_msg( $image->ID, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), '<code>' . esc_html( $fullsizepath ) . '</code>' ) );
+			$this->die_json_error_msg( $post->ID, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
 
 		@set_time_limit( 300 ); // 5 minutes per post should be PLENTY
 
-		$metadata = wp_generate_attachment_metadata( $image->ID, $fullsizepath );
+		// process [flickr] codes in posts
+		// process each [flickr] entry
+		// pull original Flickr image
+		// add image to media library
+		// relate image to post
+		// if first image, set as featured and remove that [flickr] from post
+		// remaining [flickr] converted to locally reference image
+		$this->featured_id		= false;
+		$this->menu_order		= 1;
+		$this->post_id			= $post->ID;
+		$post_content			= do_shortcode( $post->post_content );
+		$post					= array(
+			'ID'			=> $post->ID,
+			'post_content'	=> $post_content
+		);
+
+		wp_update_post( $post );
+
+		if ( $this->featured_id )
+			update_post_meta( $post->ID, "_thumbnail_id", $this->featured_id );
+
+		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $post->ID ), esc_html( get_the_title( $post->ID ) ), $post->ID, timer_stop() ) ) ) );
+	}
+
+	
+	function shortcode_flickr($args) {
+		$photo					= $this->flickr->photos_getInfo( $args['id'] );
+		$photo					= $photo['photo'];
+		$contexts				= $this->flickr->photos_getAllContexts( $args['id'] );
+		$photo['caption']		= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
+
+		$size					= $this->get_shortcode_image_size( $args['thumbnail'] );
+		$align					= $args['align'] ? $args['align'] : 'none';
+		$markup					= '';
+		
+		if ( 'photo' == $photo['media'] ) {
+			$src				= $this->flickr->buildPhotoURL($photo, 'original');
+			$image_id			= $this->import_image( $src, $photo );
+			$image_tag			= wp_get_attachment_image( $image_id, $size );
+
+			$image_link			= wp_get_attachment_link($id, 'large');
+			print_r($image_link); echo '<br />'; echo '' . __LINE__  . '<br />';
+
+			// set class for align per $args['align']
+			$align				= ' align' . $align;
+			$size				= ' size-' . $size;
+			$wp_image			= ' wp-image--' . $image_id;
+			$image_tag			= preg_replace( '#(class="[^"]+)"#', '\1'
+				. $align
+				. $size
+				. $wp_image
+				. '"', $image_tag );
+
+			// TODO need to wrap in link to attachment itself
+			$markup				= $image_tag;
+			exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );	
+
+		} elseif ($photo['media'] == 'video' && in_array($args['thumbnail'], array('video_player','site_mp4'))) {
+			$markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
+		}
+		
+		return $markup;
+	}
+
+
+	// correct none thumbnail, medium, large or full size values
+	function get_shortcode_image_size( $size_name ) {
+		switch ( $size_name ) {
+			case 'square':
+			case 'thumbnail':
+			case 'small':
+				$size			= 'thumbnail';
+				break;
+
+			case 'medium':
+			case 'medium_640':
+				$size			= 'medium';
+				break;
+
+			case 'large':
+				$size			= 'large';
+				break;
+
+			case 'original':
+				$size			= 'full';
+				break;
+		}
+
+		return $size;
+	}
+	
+
+	function import_image( $src, $photo ) {
+		$title				= $photo['title'];
+		$alt				= $title;
+		$desc				= $photo['description'];
+		$date				= $photo['dates']['taken'];
+		$caption			= $photo['caption'];
+
+		$file				= basename( $src );
+		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );
+		$filename			= $file_move['file'];
+
+		$wp_filetype		= wp_check_filetype($file, null);
+		$attachment			= array(
+			'menu_order'		=> $this->menu_order++,
+			'post_content'		=> $desc,
+			'post_date'			=> $date,
+			'post_excerpt'		=> $caption,
+			'post_mime_type'	=> $wp_filetype['type'],
+			'post_status'		=> 'inherit',
+			'post_title'		=> $title,
+		);
+		$image_id			= wp_insert_attachment( $attachment, $filename, $this->post_id );
+
+		if ( ! $image_id )
+			$this->die_json_error_msg( $post->ID, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), '<code>' . esc_html( $filename ) . '</code>' ) );
+
+		// TODO test it works
+		if ( ! $this->featured_id ) {
+			$this->featured_id	= $image_id;
+		}
+
+		$metadata			= wp_generate_attachment_metadata( $image_id, $filename );
 
 		if ( is_wp_error( $metadata ) )
-			$this->die_json_error_msg( $image->ID, $metadata->get_error_message() );
+			$this->die_json_error_msg( $post->ID, $metadata->get_error_message() );
+
 		if ( empty( $metadata ) )
-			$this->die_json_error_msg( $image->ID, __( 'Unknown failure reason.', 'flickr-shortcode-importer' ) );
+			$this->die_json_error_msg( $post->ID, __( 'Unknown failure reason.', 'flickr-shortcode-importer' ) );
 
 		// If this fails, then it just means that nothing was changed (old value == new value)
-		wp_update_attachment_metadata( $image->ID, $metadata );
+		wp_update_attachment_metadata( $image_id, $metadata );
+		update_post_meta( $image_id, '_wp_attachment_image_alt', $alt );
 
-		die( json_encode( array( 'success' => sprintf( __( '&quot;%1$s&quot; (ID %2$s) was successfully imported in %3$s seconds.', 'flickr-shortcode-importer' ), esc_html( get_the_title( $image->ID ) ), $image->ID, timer_stop() ) ) ) );
+		return $image_id;
 	}
 
 
 	// Helper to make a JSON error message
 	function die_json_error_msg( $id, $message ) {
-		die( json_encode( array( 'error' => sprintf( __( '&quot;%1$s&quot; (ID %2$s) failed to be imported. The error message was: %3$s', 'flickr-shortcode-importer' ), esc_html( get_the_title( $id ) ), $id, $message ) ) ) );
+		die( json_encode( array( 'error' => sprintf( __( '&quot;%1$s&quot; Post ID %2$s failed to be processed. The error message was: %3$s', 'flickr-shortcode-importer' ), esc_html( get_the_title( $id ) ), $id, $message ) ) ) );
 	}
 
 

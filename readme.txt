@@ -23,7 +23,9 @@ Optional to remove first [flickr] from post content that's been used as Featured
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
 
-Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin.
+= Thank You =
+* Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
+* [flickr] shortcode handling code copied from Trent Gardner's very fine Flickr Manager plugin.
 
 == Installation ==
 1. Upload the `flickr-shortcode-importer` folder to the `/wp-content/plugins/` directory

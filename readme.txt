@@ -6,10 +6,10 @@ Requires at least: 3.0.0
 Tested up to: 3.2.1
 Stable tag: 1.0.0
 
-Import [flickr] shortcodes into Media Library. First [flickr] image is set as the post's Featured Images. Handy for transitioning from plugin wordpress-flickr-manager to own Media Library.
+Import [flickr] shortcodes into the Media Library.
 
 == Description ==
-Import [flickr] shortcodes into Media Library. First [flickr] image is set as the post's Featured Images. [flickr] shortcodes are then transitioned to like sized locally referenced images.
+Import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.
 
 Handy for transitioning from plugin `wordpress-flickr-manager` to own Media Library.
 

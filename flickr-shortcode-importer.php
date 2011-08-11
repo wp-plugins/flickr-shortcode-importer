@@ -2,7 +2,7 @@
 /*
 	Plugin Name: Flickr Shortcode Importer
 	Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
-	Description: Import [flickr] shortcodes into Media Library. First [flickr] image is set as the post's Featured Images. Handy for transitioning from plugin wordpress-flickr-manager to own Media Library.
+	Description: Import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.
 	Version: 1.0.0
 	Author: Michael Cannon
 	Author URI: http://peimic.com/contact-peimic/
@@ -36,19 +36,31 @@ class FlickrShortcodeImporter {
 		// Place it in this plugin's "localization" folder and name it "flickr-shortcode-importer-[value in wp-config].mo"
 		load_plugin_textdomain( 'flickr-shortcode-importer', false, '/flickr-shortcode-importer/localization' );
 
-		add_action( 'admin_menu',                              array( &$this, 'add_admin_menu' ) );
-		add_action( 'admin_enqueue_scripts',                   array( &$this, 'admin_enqueues' ) );
-		add_action( 'wp_ajax_regeneratethumbnail',             array( &$this, 'ajax_process_image' ) );
-		add_filter( 'media_row_actions',                       array( &$this, 'add_media_row_action' ), 10, 2 );
-		//add_filter( 'bulk_actions-upload',                     array( &$this, 'add_bulk_actions' ), 99 ); // A last minute change to 3.1 makes this no longer work
-		add_action( 'admin_head-upload.php',          array( &$this, 'add_bulk_actions_via_javascript' ) );
+		add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueues' ) );
+		add_action( 'wp_ajax_regeneratethumbnail', array( &$this, 'ajax_process_image' ) );
+		add_filter( 'plugin_action_links', array( &$this, 'add_plugin_action_links' ), 10, 2 );
 		add_action( 'admin_action_bulk_regenerate_thumbnails', array( &$this, 'bulk_action_handler' ) );
 	}
 
 
+	// Display a Settings link on the main Plugins page
+	function add_plugin_action_links( $links, $file ) {
+		if ( $file == plugin_basename( __FILE__ ) ) {
+			// $fsi_link			= '<a href="'.get_admin_url().'options-general.php?page=flickr-shortcode-importer/flickr-shortcode-importer.php">'.__('Settings').'</a>';
+			// array_unshift( $links, $fsi_link );
+
+			$fsi_link			= '<a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('Import').'</a>';
+			// make the 'Import' link appear first
+			array_unshift( $links, $fsi_link );
+		}
+
+		return $links;
+	}
+
 	// Register the management page
 	function add_admin_menu() {
-		$this->menu_id = add_management_page( __( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ), __( 'Regen. Thumbnails', 'flickr-shortcode-importer' ), 'manage_options', 'flickr-shortcode-importer', array(&$this, 'regenerate_interface') );
+		$this->menu_id = add_management_page( __( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ), __( '[flickr] Importer', 'flickr-shortcode-importer' ), 'manage_options', 'flickr-shortcode-importer', array(&$this, 'regenerate_interface') );
 	}
 
 
@@ -64,47 +76,6 @@ class FlickrShortcodeImporter {
 			wp_enqueue_script( 'jquery-ui-progressbar', plugins_url( 'jquery-ui/jquery.ui.progressbar.min.1.7.2.js', __FILE__ ), array( 'jquery-ui-core' ), '1.7.2' );
 
 		wp_enqueue_style( 'jquery-ui-regenthumbs', plugins_url( 'jquery-ui/redmond/jquery-ui-1.7.2.custom.css', __FILE__ ), array(), '1.7.2' );
-	}
-
-
-	// Add a "Flickr Shortcode Importer" link to the media row actions
-	function add_media_row_action( $actions, $post ) {
-		if ( 'image/' != substr( $post->post_mime_type, 0, 6 ) )
-			return $actions;
-
-		$url = wp_nonce_url( admin_url( 'tools.php?page=flickr-shortcode-importer&goback=1&ids=' . $post->ID ), 'flickr-shortcode-importer' );
-		$actions['regenerate_thumbnails'] = '<a href="' . esc_url( $url ) . '" title="' . esc_attr( __( "Regenerate the thumbnails for this single image", 'flickr-shortcode-importer' ) ) . '">' . __( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ) . '</a>';
-
-		return $actions;
-	}
-
-
-	// Add "Flickr Shortcode Importer" to the Bulk Actions media dropdown
-	function add_bulk_actions( $actions ) {
-		$delete = false;
-		if ( ! empty( $actions['delete'] ) ) {
-			$delete = $actions['delete'];
-			unset( $actions['delete'] );
-		}
-
-		$actions['bulk_regenerate_thumbnails'] = __( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' );
-
-		if ( $delete )
-			$actions['delete'] = $delete;
-
-		return $actions;
-	}
-
-
-	// Add new items to the Bulk Actions using Javascript
-	// A last minute change to the "bulk_actions-xxxxx" filter in 3.1 made it not possible to add items using that
-	function add_bulk_actions_via_javascript() { ?>
-		<script type="text/javascript">
-			jQuery(document).ready(function($){
-				$('select[name^="action"] option:last-child').before('<option value="bulk_regenerate_thumbnails"><?php echo esc_attr( __( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ) ); ?></option>');
-			});
-		</script>
-<?php
 	}
 
 
@@ -308,15 +279,13 @@ class FlickrShortcodeImporter {
 	<form method="post" action="">
 <?php wp_nonce_field('flickr-shortcode-importer') ?>
 
-	<p><?php printf( __( "Use this tool to regenerate thumbnails for all images that you have uploaded to your blog. This is useful if you've changed any of the thumbnail dimensions on the <a href='%s'>media settings page</a>. Old thumbnails will be kept to avoid any broken images due to hard-coded URLs.", 'flickr-shortcode-importer' ), admin_url( 'options-media.php' ) ); ?></p>
+	<p><?php _e( "Use this tool to import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.", 'flickr-shortcode-importer' ); ?></p>
 
-	<p><?php printf( __( "You can regenerate specific images (rather than all images) from the <a href='%s'>Media</a> page. Hover over an image's row and click the link to resize just that one image or use the checkboxes and the &quot;Bulk Actions&quot; dropdown to resize multiple images (WordPress 3.1+ only).", 'flickr-shortcode-importer '), admin_url( 'upload.php' ) ); ?></p>
-
-	<p><?php _e( "Thumbnail regeneration is not reversible, but you can just change your thumbnail dimensions back to the old values and click the button again if you don't like the results.", 'flickr-shortcode-importer' ); ?></p>
+	<p><?php _e( "Flickr shortcode import is not reversible. Backup your database beforehand.", 'flickr-shortcode-importer' ); ?></p>
 
 	<p><?php _e( 'To begin, just press the button below.', 'flickr-shortcode-importer '); ?></p>
 
-	<p><input type="submit" class="button hide-if-no-js" name="flickr-shortcode-importer" id="flickr-shortcode-importer" value="<?php _e( 'Regenerate All Thumbnails', 'flickr-shortcode-importer' ) ?>" /></p>
+	<p><input type="submit" class="button hide-if-no-js" name="flickr-shortcode-importer" id="flickr-shortcode-importer" value="<?php _e( 'Import Flickr Shortcode', 'flickr-shortcode-importer' ) ?>" /></p>
 
 	<noscript><p><em><?php _e( 'You must enable Javascript in order to proceed!', 'flickr-shortcode-importer' ) ?></em></p></noscript>
 

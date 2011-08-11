@@ -1,12 +1,12 @@
 <?php
 /*
-	Plugin Name: Flickr Shortcode Importer
-	Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
-	Description: Import [flickr] shortcodes into Media Library. First [flickr] image is set as the post's Featured Images. Handy for transitioning from plugin wordpress-flickr-manager to own Media Library.
-	Version: 1.0.0
-	Author: Michael Cannon
-	Author URI: http://peimic.com/contact-peimic/
-	License: GPL2
+X	Plugin Name: Flickr Shortcode Importer
+X	Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
+X	Description: Import [flickr] shortcodes into Media Library. First [flickr] image is set as the post's Featured Images. Handy for transitioning from plugin wordpress-flickr-manager to own Media Library.
+X	Version: 1.0.0
+X	Author: Michael Cannon
+X	Author URI: http://peimic.com/contact-peimic/
+X	License: GPL2
 	
 	Copyright 2011  Michael Cannon  (email : michael@peimic.com)
  

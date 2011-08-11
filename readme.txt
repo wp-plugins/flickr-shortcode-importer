@@ -19,7 +19,7 @@ Handy for transitioning from plugin `wordpress-flickr-manager` to own Media Libr
 
 Optional to remove first [flickr] from post content that's been used as Featured Image.
 
-Handled shortcode samples
+= Handled shortcode samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
 

@@ -52,5 +52,8 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * Remove first [flickr] from post content
 * a tag class like 'lightbox'
 
+= Prevent =
+* Duplicates - difficult to assign guid and recall for later use
+
 = Handle [flickrset] =
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]

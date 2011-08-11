@@ -118,7 +118,8 @@ class Flickr_Shortcode_Importer {
 				// Directly querying the database is normally frowned upon, but all
 				// of the API functions will return the full post objects which will
 				// suck up lots of memory. This is best, just not as future proof.
-				$results		= $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_parent = 0 AND post_content LIKE '%[flickr %' ORDER BY ID DESC LIMIT 1" );
+				$results		= $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_parent = 0 AND post_content LIKE '%[flickr %'" );
+				// $results		= $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_parent = 0 AND post_content LIKE '%[flickr %' LIMIT 1" );
 				$count			= 0;
 
 				// Generate the list of IDs
@@ -313,33 +314,33 @@ class Flickr_Shortcode_Importer {
 
 		$id						= (int) $_REQUEST['id'];
 		$post					= get_post( $id );
+		$this->post_id			= $post->ID;
 
 		if ( ! $post || 'post' != $post->post_type || ! stristr( $post->post_content, '[flickr' ) )
 			die( json_encode( array( 'error' => sprintf( __( 'Failed import: %s is an invalid image ID.', 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
 
 		if ( !current_user_can( 'manage_options' ) )
-			$this->die_json_error_msg( $post->ID, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
+			$this->die_json_error_msg( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
 
 		@set_time_limit( 300 ); // 5 minutes per post should be PLENTY
 
 		$this->featured_id		= false;
 		$this->first_image		= true;
 		$this->menu_order		= 1;
-		$this->post_id			= $post->ID;
+
 		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
 
 		if ( $this->featured_id )
-			update_post_meta( $post->ID, "_thumbnail_id", $this->featured_id );
+			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
 
 		$post					= array(
-			'ID'			=> $post->ID,
-			'post_content'	=> $post_content
+			'ID'			=> $this->post_id,
+			'post_content'	=> $post_content,
 		);
 
 		wp_update_post( $post );
 
-		// die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $post->ID ), esc_html( get_the_title( $post->ID ) ), $post->ID, timer_stop() ) ) ) );
 		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $this->post_id ), esc_html( get_the_title( $this->post_id ) ), $this->post_id, timer_stop() ) ) ) );
 	}
 
@@ -430,12 +431,30 @@ class Flickr_Shortcode_Importer {
 		$caption			= $photo['caption'];
 		$file				= basename( $src );
 
-		$query				= "SELECT ID FROM $wpdb->posts WHERE post_date = '$date' AND guid LIKE '%/$file';";
+		// TODO ensure dups actually picked up
+		// there's no guid, need to use post metadata and date
+		// need to join with wp_postmeta ON post_id = ID
+		// WHERE _wp_attached_file LIKE '%/$file' 
+		//
+		// TODO need to find unique way to id images imports to prevent dups
+		// guid on insert attachment is possible
+		if ( false ) {
+		$query				= "
+			SELECT p.ID
+			FROM $wpdb->posts p
+				LEFT JOIN $wpdb->postmeta m ON p.ID = m.post_id
+			WHERE p.post_date = '$date'
+				AND m.meta_key LIKE '_wp_attached_file'
+				AND m.meta_value LIKE '%/$file';
+		";
+		print_r($query); echo '<br />'; echo '' . __LINE__  . '<br />';	
 		// see if src is duplicate, if so return image_id
-		$dup				= $wpdb->get_var($wpdb->prepare( $query ));
+		$dup				= $wpdb->get_var( $query );
+		var_dump($dup); echo '<br />'; echo '' . __LINE__  . '<br />';	
 
 		if ( $dup )
 			return $dup;
+		}
 
 		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );
 		$filename			= $file_move['file'];
@@ -454,15 +473,15 @@ class Flickr_Shortcode_Importer {
 		$image_id			= wp_insert_attachment( $attachment, $filename, $this->post_id );
 
 		if ( ! $image_id )
-			$this->die_json_error_msg( $post->ID, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), '<code>' . esc_html( $filename ) . '</code>' ) );
+			$this->die_json_error_msg( $this->post_id, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), '<code>' . esc_html( $filename ) . '</code>' ) );
 
 		$metadata				= wp_generate_attachment_metadata( $image_id, $filename );
 
 		if ( is_wp_error( $metadata ) )
-			$this->die_json_error_msg( $post->ID, $metadata->get_error_message() );
+			$this->die_json_error_msg( $this->post_id, $metadata->get_error_message() );
 
 		if ( empty( $metadata ) )
-			$this->die_json_error_msg( $post->ID, __( 'Unknown failure reason.', 'flickr-shortcode-importer' ) );
+			$this->die_json_error_msg( $this->post_id, __( 'Unknown failure reason.', 'flickr-shortcode-importer' ) );
 
 		// If this fails, then it just means that nothing was changed (old value == new value)
 		wp_update_attachment_metadata( $image_id, $metadata );

@@ -2,8 +2,8 @@
 /*
 	Plugin Name: Flickr Shortcode Importer
 	Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
-	Description: Import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.
-	Version: 0.0.0
+	Description: Imports [flickr] shortcode images into the Media Library.
+	Version: 0.1.0
 	Author: Michael Cannon
 	Author URI: http://peimic.com/contact-peimic/
 	License: GPL2
@@ -23,11 +23,6 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-if ( ! defined( 'FSI_USE_OKAY' ) ) {
-	die( __( 'Flickr Shortcode Importer is NOT reaady for use', 'flickr-shortcode-importer' ) );
-}
-
 
 // Load dependencies
 require_once( dirname(__FILE__) . '/lib/inc.flickr.php' );
@@ -344,7 +339,8 @@ class Flickr_Shortcode_Importer {
 
 		wp_update_post( $post );
 
-		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $post->ID ), esc_html( get_the_title( $post->ID ) ), $post->ID, timer_stop() ) ) ) );
+		// die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $post->ID ), esc_html( get_the_title( $post->ID ) ), $post->ID, timer_stop() ) ) ) );
+		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $this->post_id ), esc_html( get_the_title( $this->post_id ) ), $this->post_id, timer_stop() ) ) ) );
 	}
 
 	
@@ -357,13 +353,17 @@ class Flickr_Shortcode_Importer {
 
 		$size					= $this->get_shortcode_size( $args['thumbnail'] );
 		$align					= $args['align'] ? $args['align'] : 'none';
-		$markup					= '';
 		
 		if ( 'photo' == $photo['media'] ) {
 			// pull original Flickr image
 			$src				= $this->flickr->buildPhotoURL( $photo, 'original' );
 			// add image to media library
 			$image_id			= $this->import_image( $src, $photo );
+
+			// if first image, set as featured 
+			if ( ! $this->featured_id ) {
+				$this->featured_id	= $image_id;
+			}
 
 			// wrap in link to attachment itself
 			$image_link			= wp_get_attachment_link( $image_id, $size, true 	);
@@ -376,9 +376,14 @@ class Flickr_Shortcode_Importer {
 				. $wp_image
 				. '"', $image_link );
 
-			// remaining [flickr] converted to locally reference image
-			if ( ! $this->first_image )
+			if ( ! $this->first_image ) {
+				// remaining [flickr] converted to locally reference image
 				$markup			= $image_link;
+			} else {
+				// remove [flickr] from post
+				$markup			= '';
+				$this->first_image	= false;
+			}
 		} elseif ($photo['media'] == 'video' && in_array($args['thumbnail'], array('video_player','site_mp4'))) {
 			// TODO import_video
 			// $markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
@@ -416,13 +421,22 @@ class Flickr_Shortcode_Importer {
 	
 
 	function import_image( $src, $photo ) {
+		global $wpdb;
+
 		$title				= $photo['title'];
 		$alt				= $title;
 		$desc				= $photo['description'];
 		$date				= $photo['dates']['taken'];
 		$caption			= $photo['caption'];
-
 		$file				= basename( $src );
+
+		$query				= "SELECT ID FROM $wpdb->posts WHERE post_date = '$date' AND guid LIKE '%/$file';";
+		// see if src is duplicate, if so return image_id
+		$dup				= $wpdb->get_var($wpdb->prepare( $query ));
+
+		if ( $dup )
+			return $dup;
+
 		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );
 		$filename			= $file_move['file'];
 
@@ -441,12 +455,6 @@ class Flickr_Shortcode_Importer {
 
 		if ( ! $image_id )
 			$this->die_json_error_msg( $post->ID, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), '<code>' . esc_html( $filename ) . '</code>' ) );
-
-		// if first image, set as featured and remove that [flickr] from post
-		if ( ! $this->featured_id ) {
-			$this->featured_id	= $image_id;
-			$this->first_image	= false;
-		}
 
 		$metadata				= wp_generate_attachment_metadata( $image_id, $filename );
 

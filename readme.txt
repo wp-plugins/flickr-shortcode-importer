@@ -1,27 +1,24 @@
 === Flickr Shortcode Importer ===
 Contributors: comprock
 Donate link: http://peimic.com/about-peimic/donate/
-Tags: flickr,featured image,import,media library,
+Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 0.0.0
+Stable tag: 0.1.0
 
-Import [flickr] shortcodes into the Media Library.
+Imports [flickr] shortcode images into the Media Library.
 
 == Description ==
-!!! DON'T USE YET !!!
+Imports [flickr] shortcode images into the Media Library.
 
-!!! NOT READY FOR RELEASE !!!
+The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content.
 
-Import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.
+The remaining [flickr] shortcodes are then transfromed as image links to their attachment page. Image size and alignment properties are kept in the new link.
 
-Handy for transitioning from plugin `wordpress-flickr-manager` to own Media Library.
-
-Optional to remove first [flickr] from post content that's been used as Featured Image.
+This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to own Media Library because you have your own CDN services.
 
 = Handled shortcode samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
-* [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
 
 = Thank You =
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
@@ -37,13 +34,23 @@ Optional to remove first [flickr] from post content that's been used as Featured
 Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/about-peimic/donate/ "Help sponsor Flickr Shortcode Importer") and let me know what's wanted
 
 == Screenshots ==
-1. Where to find Flickr Shortcode Importer in Tools
-2. Flickr Shortcode Importer settings
+1. Flickr Shortcode Importer in Plugins
+2. Flickr Shortcode Importer in Tools
 3. Flickr Shortcode Importer progress
 
 == Changelog ==
-= 1.0.0 =
-* Initial release
+= 0.1.0 =
+* Initial release for production testing
 
 == Upgrade Notice ==
 * None
+
+== TODO ==
+= Add options =
+* Convert limit
+* Set Featured Image
+* Remove first [flickr] from post content
+* a tag class like 'lightbox'
+
+= Handle [flickrset] =
+* [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]

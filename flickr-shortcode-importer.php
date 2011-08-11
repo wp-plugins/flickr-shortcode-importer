@@ -3,7 +3,7 @@
 	Plugin Name: Flickr Shortcode Importer
 	Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 	Description: Import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.
-	Version: 1.0.0
+	Version: 0.0.0
 	Author: Michael Cannon
 	Author URI: http://peimic.com/contact-peimic/
 	License: GPL2

@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.0.0
+Stable tag: 0.0.0
 
 Import [flickr] shortcodes into the Media Library.
 

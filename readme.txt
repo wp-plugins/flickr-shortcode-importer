@@ -9,11 +9,19 @@ Stable tag: 1.0.0
 Import [flickr] shortcodes into the Media Library.
 
 == Description ==
+!!! DON'T USE YET !!!
+
+!!! NOT READY FOR RELEASE !!!
+
 Import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.
 
 Handy for transitioning from plugin `wordpress-flickr-manager` to own Media Library.
 
 Optional to remove first [flickr] from post content that's been used as Featured Image.
+
+Handled shortcode samples
+* [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
+* [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
 
 Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin.
 

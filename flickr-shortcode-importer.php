@@ -305,7 +305,7 @@ class Flickr_Shortcode_Importer {
 	function ajax_process_shortcode() {
 		@error_reporting( 0 ); // Don't break the JSON result
 
-		// header( 'Content-type: application/json' );
+		header( 'Content-type: application/json' );
 
 		// Peimic.com API key
 		$api_key				= 'd7a73fed961744db01c498ca910a003d';
@@ -327,17 +327,16 @@ class Flickr_Shortcode_Importer {
 
 		@set_time_limit( 300 ); // 5 minutes per post should be PLENTY
 
-		// process [flickr] codes in posts
-		// process each [flickr] entry
-		// pull original Flickr image
-		// add image to media library
-		// relate image to post
-		// if first image, set as featured and remove that [flickr] from post
-		// remaining [flickr] converted to locally reference image
 		$this->featured_id		= false;
+		$this->first_image		= true;
 		$this->menu_order		= 1;
 		$this->post_id			= $post->ID;
+		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
+
+		if ( $this->featured_id )
+			update_post_meta( $post->ID, "_thumbnail_id", $this->featured_id );
+
 		$post					= array(
 			'ID'			=> $post->ID,
 			'post_content'	=> $post_content
@@ -345,47 +344,44 @@ class Flickr_Shortcode_Importer {
 
 		wp_update_post( $post );
 
-		if ( $this->featured_id )
-			update_post_meta( $post->ID, "_thumbnail_id", $this->featured_id );
-
 		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $post->ID ), esc_html( get_the_title( $post->ID ) ), $post->ID, timer_stop() ) ) ) );
 	}
 
 	
 	function shortcode_flickr($args) {
+		// process each [flickr] entry
 		$photo					= $this->flickr->photos_getInfo( $args['id'] );
 		$photo					= $photo['photo'];
 		$contexts				= $this->flickr->photos_getAllContexts( $args['id'] );
 		$photo['caption']		= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
 
-		$size					= $this->get_shortcode_image_size( $args['thumbnail'] );
+		$size					= $this->get_shortcode_size( $args['thumbnail'] );
 		$align					= $args['align'] ? $args['align'] : 'none';
 		$markup					= '';
 		
 		if ( 'photo' == $photo['media'] ) {
-			$src				= $this->flickr->buildPhotoURL($photo, 'original');
+			// pull original Flickr image
+			$src				= $this->flickr->buildPhotoURL( $photo, 'original' );
+			// add image to media library
 			$image_id			= $this->import_image( $src, $photo );
-			$image_tag			= wp_get_attachment_image( $image_id, $size );
 
-			$image_link			= wp_get_attachment_link($id, 'large');
-			print_r($image_link); echo '<br />'; echo '' . __LINE__  . '<br />';
+			// wrap in link to attachment itself
+			$image_link			= wp_get_attachment_link( $image_id, $size, true 	);
 
-			// set class for align per $args['align']
+			// correct class per args
 			$align				= ' align' . $align;
-			$size				= ' size-' . $size;
-			$wp_image			= ' wp-image--' . $image_id;
-			$image_tag			= preg_replace( '#(class="[^"]+)"#', '\1'
+			$wp_image			= ' wp-image-' . $image_id;
+			$image_link			= preg_replace( '#(class="[^"]+)"#', '\1'
 				. $align
-				. $size
 				. $wp_image
-				. '"', $image_tag );
+				. '"', $image_link );
 
-			// TODO need to wrap in link to attachment itself
-			$markup				= $image_tag;
-			exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );	
-
+			// remaining [flickr] converted to locally reference image
+			if ( ! $this->first_image )
+				$markup			= $image_link;
 		} elseif ($photo['media'] == 'video' && in_array($args['thumbnail'], array('video_player','site_mp4'))) {
-			$markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
+			// TODO import_video
+			// $markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
 		}
 		
 		return $markup;
@@ -393,7 +389,7 @@ class Flickr_Shortcode_Importer {
 
 
 	// correct none thumbnail, medium, large or full size values
-	function get_shortcode_image_size( $size_name ) {
+	function get_shortcode_size( $size_name ) {
 		switch ( $size_name ) {
 			case 'square':
 			case 'thumbnail':
@@ -440,17 +436,19 @@ class Flickr_Shortcode_Importer {
 			'post_status'		=> 'inherit',
 			'post_title'		=> $title,
 		);
+		// relate image to post
 		$image_id			= wp_insert_attachment( $attachment, $filename, $this->post_id );
 
 		if ( ! $image_id )
 			$this->die_json_error_msg( $post->ID, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), '<code>' . esc_html( $filename ) . '</code>' ) );
 
-		// TODO test it works
+		// if first image, set as featured and remove that [flickr] from post
 		if ( ! $this->featured_id ) {
 			$this->featured_id	= $image_id;
+			$this->first_image	= false;
 		}
 
-		$metadata			= wp_generate_attachment_metadata( $image_id, $filename );
+		$metadata				= wp_generate_attachment_metadata( $image_id, $filename );
 
 		if ( is_wp_error( $metadata ) )
 			$this->die_json_error_msg( $post->ID, $metadata->get_error_message() );

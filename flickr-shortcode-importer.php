@@ -24,11 +24,15 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-class FlickrShortcodeImporter {
+if ( ! defined( 'FSI_USE_OKAY' ) ) {
+	die( __( 'Flickr Shortcode Importer is NOT reaady for use', 'flickr-shortcode-importer' ) );
+}
+
+class Flickr_Shortcode_Importer {
 	var $menu_id;
 
 	// Plugin initialization
-	function FlickrShortcodeImporter() {
+	function Flickr_Shortcode_Importer() {
 		if ( ! function_exists( 'admin_url' ) )
 			return false;
 
@@ -47,12 +51,12 @@ class FlickrShortcodeImporter {
 	// Display a Settings link on the main Plugins page
 	function add_plugin_action_links( $links, $file ) {
 		if ( $file == plugin_basename( __FILE__ ) ) {
-			// $fsi_link			= '<a href="'.get_admin_url().'options-general.php?page=flickr-shortcode-importer/flickr-shortcode-importer.php">'.__('Settings').'</a>';
-			// array_unshift( $links, $fsi_link );
+			// $link			= '<a href="'.get_admin_url().'options-general.php?page=flickr-shortcode-importer/flickr-shortcode-importer.php">'.__('Settings').'</a>';
+			// array_unshift( $links, $link );
 
-			$fsi_link			= '<a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('Import', 'flickr-shortcode-importer').'</a>';
+			$link				= '<a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('Import', 'flickr-shortcode-importer').'</a>';
 			// make the 'Import' link appear first
-			array_unshift( $links, $fsi_link );
+			array_unshift( $links, $link );
 		}
 
 		return $links;
@@ -348,10 +352,11 @@ class FlickrShortcodeImporter {
 }
 
 // Start up this plugin
-add_action( 'init', 'FlickrShortcodeImporter' );
-function FlickrShortcodeImporter() {
-	global $FlickrShortcodeImporter;
-	$FlickrShortcodeImporter = new FlickrShortcodeImporter();
+function Flickr_Shortcode_Importer() {
+	global $Flickr_Shortcode_Importer;
+	$Flickr_Shortcode_Importer	= new Flickr_Shortcode_Importer();
 }
+
+add_action( 'init', 'Flickr_Shortcode_Importer' );
 
 ?>

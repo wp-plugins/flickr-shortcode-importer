@@ -9,13 +9,11 @@ Stable tag: 0.1.0
 Imports [flickr] shortcode images into the Media Library.
 
 == Description ==
-Imports [flickr] shortcode images into the Media Library.
+Imports [flickr] shortcode images into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
 
-The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content.
+The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.
 
-The remaining [flickr] shortcodes are then transfromed as image links to their attachment page. Image size and alignment properties are kept in the new link.
-
-This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to own Media Library because you have your own CDN services.
+This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
 
 = Handled shortcode samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
@@ -37,6 +35,8 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 1. Flickr Shortcode Importer in Plugins
 2. Flickr Shortcode Importer in Tools
 3. Flickr Shortcode Importer progress
+4. Before Flickr Shortcode Importer
+5. After Flickr Shortcode Importer
 
 == Changelog ==
 = 0.1.0 =

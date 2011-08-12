@@ -317,7 +317,7 @@ class Flickr_Shortcode_Importer {
 		$this->post_id			= $post->ID;
 
 		if ( ! $post || 'post' != $post->post_type || ! stristr( $post->post_content, '[flickr' ) )
-			die( json_encode( array( 'error' => sprintf( __( 'Failed import: %s is an invalid image ID.', 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
+			die( json_encode( array( 'error' => sprintf( __( "Failed import: %s doesn't contain [flickr].", 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
 
 		if ( !current_user_can( 'manage_options' ) )
 			$this->die_json_error_msg( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
@@ -431,36 +431,33 @@ class Flickr_Shortcode_Importer {
 		$caption			= $photo['caption'];
 		$file				= basename( $src );
 
-		// TODO ensure dups actually picked up
-		// there's no guid, need to use post metadata and date
-		// need to join with wp_postmeta ON post_id = ID
-		// WHERE _wp_attached_file LIKE '%/$file' 
-		//
-		// TODO need to find unique way to id images imports to prevent dups
-		// guid on insert attachment is possible
-		if ( false ) {
+		// normal posts have guid based upon permalink
+		// wp_insert_attachment don't set guid, so we create our own
+		$guid				= $date . '-' . $file;
+		$guid				= preg_replace( '#\W#', '-', $guid );
+
+		// TODO don't use guid
+		// use post meta data
+
+		// see if src is duplicate, if so return image_id
 		$query				= "
 			SELECT p.ID
 			FROM $wpdb->posts p
-				LEFT JOIN $wpdb->postmeta m ON p.ID = m.post_id
-			WHERE p.post_date = '$date'
-				AND m.meta_key LIKE '_wp_attached_file'
-				AND m.meta_value LIKE '%/$file';
+			WHERE p.guid = 'http://$guid'
 		";
-		print_r($query); echo '<br />'; echo '' . __LINE__  . '<br />';	
-		// see if src is duplicate, if so return image_id
-		$dup				= $wpdb->get_var( $query );
-		var_dump($dup); echo '<br />'; echo '' . __LINE__  . '<br />';	
 
+		$dup				= $wpdb->get_var( $query );
+
+		// TODO ignore dup if importing [flickrset]
 		if ( $dup )
 			return $dup;
-		}
 
 		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );
 		$filename			= $file_move['file'];
 
 		$wp_filetype		= wp_check_filetype($file, null);
 		$attachment			= array(
+			'guid'				=> $guid,
 			'menu_order'		=> $this->menu_order++,
 			'post_content'		=> $desc,
 			'post_date'			=> $date,

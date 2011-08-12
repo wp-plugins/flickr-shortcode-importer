@@ -20,6 +20,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 = Options =
 * Set limit of posts to be processed
 * Set first [flickr] image as featured image or not
+* Remove first [flickr] from post content or not
 
 = Handled shortcode samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
@@ -95,8 +96,7 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == TODO ==
 = Add options =
-* Remove first [flickr] from post content
-* a tag class like 'lightbox'
+* Add an a tag class attribute like 'lightbox'
 
 = Handle =
 * Flickr video importing - currently rendering as video/object/embed tag using Flickr

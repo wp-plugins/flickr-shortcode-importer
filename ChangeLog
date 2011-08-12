@@ -1,3 +1,46 @@
+2011-08-12 11:19  comprock
+
+	* class.settings.php,
+	  settings.css:
+	  *
+	  Use
+	  Alison
+	  Barret's
+	  class
+	  My_Theme_Options
+
+2011-08-12 11:01  comprock
+
+	* flickr-shortcode-importer.php,
+	  settings.php:
+	  *
+	  Add
+	  ob_settings.php
+	  options
+	  page
+	  helper
+	  for
+	  using
+	  Settings
+	  API
+
+2011-08-12 06:13  comprock
+
+	* flickr-shortcode-importer.php,
+	  readme.txt:
+	  TODO
+	  video
+	  import Backup
+	  or
+	  reversion
+	  reminders
+
+2011-08-12 04:43  comprock
+
+	* ChangeLog:
+	  Update
+	  ChangeLog
+
 2011-08-12 04:41  comprock
 
 	* flickr-shortcode-importer.php,

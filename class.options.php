@@ -317,7 +317,15 @@ EOD;
 		$this->settings['set_featured_image'] = array(
 			'section' => 'general',
 			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Set the first [flickr] image found as the Featured Image?.' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Set the first [flickr] image found as the Featured Image?' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+		);
+		
+		$this->settings['remove_first_flickr_shortcode'] = array(
+			'section' => 'general',
+			'title'   => __( 'Remove First Flickr Shortcode' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Remove the first [flickr] from post content? If you use Featured Images, this will help prevent duplicate images in your post.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);

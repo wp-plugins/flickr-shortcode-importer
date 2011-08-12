@@ -341,7 +341,7 @@ class Flickr_Shortcode_Importer {
 		@set_time_limit( 300 ); // 5 minutes per post should be PLENTY
 
 		$this->featured_id		= false;
-		$this->first_image		= true;
+		$this->first_image		= fsi_options( 'remove_first_flickr_shortcode' ) ? true : false;
 		$this->menu_order		= 1;
 
 		// process [flickr] codes in posts

@@ -26,7 +26,7 @@
 
 // Load dependencies
 require_once( dirname(__FILE__) . '/lib/inc.flickr.php' );
-require_once( dirname(__FILE__) . '/settings.php' );
+require_once( dirname(__FILE__) . '/class.settings.php' );
 
 
 class Flickr_Shortcode_Importer {
@@ -39,7 +39,7 @@ class Flickr_Shortcode_Importer {
 
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's "localization" folder and name it "flickr-shortcode-importer-[value in wp-config].mo"
-		load_plugin_textdomain( 'flickr-shortcode-importer', false, '/flickr-shortcode-importer/localization' );
+		load_plugin_textdomain( 'flickr-shortcode-importer', false, '/flickr-shortcode-importer/languages/' );
 
 		add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueues' ) );
@@ -51,11 +51,10 @@ class Flickr_Shortcode_Importer {
 	// Display a Settings link on the main Plugins page
 	function add_plugin_action_links( $links, $file ) {
 		if ( $file == plugin_basename( __FILE__ ) ) {
-			// $link			= '<a href="'.get_admin_url().'options-general.php?page=flickr-shortcode-importer/flickr-shortcode-importer.php">'.__('Settings').'</a>';
-			// array_unshift( $links, $link );
+			$link			= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('Settings', 'flickr-shortcode-importer').'</a>';
+			array_unshift( $links, $link );
 
 			$link				= '<a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('Import', 'flickr-shortcode-importer').'</a>';
-			// make the 'Import' link appear first
 			array_unshift( $links, $link );
 		}
 

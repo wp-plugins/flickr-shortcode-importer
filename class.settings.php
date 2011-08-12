@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Master theme class
- * 
- * @package Bolts
+ * Flickr Shortcode Importer settings class
+ *
+ * @ref http://alisothegeek.com/2011/01/wordpress-settings-api-tutorial-1/
  * @since 1.0
  */
-class My_Theme_Options {
+class FSI_Settings {
 	
 	private $sections;
 	private $checkboxes;
@@ -20,8 +20,8 @@ class My_Theme_Options {
 	public function __construct() {
 		
 		// This will keep track of the checkbox options for the validate_settings function.
-		$this->checkboxes = array();
-		$this->settings = array();
+		$this->checkboxes				= array();
+		$this->settings					= array();
 		$this->get_settings();
 		
 		$this->sections['general']      = __( 'General Settings' );
@@ -31,8 +31,10 @@ class My_Theme_Options {
 		
 		add_action( 'admin_menu', array( &$this, 'add_pages' ) );
 		add_action( 'admin_init', array( &$this, 'register_settings' ) );
+
+		load_plugin_textdomain( 'flickr-shortcode-importer', false, '/flickr-shortcode-importer/languages/' );
 		
-		if ( ! get_option( 'mytheme_options' ) )
+		if ( ! get_option( 'fsi_options' ) )
 			$this->initialize_settings();
 		
 	}
@@ -44,7 +46,7 @@ class My_Theme_Options {
 	 */
 	public function add_pages() {
 		
-		$admin_page = add_theme_page( __( 'Theme Options' ), __( 'Theme Options' ), 'manage_options', 'mytheme-options', array( &$this, 'display_page' ) );
+		$admin_page = add_options_page( __( 'Flickr Shortcode Importer Options' ), __( '[flickr] Options' ), 'manage_options', 'fsi-options', array( &$this, 'display_page' ) );
 		
 		add_action( 'admin_print_scripts-' . $admin_page, array( &$this, 'scripts' ) );
 		add_action( 'admin_print_styles-' . $admin_page, array( &$this, 'styles' ) );
@@ -84,7 +86,7 @@ class My_Theme_Options {
 		if ( $type == 'checkbox' )
 			$this->checkboxes[] = $id;
 		
-		add_settings_field( $id, $title, array( $this, 'display_setting' ), 'mytheme-options', $section, $field_args );
+		add_settings_field( $id, $title, array( $this, 'display_setting' ), 'fsi-options', $section, $field_args );
 	}
 	
 	/**
@@ -96,14 +98,11 @@ class My_Theme_Options {
 		
 		echo '<div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
-	<h2>' . __( 'Theme Options' ) . '</h2>';
+	<h2>' . __( 'Flickr Shortcode Importer Options' ) . '</h2>';
 	
-		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true )
-			echo '<div class="updated fade"><p>' . __( 'Theme options updated.' ) . '</p></div>';
-		
 		echo '<form action="options.php" method="post">';
 	
-		settings_fields( 'mytheme_options' );
+		settings_fields( 'fsi_options' );
 		echo '<div class="ui-tabs">
 			<ul class="ui-tabs-nav">';
 		
@@ -205,7 +204,7 @@ class My_Theme_Options {
 		
 		extract( $args );
 		
-		$options = get_option( 'mytheme_options' );
+		$options = get_option( 'fsi_options' );
 		
 		if ( ! isset( $options[$id] ) && $type != 'checkbox' )
 			$options[$id] = $std;
@@ -224,12 +223,12 @@ class My_Theme_Options {
 			
 			case 'checkbox':
 				
-				echo '<input class="checkbox' . $field_class . '" type="checkbox" id="' . $id . '" name="mytheme_options[' . $id . ']" value="1" ' . checked( $options[$id], 1, false ) . ' /> <label for="' . $id . '">' . $desc . '</label>';
+				echo '<input class="checkbox' . $field_class . '" type="checkbox" id="' . $id . '" name="fsi_options[' . $id . ']" value="1" ' . checked( $options[$id], 1, false ) . ' /> <label for="' . $id . '">' . $desc . '</label>';
 				
 				break;
 			
 			case 'select':
-				echo '<select class="select' . $field_class . '" name="mytheme_options[' . $id . ']">';
+				echo '<select class="select' . $field_class . '" name="fsi_options[' . $id . ']">';
 				
 				foreach ( $choices as $value => $label )
 					echo '<option value="' . esc_attr( $value ) . '"' . selected( $options[$id], $value, false ) . '>' . $label . '</option>';
@@ -244,7 +243,7 @@ class My_Theme_Options {
 			case 'radio':
 				$i = 0;
 				foreach ( $choices as $value => $label ) {
-					echo '<input class="radio' . $field_class . '" type="radio" name="mytheme_options[' . $id . ']" id="' . $id . $i . '" value="' . esc_attr( $value ) . '" ' . checked( $options[$id], $value, false ) . '> <label for="' . $id . $i . '">' . $label . '</label>';
+					echo '<input class="radio' . $field_class . '" type="radio" name="fsi_options[' . $id . ']" id="' . $id . $i . '" value="' . esc_attr( $value ) . '" ' . checked( $options[$id], $value, false ) . '> <label for="' . $id . $i . '">' . $label . '</label>';
 					if ( $i < count( $options ) - 1 )
 						echo '<br />';
 					$i++;
@@ -256,7 +255,7 @@ class My_Theme_Options {
 				break;
 			
 			case 'textarea':
-				echo '<textarea class="' . $field_class . '" id="' . $id . '" name="mytheme_options[' . $id . ']" placeholder="' . $std . '" rows="5" cols="30">' . wp_htmledit_pre( $options[$id] ) . '</textarea>';
+				echo '<textarea class="' . $field_class . '" id="' . $id . '" name="fsi_options[' . $id . ']" placeholder="' . $std . '" rows="5" cols="30">' . wp_htmledit_pre( $options[$id] ) . '</textarea>';
 				
 				if ( $desc != '' )
 					echo '<br /><span class="description">' . $desc . '</span>';
@@ -264,7 +263,7 @@ class My_Theme_Options {
 				break;
 			
 			case 'password':
-				echo '<input class="regular-text' . $field_class . '" type="password" id="' . $id . '" name="mytheme_options[' . $id . ']" value="' . esc_attr( $options[$id] ) . '" />';
+				echo '<input class="regular-text' . $field_class . '" type="password" id="' . $id . '" name="fsi_options[' . $id . ']" value="' . esc_attr( $options[$id] ) . '" />';
 				
 				if ( $desc != '' )
 					echo '<br /><span class="description">' . $desc . '</span>';
@@ -273,7 +272,7 @@ class My_Theme_Options {
 			
 			case 'text':
 			default:
-		 		echo '<input class="regular-text' . $field_class . '" type="text" id="' . $id . '" name="mytheme_options[' . $id . ']" placeholder="' . $std . '" value="' . esc_attr( $options[$id] ) . '" />';
+		 		echo '<input class="regular-text' . $field_class . '" type="text" id="' . $id . '" name="fsi_options[' . $id . ']" placeholder="' . $std . '" value="' . esc_attr( $options[$id] ) . '" />';
 		 		
 		 		if ( $desc != '' )
 		 			echo '<br /><span class="description">' . $desc . '</span>';
@@ -357,7 +356,7 @@ class My_Theme_Options {
 		$this->settings['header_logo'] = array(
 			'section' => 'appearance',
 			'title'   => __( 'Header Logo' ),
-			'desc'    => __( 'Enter the URL to your logo for the theme header.' ),
+			'desc'    => __( 'Enter the URL to your logo for the plugin header.' ),
 			'type'    => 'text',
 			'std'     => ''
 		);
@@ -372,7 +371,7 @@ class My_Theme_Options {
 		
 		$this->settings['custom_css'] = array(
 			'title'   => __( 'Custom Styles' ),
-			'desc'    => __( 'Enter any custom CSS here to apply it to your theme.' ),
+			'desc'    => __( 'Enter any custom CSS here to apply it to your plugin.' ),
 			'std'     => '',
 			'type'    => 'textarea',
 			'section' => 'appearance',
@@ -382,13 +381,13 @@ class My_Theme_Options {
 		/* Reset
 		===========================================*/
 		
-		$this->settings['reset_theme'] = array(
+		$this->settings['reset_plugin'] = array(
 			'section' => 'reset',
-			'title'   => __( 'Reset theme' ),
+			'title'   => __( 'Reset plugin' ),
 			'type'    => 'checkbox',
 			'std'     => 0,
 			'class'   => 'warning', // Custom class for CSS
-			'desc'    => __( 'Check this box and click "Save Changes" below to reset theme options to their defaults.' )
+			'desc'    => __( 'Check this box and click "Save Changes" below to reset plugin options to their defaults.' )
 		);
 		
 	}
@@ -406,7 +405,7 @@ class My_Theme_Options {
 				$default_settings[$id] = $setting['std'];
 		}
 		
-		update_option( 'mytheme_options', $default_settings );
+		update_option( 'fsi_options', $default_settings );
 		
 	}
 	
@@ -417,13 +416,13 @@ class My_Theme_Options {
 	*/
 	public function register_settings() {
 		
-		register_setting( 'mytheme_options', 'mytheme_options', array ( &$this, 'validate_settings' ) );
+		register_setting( 'fsi_options', 'fsi_options', array ( &$this, 'validate_settings' ) );
 		
 		foreach ( $this->sections as $slug => $title ) {
 			if ( $slug == 'about' )
-				add_settings_section( $slug, $title, array( &$this, 'display_about_section' ), 'mytheme-options' );
+				add_settings_section( $slug, $title, array( &$this, 'display_about_section' ), 'fsi-options' );
 			else
-				add_settings_section( $slug, $title, array( &$this, 'display_section' ), 'mytheme-options' );
+				add_settings_section( $slug, $title, array( &$this, 'display_section' ), 'fsi-options' );
 		}
 		
 		$this->get_settings();
@@ -447,14 +446,14 @@ class My_Theme_Options {
 	}
 	
 	/**
-	* Styling for the theme options page
+	* Styling for the plugin options page
 	*
 	* @since 1.0
 	*/
 	public function styles() {
 		
-		wp_register_style( 'mytheme-admin', get_bloginfo( 'stylesheet_directory' ) . '/mytheme-options.css' );
-		wp_enqueue_style( 'mytheme-admin' );
+		wp_register_style( 'fsi-admin', plugins_url( 'settings.css', __FILE__ ) );
+		wp_enqueue_style( 'fsi-admin' );
 		
 	}
 	
@@ -465,8 +464,8 @@ class My_Theme_Options {
 	*/
 	public function validate_settings( $input ) {
 		
-		if ( ! isset( $input['reset_theme'] ) ) {
-			$options = get_option( 'mytheme_options' );
+		if ( ! isset( $input['reset_plugin'] ) ) {
+			$options = get_option( 'fsi_options' );
 			
 			foreach ( $this->checkboxes as $id ) {
 				if ( isset( $options[$id] ) && ! isset( $input[$id] ) )
@@ -481,10 +480,10 @@ class My_Theme_Options {
 	
 }
 
-$theme_options = new My_Theme_Options();
+$FSI_Settings					= new FSI_Settings();
 
-function mytheme_option( $option ) {
-	$options = get_option( 'mytheme_options' );
+function fsi_options( $option ) {
+	$options					= get_option( 'fsi_options' );
 	if ( isset( $options[$option] ) )
 		return $options[$option];
 	else

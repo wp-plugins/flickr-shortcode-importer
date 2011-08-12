@@ -26,7 +26,7 @@
 
 // Load dependencies
 require_once( dirname(__FILE__) . '/lib/inc.flickr.php' );
-require_once( dirname(__FILE__) . '/class.settings.php' );
+require_once( dirname(__FILE__) . '/class.options.php' );
 
 
 class Flickr_Shortcode_Importer {
@@ -45,14 +45,15 @@ class Flickr_Shortcode_Importer {
 		add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueues' ) );
 		add_action( 'wp_ajax_importflickrshortcode', array( &$this, 'ajax_process_shortcode' ) );
 		add_filter( 'plugin_action_links', array( &$this, 'add_plugin_action_links' ), 10, 2 );
+		
+		$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('[flickr] Options', 'flickr-shortcode-importer').'</a>';
 	}
 
 
-	// Display a Settings link on the main Plugins page
+	// Display a Options link on the main Plugins page
 	function add_plugin_action_links( $links, $file ) {
 		if ( $file == plugin_basename( __FILE__ ) ) {
-			$link			= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('Settings', 'flickr-shortcode-importer').'</a>';
-			array_unshift( $links, $link );
+			array_unshift( $links, $this->options_link );
 
 			$link				= '<a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('Import', 'flickr-shortcode-importer').'</a>';
 			array_unshift( $links, $link );
@@ -92,6 +93,7 @@ class Flickr_Shortcode_Importer {
 <div id="message" class="updated fade" style="display:none"></div>
 
 <div class="wrap fsiposts">
+	<div class="icon32" id="icon-tools"></div>
 	<h2><?php _e('Flickr Shortcode Importer', 'flickr-shortcode-importer'); ?></h2>
 
 <?php
@@ -279,6 +281,8 @@ class Flickr_Shortcode_Importer {
 	<p><?php _e( "Use this tool to import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.", 'flickr-shortcode-importer' ); ?></p>
 
 	<p><?php _e( "Flickr shortcode import is not reversible. Backup your database beforehand or be prepared to revert each transformmed post manually.", 'flickr-shortcode-importer' ); ?></p>
+
+	<p><?php printf( __( 'Please review your %s before proceeding.', 'flickr-shortcode-importer' ), $this->options_link ); ?></p>
 
 	<p><?php _e( 'To begin, just press the button below.', 'flickr-shortcode-importer ', 'flickr-shortcode-importer'); ?></p>
 

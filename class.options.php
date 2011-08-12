@@ -314,6 +314,14 @@ EOD;
 			'section' => 'general'
 		);
 		
+		$this->settings['set_featured_image'] = array(
+			'section' => 'general',
+			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Set the first [flickr] image found as the Featured Image?.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+		);
+		
 		if ( false ) {
 		$this->settings['example_text'] = array(
 			'title'   => __( 'Example Text Input' , 'flickr-shortcode-importer'),

@@ -347,7 +347,7 @@ class Flickr_Shortcode_Importer {
 		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
 
-		if ( $this->featured_id )
+		if ( $this->featured_id && fsi_options( 'set_featured_image' ) )
 			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
 
 		$post					= array(

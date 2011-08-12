@@ -24,10 +24,11 @@ class FSI_Settings {
 		$this->settings					= array();
 		$this->get_settings();
 		
-		$this->sections['general']      = __( 'General Settings' );
-		$this->sections['appearance']   = __( 'Appearance' );
-		$this->sections['reset']        = __( 'Reset to Defaults' );
-		$this->sections['about']        = __( 'About' );
+		$this->sections['general']      = __( 'General Settings' , 'flickr-shortcode-importer');
+		// hide section in UI
+		// $this->sections['appearance']   = __( 'Appearance' );
+		$this->sections['reset']        = __( 'Reset to Defaults' , 'flickr-shortcode-importer');
+		$this->sections['about']        = __( 'About' , 'flickr-shortcode-importer');
 		
 		add_action( 'admin_menu', array( &$this, 'add_pages' ) );
 		add_action( 'admin_init', array( &$this, 'register_settings' ) );
@@ -46,7 +47,7 @@ class FSI_Settings {
 	 */
 	public function add_pages() {
 		
-		$admin_page = add_options_page( __( 'Flickr Shortcode Importer Options' ), __( '[flickr] Options' ), 'manage_options', 'fsi-options', array( &$this, 'display_page' ) );
+		$admin_page = add_options_page( __( 'Flickr Shortcode Importer Options' , 'flickr-shortcode-importer'), __( '[flickr] Options' , 'flickr-shortcode-importer'), 'manage_options', 'fsi-options', array( &$this, 'display_page' ) );
 		
 		add_action( 'admin_print_scripts-' . $admin_page, array( &$this, 'scripts' ) );
 		add_action( 'admin_print_styles-' . $admin_page, array( &$this, 'styles' ) );
@@ -62,8 +63,8 @@ class FSI_Settings {
 		
 		$defaults = array(
 			'id'      => 'default_field',
-			'title'   => __( 'Default Field' ),
-			'desc'    => __( 'This is a default description.' ),
+			'title'   => __( 'Default Field' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'This is a default description.' , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'text',
 			'section' => 'general',
@@ -98,7 +99,7 @@ class FSI_Settings {
 		
 		echo '<div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
-	<h2>' . __( 'Flickr Shortcode Importer Options' ) . '</h2>';
+	<h2>' . __( 'Flickr Shortcode Importer Options' , 'flickr-shortcode-importer') . '</h2>';
 	
 		echo '<form action="options.php" method="post">';
 	
@@ -113,7 +114,7 @@ class FSI_Settings {
 		do_settings_sections( $_GET['page'] );
 		
 		echo '</div>
-		<p class="submit"><input name="Submit" type="submit" class="button-primary" value="' . __( 'Save Changes' ) . '" /></p>
+		<p class="submit"><input name="Submit" type="submit" class="button-primary" value="' . __( 'Save Changes' , 'flickr-shortcode-importer') . '" /></p>
 		
 	</form>';
 	
@@ -294,16 +295,16 @@ class FSI_Settings {
 		===========================================*/
 		
 		$this->settings['example_text'] = array(
-			'title'   => __( 'Example Text Input' ),
-			'desc'    => __( 'This is a description for the text input.' ),
+			'title'   => __( 'Example Text Input' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'This is a description for the text input.' , 'flickr-shortcode-importer'),
 			'std'     => 'Default value',
 			'type'    => 'text',
 			'section' => 'general'
 		);
 		
 		$this->settings['example_textarea'] = array(
-			'title'   => __( 'Example Textarea Input' ),
-			'desc'    => __( 'This is a description for the textarea input.' ),
+			'title'   => __( 'Example Textarea Input' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'This is a description for the textarea input.' , 'flickr-shortcode-importer'),
 			'std'     => 'Default value',
 			'type'    => 'textarea',
 			'section' => 'general'
@@ -311,8 +312,8 @@ class FSI_Settings {
 		
 		$this->settings['example_checkbox'] = array(
 			'section' => 'general',
-			'title'   => __( 'Example Checkbox' ),
-			'desc'    => __( 'This is a description for the checkbox.' ),
+			'title'   => __( 'Example Checkbox' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'This is a description for the checkbox.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);
@@ -326,8 +327,8 @@ class FSI_Settings {
 		
 		$this->settings['example_radio'] = array(
 			'section' => 'general',
-			'title'   => __( 'Example Radio' ),
-			'desc'    => __( 'This is a description for the radio buttons.' ),
+			'title'   => __( 'Example Radio' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'This is a description for the radio buttons.' , 'flickr-shortcode-importer'),
 			'type'    => 'radio',
 			'std'     => '',
 			'choices' => array(
@@ -339,8 +340,8 @@ class FSI_Settings {
 		
 		$this->settings['example_select'] = array(
 			'section' => 'general',
-			'title'   => __( 'Example Select' ),
-			'desc'    => __( 'This is a description for the drop-down.' ),
+			'title'   => __( 'Example Select' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'This is a description for the drop-down.' , 'flickr-shortcode-importer'),
 			'type'    => 'select',
 			'std'     => '',
 			'choices' => array(
@@ -355,23 +356,23 @@ class FSI_Settings {
 		
 		$this->settings['header_logo'] = array(
 			'section' => 'appearance',
-			'title'   => __( 'Header Logo' ),
-			'desc'    => __( 'Enter the URL to your logo for the plugin header.' ),
+			'title'   => __( 'Header Logo' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Enter the URL to your logo for the plugin header.' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
 			'std'     => ''
 		);
 		
 		$this->settings['favicon'] = array(
 			'section' => 'appearance',
-			'title'   => __( 'Favicon' ),
-			'desc'    => __( 'Enter the URL to your custom favicon. It should be 16x16 pixels in size.' ),
+			'title'   => __( 'Favicon' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Enter the URL to your custom favicon. It should be 16x16 pixels in size.' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
 			'std'     => ''
 		);
 		
 		$this->settings['custom_css'] = array(
-			'title'   => __( 'Custom Styles' ),
-			'desc'    => __( 'Enter any custom CSS here to apply it to your plugin.' ),
+			'title'   => __( 'Custom Styles' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Enter any custom CSS here to apply it to your plugin.' , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'textarea',
 			'section' => 'appearance',
@@ -383,11 +384,11 @@ class FSI_Settings {
 		
 		$this->settings['reset_plugin'] = array(
 			'section' => 'reset',
-			'title'   => __( 'Reset plugin' ),
+			'title'   => __( 'Reset plugin' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 0,
 			'class'   => 'warning', // Custom class for CSS
-			'desc'    => __( 'Check this box and click "Save Changes" below to reset plugin options to their defaults.' )
+			'desc'    => __( 'Check this box and click "Save Changes" below to reset plugin options to their defaults.' , 'flickr-shortcode-importer')
 		);
 		
 	}

@@ -1,345 +1,143 @@
-2011-08-12 11:19  comprock
+------------------------------------------------------------------------
+r422615 | comprock | 2011-08-12 21:16:08 +0800 (Fri, 12 Aug 2011) | 2 lines
 
-	* class.settings.php,
-	  settings.css:
-	  *
-	  Use
-	  Alison
-	  Barret's
-	  class
-	  My_Theme_Options
+* Add option Remove First Flickr Shortcode
 
-2011-08-12 11:01  comprock
+------------------------------------------------------------------------
+r422605 | comprock | 2011-08-12 21:04:19 +0800 (Fri, 12 Aug 2011) | 2 lines
 
-	* flickr-shortcode-importer.php,
-	  settings.php:
-	  *
-	  Add
-	  ob_settings.php
-	  options
-	  page
-	  helper
-	  for
-	  using
-	  Settings
-	  API
+* Add option to setting Featured Image or not
 
-2011-08-12 06:13  comprock
+------------------------------------------------------------------------
+r422601 | comprock | 2011-08-12 20:53:10 +0800 (Fri, 12 Aug 2011) | 1 line
 
-	* flickr-shortcode-importer.php,
-	  readme.txt:
-	  TODO
-	  video
-	  import Backup
-	  or
-	  reversion
-	  reminders
+Add import page link to options page
+------------------------------------------------------------------------
+r422598 | comprock | 2011-08-12 20:49:30 +0800 (Fri, 12 Aug 2011) | 3 lines
 
-2011-08-12 04:43  comprock
+* Add conversion limit option
+* Polish up About Flickr Shortcode Importer section
 
-	* ChangeLog:
-	  Update
-	  ChangeLog
+------------------------------------------------------------------------
+r422585 | comprock | 2011-08-12 20:22:16 +0800 (Fri, 12 Aug 2011) | 1 line
 
-2011-08-12 04:41  comprock
+* Add text domain
+------------------------------------------------------------------------
+r422584 | comprock | 2011-08-12 20:19:10 +0800 (Fri, 12 Aug 2011) | 4 lines
 
-	* flickr-shortcode-importer.php,
-	  readme.txt:
-	  *
-	  Replace
-	  duplicate
-	  lookup
-	  by
-	  guid
-	  with
-	  _flickr_src
-	  in
-	  postmeta *
-	  RenderVideo
-	  via
-	  FlickrManager
-	  code *
-	  Remove
-	  [flickr]
-	  lookup
-	  LIMIT
+* Rename class.settings.php to class.options.php
+* Add [flickr] Options link to [flickr] Import page
+* Add icon to [flickr] Import page
 
-2011-08-12 03:36  comprock
+------------------------------------------------------------------------
+r422580 | comprock | 2011-08-12 20:09:24 +0800 (Fri, 12 Aug 2011) | 4 lines
 
-	* ChangeLog,
-	  flickr-shortcode-importer.php,
-	  readme.txt:
-	  Prep
-	  for
-	  1.0.0
-	  release
+* Flickr Shortcode Importer Options page added
+* [flickr] Options linked from Plugins
+* Update pot file
 
-2011-08-12 03:30  comprock
+------------------------------------------------------------------------
+r422577 | comprock | 2011-08-12 19:29:52 +0800 (Fri, 12 Aug 2011) | 2 lines
 
-	* screenshot-1.png,
-	  screenshot-2.png,
-	  screenshot-3.png,
-	  screenshot-4.png,
-	  screenshot-5.png:
-	  Smush.it
-	  screenshots
+* Remove old settings file
 
-2011-08-12 03:19  comprock
+------------------------------------------------------------------------
+r422574 | comprock | 2011-08-12 19:19:34 +0800 (Fri, 12 Aug 2011) | 2 lines
 
-	* flickr-shortcode-importer.php,
-	  readme.txt,
-	  screenshot-4.png,
-	  screenshot-5.png:
-	  Add
-	  before
-	  &
-	  after
-	  screenshots;
-	  Create
-	  &
-	  use
-	  guid
-	  to
-	  prevent
-	  duplicates;
+* Use Alison Barret's class My_Theme_Options
 
-2011-08-11 17:51  comprock
+------------------------------------------------------------------------
+r422570 | comprock | 2011-08-12 19:01:11 +0800 (Fri, 12 Aug 2011) | 2 lines
 
-	* ChangeLog,
-	  d:
-	  Add
-	  ChangeLog
+* Add ob_settings.php options page helper for using Settings API
 
-2011-08-11 17:35  comprock
+------------------------------------------------------------------------
+r422526 | comprock | 2011-08-12 14:13:11 +0800 (Fri, 12 Aug 2011) | 3 lines
 
-	* flickr-shortcode-importer.php,
-	  readme.txt:
-	  Prep
-	  for
-	  further
-	  production
-	  testing;
-	  Remove
-	  import
-	  LIMIT;
-	  Turn
-	  off
-	  duplicate
-	  handling
-	  due
-	  to
-	  being
-	  unable
-	  to
-	  process
-	  guid
-	  setting
-	  or
-	  recall;
+TODO video import
+Backup or reversion reminders
 
-2011-08-11 16:48  comprock
+------------------------------------------------------------------------
+r422488 | comprock | 2011-08-12 12:43:41 +0800 (Fri, 12 Aug 2011) | 1 line
 
-	* flickr-shortcode-importer.php,
-	  o.FlickrManager.php,
-	  o.flickr-shortcode-importer.php,
-	  readme.txt,
-	  screenshot-1.png,
-	  screenshot-2.png,
-	  screenshot-3.png:
-	  Remove
-	  unused
-	  helper
-	  files;
-	  Add
-	  screenshots;
-	  Set
-	  version
-	  0.1.0;
-	  Correct
-	  featured
-	  image
-	  setting
-	  and
-	  first_image
-	  removal
-	  handling;
-	  Prevent
-	  duplicate
-	  [flickr]
-	  imports;
-	  Revise
-	  readme
-	  content;
+Update ChangeLog
+------------------------------------------------------------------------
+r422487 | comprock | 2011-08-12 12:41:20 +0800 (Fri, 12 Aug 2011) | 4 lines
 
-2011-08-11 15:41  comprock
+* Replace duplicate lookup by guid with _flickr_src in postmeta
+* RenderVideo via FlickrManager code
+* Remove [flickr] lookup LIMIT
 
-	* flickr-shortcode-importer.php:
-	  Handle
-	  featured
-	  image
-	  setting;
-	  Remove
-	  first
-	  [flickr]
-	  from
-	  post_content;
-	  Correct
-	  [flickr]
-	  replacement
-	  for
-	  attachment
-	  links
+------------------------------------------------------------------------
+r422468 | comprock | 2011-08-12 11:36:41 +0800 (Fri, 12 Aug 2011) | 1 line
 
-2011-08-11 09:54  comprock
+Prep for 1.0.0 release
+------------------------------------------------------------------------
+r422466 | comprock | 2011-08-12 11:30:03 +0800 (Fri, 12 Aug 2011) | 1 line
 
-	* flickr-shortcode-importer.php,
-	  readme.txt:
-	  Load
-	  phpFlickr;
-	  In
-	  test
-	  mode;
-	  Verbiage
-	  updates;
-	  Process
-	  shortcode
-	  via
-	  do_shortcode;
-	  Readme
-	  thank
-	  you
+Smush.it screenshots
+------------------------------------------------------------------------
+r422465 | comprock | 2011-08-12 11:19:59 +0800 (Fri, 12 Aug 2011) | 1 line
 
-2011-08-11 04:43  comprock
+Add before & after screenshots; Create & use guid to prevent duplicates;
+------------------------------------------------------------------------
+r422240 | comprock | 2011-08-12 01:51:32 +0800 (Fri, 12 Aug 2011) | 1 line
 
-	* flickr-shortcode-importer.php:
-	  Update
-	  method
-	  names
-	  for
-	  FSI;
-	  Remove
-	  unused
-	  methods;
-	  Begin
-	  post
-	  pulling
-	  with
-	  [flickr];
-	  Set
-	  5-minute
-	  time
-	  limit
-	  per
-	  post;
-	  Update
-	  verbiage
-	  for
-	  FSI
-	  usage
+Add ChangeLog
+------------------------------------------------------------------------
+r422232 | comprock | 2011-08-12 01:35:28 +0800 (Fri, 12 Aug 2011) | 1 line
 
-2011-08-11 03:53  comprock
+Prep for further production testing; Remove import LIMIT; Turn off duplicate handling due to being unable to process guid setting or recall;
+------------------------------------------------------------------------
+r422223 | comprock | 2011-08-12 00:48:11 +0800 (Fri, 12 Aug 2011) | 1 line
 
-	* readme.txt:
-	  UL
-	  shortcode
-	  samples
+Remove unused helper files; Add screenshots; Set version 0.1.0; Correct featured image setting and first_image removal handling; Prevent duplicate [flickr] imports; Revise readme content;
+------------------------------------------------------------------------
+r422204 | comprock | 2011-08-11 23:41:59 +0800 (Thu, 11 Aug 2011) | 1 line
 
-2011-08-11 03:50  comprock
+Handle featured image setting; Remove first [flickr] from post_content; Correct [flickr] replacement for attachment links
+------------------------------------------------------------------------
+r422080 | comprock | 2011-08-11 17:54:12 +0800 (Thu, 11 Aug 2011) | 1 line
 
-	* flickr-shortcode-importer.php:
-	  Update
-	  for
-	  coding
-	  standard;
-	  Disallow
-	  production
-	  use
+Load phpFlickr; In test mode; Verbiage updates; Process shortcode via do_shortcode; Readme thank you
+------------------------------------------------------------------------
+r421980 | comprock | 2011-08-11 12:43:20 +0800 (Thu, 11 Aug 2011) | 1 line
 
-2011-08-11 01:44  comprock
+Update method names for FSI; Remove unused methods; Begin post pulling with [flickr]; Set 5-minute time limit per post; Update verbiage for FSI usage
+------------------------------------------------------------------------
+r421977 | comprock | 2011-08-11 11:53:30 +0800 (Thu, 11 Aug 2011) | 1 line
 
-	* flickr-shortcode-importer.php,
-	  readme.txt:
-	  Set
-	  version
-	  0.0.0
+UL shortcode samples
+------------------------------------------------------------------------
+r421975 | comprock | 2011-08-11 11:50:44 +0800 (Thu, 11 Aug 2011) | 1 line
 
-2011-08-11 01:43  comprock
+Update for coding standard; Disallow production use
+------------------------------------------------------------------------
+r421941 | comprock | 2011-08-11 09:44:06 +0800 (Thu, 11 Aug 2011) | 1 line
 
-	* d,
-	  flickr-shortcode-importer.php,
-	  languages/flickr-shortcode-importer.pot:
-	  Domain
-	  text;
-	  Add
-	  language
+Set version 0.0.0
+------------------------------------------------------------------------
+r421940 | comprock | 2011-08-11 09:43:23 +0800 (Thu, 11 Aug 2011) | 1 line
 
-2011-08-11 01:41  comprock
+Domain text; Add language
+------------------------------------------------------------------------
+r421939 | comprock | 2011-08-11 09:41:27 +0800 (Thu, 11 Aug 2011) | 1 line
 
-	* readme.txt:
-	  Don't
-	  Use
-	  Text
+Don't Use Text
+------------------------------------------------------------------------
+r421936 | comprock | 2011-08-11 09:21:10 +0800 (Thu, 11 Aug 2011) | 1 line
 
-2011-08-11 01:21  comprock
+Add PHPFlickr library; Add FlickManager reference
+------------------------------------------------------------------------
+r421931 | comprock | 2011-08-11 08:59:31 +0800 (Thu, 11 Aug 2011) | 1 line
 
-	* lib,
-	  lib/inc.flickr.php,
-	  o.FlickrManager.php:
-	  Add
-	  PHPFlickr
-	  library;
-	  Add
-	  FlickManager
-	  reference
+Update verbiage to Flickr Shortcode Importer; Ignore options for now
+------------------------------------------------------------------------
+r421926 | comprock | 2011-08-11 08:17:50 +0800 (Thu, 11 Aug 2011) | 1 line
 
-2011-08-11 00:59  comprock
+initial import
+------------------------------------------------------------------------
+r421852 | plugin-master | 2011-08-11 05:09:35 +0800 (Thu, 11 Aug 2011) | 1 line
 
-	* flickr-shortcode-importer.php,
-	  o.flickr-shortcode-importer.php,
-	  readme.txt:
-	  Update
-	  verbiage
-	  to
-	  Flickr
-	  Shortcode
-	  Importer;
-	  Ignore
-	  options
-	  for
-	  now
-
-2011-08-11 00:17  comprock
-
-	* flickr-shortcode-importer.php,
-	  images,
-	  images/facebook-icon.png,
-	  images/pc-icon.png,
-	  images/twitter-icon.png,
-	  jquery-ui,
-	  jquery-ui/jquery.ui.progressbar.min.1.7.2.js,
-	  jquery-ui/jquery.ui.progressbar.min.js,
-	  jquery-ui/redmond,
-	  jquery-ui/redmond/images,
-	  jquery-ui/redmond/images/ui-bg_flat_0_aaaaaa_40x100.png,
-	  jquery-ui/redmond/images/ui-bg_flat_55_fbec88_40x100.png,
-	  jquery-ui/redmond/images/ui-bg_glass_75_d0e5f5_1x400.png,
-	  jquery-ui/redmond/images/ui-bg_glass_85_dfeffc_1x400.png,
-	  jquery-ui/redmond/images/ui-bg_glass_95_fef1ec_1x400.png,
-	  jquery-ui/redmond/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png,
-	  jquery-ui/redmond/images/ui-bg_inset-hard_100_f5f8f9_1x100.png,
-	  jquery-ui/redmond/images/ui-bg_inset-hard_100_fcfdfd_1x100.png,
-	  jquery-ui/redmond/jquery-ui-1.7.2.custom.css,
-	  languages,
-	  o.flickr-shortcode-importer.php,
-	  readme.txt:
-	  initial
-	  import
-
-2011-08-10 21:09  plugin-master
-
-	* .:
-	  adding
-	  flickr-shortcode-importer
-	  by
-	  comprock
-
+adding flickr-shortcode-importer by comprock
+------------------------------------------------------------------------

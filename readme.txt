@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 
 Imports [flickr] shortcode images into the Media Library.
 
@@ -45,8 +45,29 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 3. Flickr Shortcode Importer progress
 4. Before Flickr Shortcode Importer
 5. After Flickr Shortcode Importer
+6. Flickr Shortcode Importer Options
 
 == Changelog ==
+= 1.1.0 =
+* Add Flickr Shortcode Importer Options screenshot
+* Add option Remove First Flickr Shortcode
+* Add option to setting Featured Image or not
+* Add import page link to options page
+* Add conversion limit option
+* Polish up About Flickr Shortcode Importer section
+* Add text domain
+* Rename class.settings.php to class.options.php
+* Add [flickr] Options link to [flickr] Import page
+* Add icon to [flickr] Import page
+* Flickr Shortcode Importer Options page added
+* [flickr] Options linked from Plugins
+* Update pot file
+* Remove old settings file
+* Use Alison Barret's class My_Theme_Options
+* Add ob_settings.php options page helper for using Settings API
+* TODO video import
+* Backup or reversion reminders
+
 = 1.0.1 =
 * Replace duplicate lookup by guid with _flickr_src in postmeta
 * RenderVideo via FlickrManager code

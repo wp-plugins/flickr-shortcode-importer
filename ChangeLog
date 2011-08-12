@@ -2,28 +2,9 @@
 
 	* flickr-shortcode-importer.php,
 	  readme.txt:
-	  Prep
-	  for
-	  further
-	  production
-	  testing;
-	  Remove
-	  import
-	  LIMIT;
-	  Turn
-	  off
-	  duplicate
-	  handling
-	  due
-	  to
-	  being
-	  unable
-	  to
-	  process
-	  guid
-	  setting
-	  or
-	  recall;
+	  Prep for further production testing;
+	  Remove import LIMIT;
+	  Turn off duplicate handling due to being unable to process guid setting or recall;
 
 2011-08-11 16:48  comprock
 
@@ -34,167 +15,84 @@
 	  screenshot-1.png,
 	  screenshot-2.png,
 	  screenshot-3.png:
-	  Remove
-	  unused
-	  helper
-	  files;
-	  Add
-	  screenshots;
-	  Set
-	  version
-	  0.1.0;
-	  Correct
-	  featured
-	  image
-	  setting
-	  and
-	  first_image
-	  removal
-	  handling;
-	  Prevent
-	  duplicate
-	  [flickr]
-	  imports;
-	  Revise
-	  readme
-	  content;
+	  Remove unused helper files;
+	  Add screenshots;
+	  Set version 0.1.0;
+	  Correct featured image setting and first_image removal handling;
+	  Prevent duplicate [flickr] imports;
+	  Revise readme content;
 
 2011-08-11 15:41  comprock
 
 	* flickr-shortcode-importer.php:
-	  Handle
-	  featured
-	  image
-	  setting;
-	  Remove
-	  first
-	  [flickr]
-	  from
-	  post_content;
-	  Correct
-	  [flickr]
-	  replacement
-	  for
-	  attachment
-	  links
+	  Handle featured image setting;
+	  Remove first [flickr] from post_content;
+	  Correct [flickr] replacement for attachment links
 
 2011-08-11 09:54  comprock
 
 	* flickr-shortcode-importer.php,
 	  readme.txt:
-	  Load
-	  phpFlickr;
-	  In
-	  test
-	  mode;
-	  Verbiage
-	  updates;
-	  Process
-	  shortcode
-	  via
-	  do_shortcode;
-	  Readme
-	  thank
-	  you
+	  Load phpFlickr;
+	  In test mode;
+	  Verbiage updates;
+	  Process shortcode via do_shortcode;
+	  Readme thank you
 
 2011-08-11 04:43  comprock
 
 	* flickr-shortcode-importer.php:
-	  Update
-	  method
-	  names
-	  for
-	  FSI;
-	  Remove
-	  unused
-	  methods;
-	  Begin
-	  post
-	  pulling
-	  with
-	  [flickr];
-	  Set
-	  5-minute
-	  time
-	  limit
-	  per
-	  post;
-	  Update
-	  verbiage
-	  for
-	  FSI
-	  usage
+	  Update method names for FSI;
+	  Remove unused methods;
+	  Begin post pulling with [flickr];
+	  Set 5-minute time limit per post;
+	  Update verbiage for FSI usage
 
 2011-08-11 03:53  comprock
 
 	* readme.txt:
-	  UL
-	  shortcode
-	  samples
+	  UL shortcode samples
 
 2011-08-11 03:50  comprock
 
 	* flickr-shortcode-importer.php:
-	  Update
-	  for
-	  coding
-	  standard;
-	  Disallow
-	  production
-	  use
+	  Update for coding standard;
+	  Disallow production use
 
 2011-08-11 01:44  comprock
 
 	* flickr-shortcode-importer.php,
 	  readme.txt:
-	  Set
-	  version
-	  0.0.0
+	  Set version 0.0.0
 
 2011-08-11 01:43  comprock
 
 	* d,
 	  flickr-shortcode-importer.php,
 	  languages/flickr-shortcode-importer.pot:
-	  Domain
-	  text;
-	  Add
-	  language
+	  Domain text;
+	  Add language
 
 2011-08-11 01:41  comprock
 
 	* readme.txt:
-	  Don't
-	  Use
-	  Text
+	  Don't Use Text
 
 2011-08-11 01:21  comprock
 
 	* lib,
 	  lib/inc.flickr.php,
 	  o.FlickrManager.php:
-	  Add
-	  PHPFlickr
-	  library;
-	  Add
-	  FlickManager
-	  reference
+	  Add PHPFlickr library;
+	  Add FlickManager reference
 
 2011-08-11 00:59  comprock
 
 	* flickr-shortcode-importer.php,
 	  o.flickr-shortcode-importer.php,
 	  readme.txt:
-	  Update
-	  verbiage
-	  to
-	  Flickr
-	  Shortcode
-	  Importer;
-	  Ignore
-	  options
-	  for
-	  now
+	  Update verbiage to Flickr Shortcode Importer;
+	  Ignore options for now
 
 2011-08-11 00:17  comprock
 
@@ -220,14 +118,10 @@
 	  languages,
 	  o.flickr-shortcode-importer.php,
 	  readme.txt:
-	  initial
-	  import
+	  initial import
 
 2011-08-10 21:09  plugin-master
 
 	* .:
-	  adding
-	  flickr-shortcode-importer
-	  by
-	  comprock
+	  adding flickr-shortcode-importer by comprock
 

@@ -1,4 +1,10 @@
 ------------------------------------------------------------------------
+r422624 | comprock | 2011-08-12 21:34:21 +0800 (Fri, 12 Aug 2011) | 3 lines
+
+* Add Flickr Shortcode Importer Options screenshot
+* Prepare for release 1.1.0
+
+------------------------------------------------------------------------
 r422615 | comprock | 2011-08-12 21:16:08 +0800 (Fri, 12 Aug 2011) | 2 lines
 
 * Add option Remove First Flickr Shortcode

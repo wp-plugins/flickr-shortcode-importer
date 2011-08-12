@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 
 Imports [flickr] shortcode images into the Media Library.
 
@@ -39,6 +39,11 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 5. After Flickr Shortcode Importer
 
 == Changelog ==
+= 1.0.1 =
+* Replace duplicate lookup by guid with _flickr_src in postmeta
+* RenderVideo via FlickrManager code
+* Remove [flickr] lookup LIMIT
+
 = 1.0.0 =
 * Initial release for production use
 
@@ -91,5 +96,6 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 = Prevent =
 * Duplicates - difficult to assign guid and recall for later use
 
-= Handle [flickrset] =
+= Handle =
+* Flickr video importing
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]

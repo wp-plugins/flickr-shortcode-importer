@@ -3,7 +3,7 @@
 	Plugin Name: Flickr Shortcode Importer
 	Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 	Description: Imports [flickr] shortcode images into the Media Library.
-	Version: 1.0.0
+	Version: 1.0.1
 	Author: Michael Cannon
 	Author URI: http://peimic.com/contact-peimic/
 	License: GPL2
@@ -95,7 +95,7 @@ class Flickr_Shortcode_Importer {
 	<h2><?php _e('Flickr Shortcode Importer', 'flickr-shortcode-importer'); ?></h2>
 
 <?php
-		// TODO testing helper
+		// testing helper
 		if ( $_REQUEST['importflickrshortcode'] ) {
 			$this->ajax_process_shortcode();
 		}
@@ -119,7 +119,6 @@ class Flickr_Shortcode_Importer {
 				// of the API functions will return the full post objects which will
 				// suck up lots of memory. This is best, just not as future proof.
 				$results		= $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_parent = 0 AND post_content LIKE '%[flickr %'" );
-				// $results		= $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_parent = 0 AND post_content LIKE '%[flickr %' LIMIT 1" );
 				$count			= 0;
 
 				// Generate the list of IDs
@@ -345,15 +344,14 @@ class Flickr_Shortcode_Importer {
 	}
 
 	
+	// process each [flickr] entry
 	function shortcode_flickr($args) {
-		// process each [flickr] entry
+		$markup					= '';
+
 		$photo					= $this->flickr->photos_getInfo( $args['id'] );
 		$photo					= $photo['photo'];
 		$contexts				= $this->flickr->photos_getAllContexts( $args['id'] );
 		$photo['caption']		= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
-
-		$size					= $this->get_shortcode_size( $args['thumbnail'] );
-		$align					= $args['align'] ? $args['align'] : 'none';
 		
 		if ( 'photo' == $photo['media'] ) {
 			// pull original Flickr image
@@ -367,9 +365,11 @@ class Flickr_Shortcode_Importer {
 			}
 
 			// wrap in link to attachment itself
+			$size				= $this->get_shortcode_size( $args['thumbnail'] );
 			$image_link			= wp_get_attachment_link( $image_id, $size, true 	);
 
 			// correct class per args
+			$align				= $args['align'] ? $args['align'] : 'none';
 			$align				= ' align' . $align;
 			$wp_image			= ' wp-image-' . $image_id;
 			$image_link			= preg_replace( '#(class="[^"]+)"#', '\1'
@@ -382,15 +382,62 @@ class Flickr_Shortcode_Importer {
 				$markup			= $image_link;
 			} else {
 				// remove [flickr] from post
-				$markup			= '';
 				$this->first_image	= false;
 			}
 		} elseif ($photo['media'] == 'video' && in_array($args['thumbnail'], array('video_player','site_mp4'))) {
-			// TODO import_video
-			// $markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
+			// TODO import video
+			$markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
 		}
 		
 		return $markup;
+	}
+	
+
+	/*
+	From...
+		Plugin Name: Flickr Manager
+		Plugin URI: http://tgardner.net/wordpress-flickr-manager/
+		Version: 3.0.1
+		Author: Trent Gardner
+	*/
+	function RenderVideo($vid, $type = 'flash', $sizes = null) {
+		if(empty($sizes)) {
+			$sizes = $this->flickr->photos_getSizes($vid);
+		}
+		
+		if($type == 'html5') {
+			
+			$video = array();
+			foreach($sizes as $v) {
+				if($v['label'] == 'Site MP4') {
+					$video = $v;
+					break;
+				}
+			}
+			
+			return sprintf('<video width="%s" height="%s" controls><source src="%s" type="video/mp4">%s</video>'
+							, $video['width']
+							, $video['height']
+							, $video['source']
+							, $this->RenderVideo($vid, 'flash', $sizes));
+			
+		} else {
+		
+			$video = array();
+			foreach($sizes as $v) {
+				if($v['label'] == 'Video Player') {
+					$video = $v;
+					break;
+				}
+			}
+			
+			return sprintf('<object width="%s" height="%s" data="%s" type="application/x-shockwave-flash" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+								<param name="flashvars" value="flickr_show_info_box=false"></param>
+								<param name="movie" value="%s"></param>
+								<param name="allowFullScreen" value="true"></param>
+							</object>', $video['width'], $video['height'], $video['source'], $video['source']);
+								
+		}
 	}
 
 
@@ -431,21 +478,15 @@ class Flickr_Shortcode_Importer {
 		$caption			= $photo['caption'];
 		$file				= basename( $src );
 
-		// normal posts have guid based upon permalink
-		// wp_insert_attachment don't set guid, so we create our own
-		$guid				= $date . '-' . $file;
-		$guid				= preg_replace( '#\W#', '-', $guid );
-
-		// TODO don't use guid
-		// use post meta data
-
 		// see if src is duplicate, if so return image_id
+		// postmeta _flickr_src = $file
 		$query				= "
-			SELECT p.ID
-			FROM $wpdb->posts p
-			WHERE p.guid = 'http://$guid'
+			SELECT m.post_id
+			FROM $wpdb->postmeta m
+			WHERE 1 = 1
+				AND m.meta_key LIKE '_flickr_src'
+				AND m.meta_value LIKE '$src'
 		";
-
 		$dup				= $wpdb->get_var( $query );
 
 		// TODO ignore dup if importing [flickrset]
@@ -457,7 +498,6 @@ class Flickr_Shortcode_Importer {
 
 		$wp_filetype		= wp_check_filetype($file, null);
 		$attachment			= array(
-			'guid'				=> $guid,
 			'menu_order'		=> $this->menu_order++,
 			'post_content'		=> $desc,
 			'post_date'			=> $date,
@@ -483,6 +523,8 @@ class Flickr_Shortcode_Importer {
 		// If this fails, then it just means that nothing was changed (old value == new value)
 		wp_update_attachment_metadata( $image_id, $metadata );
 		update_post_meta( $image_id, '_wp_attachment_image_alt', $alt );
+		// help keep track of what's been imported already
+		update_post_meta( $image_id, '_flickr_src', $src );
 
 		return $image_id;
 	}

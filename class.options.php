@@ -115,6 +115,8 @@ class FSI_Settings {
 		
 		echo '</div>
 		<p class="submit"><input name="Submit" type="submit" class="button-primary" value="' . __( 'Save Changes' , 'flickr-shortcode-importer') . '" /></p>
+
+		<p>When ready, <a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('begin flickr shortcode importing', 'flickr-shortcode-importer').'</a>
 		
 	</form>';
 	

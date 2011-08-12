@@ -26,6 +26,7 @@
 
 // Load dependencies
 require_once( dirname(__FILE__) . '/lib/inc.flickr.php' );
+require_once( dirname(__FILE__) . '/settings.php' );
 
 
 class Flickr_Shortcode_Importer {

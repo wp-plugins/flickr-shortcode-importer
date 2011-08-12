@@ -278,7 +278,7 @@ class Flickr_Shortcode_Importer {
 
 	<p><?php _e( "Use this tool to import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.", 'flickr-shortcode-importer' ); ?></p>
 
-	<p><?php _e( "Flickr shortcode import is not reversible. Backup your database beforehand.", 'flickr-shortcode-importer' ); ?></p>
+	<p><?php _e( "Flickr shortcode import is not reversible. Backup your database beforehand or be prepared to revert each transformmed post manually.", 'flickr-shortcode-importer' ); ?></p>
 
 	<p><?php _e( 'To begin, just press the button below.', 'flickr-shortcode-importer ', 'flickr-shortcode-importer'); ?></p>
 

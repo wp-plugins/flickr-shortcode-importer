@@ -15,6 +15,8 @@ The first [flickr] image found in post content is set as the post's Featured Ima
 
 This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
 
+There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
+
 = Handled shortcode samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 
@@ -93,9 +95,6 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * Remove first [flickr] from post content
 * a tag class like 'lightbox'
 
-= Prevent =
-* Duplicates - difficult to assign guid and recall for later use
-
 = Handle =
-* Flickr video importing
+* Flickr video importing - currently rendering as video/object/embed tag using Flickr
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]

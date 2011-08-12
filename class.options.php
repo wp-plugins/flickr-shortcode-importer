@@ -28,7 +28,7 @@ class FSI_Settings {
 		// hide section in UI
 		// $this->sections['appearance']   = __( 'Appearance' );
 		$this->sections['reset']        = __( 'Reset to Defaults' , 'flickr-shortcode-importer');
-		$this->sections['about']        = __( 'About' , 'flickr-shortcode-importer');
+		$this->sections['about']        = __( 'About Flickr Shortcode Importer' , 'flickr-shortcode-importer');
 		
 		add_action( 'admin_menu', array( &$this, 'add_pages' ) );
 		add_action( 'admin_init', array( &$this, 'register_settings' ) );
@@ -191,8 +191,18 @@ class FSI_Settings {
 	 */
 	public function display_about_section() {
 		
-		// This displays on the "About" tab. Echo regular HTML here, like so:
-		// echo '<p>Copyright 2011 me@example.com</p>';
+		echo					<<<EOD
+			<div style="width: 50%;">
+				<p><img class="alignright size-medium" title="Michael in Red Square, Moscow, Russia" src="http://peimic.com/wp-content/uploads/2009/05/michael-cannon-red-square-300x2251.jpg" alt="Michael in Red Square, Moscow, Russia" width="300" height="225" /><a href="http://wordpress.org/extend/plugins/flickr-shortcode-importer/">Flickr Shortcode Importer</a> is by <a href="mailto:michael@peimic.com">Michael Cannon</a>.</p>
+				<p>He's Peichi’s man, an adventurous water rat & a TYPO3 support guru who’s living simply, roaming about & smiling more.</p>
+				<p>If you like this plugin, <a href="http://peimic.com/about-peimic/donate/">please donate</a>.</p>
+EOD;
+		$copyright				= '<p>Copyright %s <a href="http://peimic.com">Peimic.com.</a></p>';
+		$copyright				= sprintf( $copyright, date( 'Y' ) );
+		echo					<<<EOD
+				$copyright
+			</div>
+EOD;
 		
 	}
 	
@@ -294,6 +304,15 @@ class FSI_Settings {
 		/* General Settings
 		===========================================*/
 		
+		$this->settings['limit'] = array(
+			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),
+			'std'     => '',
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
+		if ( false ) {
 		$this->settings['example_text'] = array(
 			'title'   => __( 'Example Text Input' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'This is a description for the text input.' , 'flickr-shortcode-importer'),
@@ -350,6 +369,7 @@ class FSI_Settings {
 				'choice3' => 'Other Choice 3'
 			)
 		);
+		}
 		
 		/* Appearance
 		===========================================*/

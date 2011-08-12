@@ -91,7 +91,6 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == TODO ==
 = Add options =
-* Convert limit
 * Set Featured Image
 * Remove first [flickr] from post content
 * a tag class like 'lightbox'

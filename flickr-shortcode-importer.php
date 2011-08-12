@@ -1,27 +1,27 @@
 <?php
 /*
-	Plugin Name: Flickr Shortcode Importer
-	Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
-	Description: Imports [flickr] shortcode images into the Media Library.
-	Version: 1.0.1
-	Author: Michael Cannon
-	Author URI: http://peimic.com/contact-peimic/
-	License: GPL2
-	
-	Copyright 2011  Michael Cannon  (email : michael@peimic.com)
- 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as 
-	published by the Free Software Foundation.
+Plugin Name: Flickr Shortcode Importer
+Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
+Description: Imports [flickr] shortcode images into the Media Library.
+Version: 1.0.1
+Author: Michael Cannon
+Author URI: http://peimic.com/contact-peimic/
+License: GPL2
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+Copyright 2011  Michael Cannon  (email : michael@peimic.com)
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License, version 2, as 
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 // Load dependencies
@@ -120,7 +120,20 @@ class Flickr_Shortcode_Importer {
 				// Directly querying the database is normally frowned upon, but all
 				// of the API functions will return the full post objects which will
 				// suck up lots of memory. This is best, just not as future proof.
-				$results		= $wpdb->get_results( "SELECT ID FROM $wpdb->posts WHERE post_type = 'post' AND post_parent = 0 AND post_content LIKE '%[flickr %'" );
+				$query			= "
+					SELECT ID
+					FROM $wpdb->posts
+					WHERE 1 = 1
+						AND post_type = 'post'
+						AND post_parent = 0
+						AND post_content LIKE '%[flickr %'
+				";
+
+				$limit			= (int) fsi_options( 'limit' );
+				if ( $limit )
+					$query		.= ' LIMIT ' . $limit;
+
+				$results		= $wpdb->get_results( $query );
 				$count			= 0;
 
 				// Generate the list of IDs

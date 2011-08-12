@@ -23,6 +23,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 = Thank You =
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
 * [flickr] shortcode handling code copied from Trent Gardner's very fine Flickr Manager plugin.
+* Hat's off to Alison Barret for her Settings API tutorials and class My_Theme_Options.
 
 == Installation ==
 1. Upload the `flickr-shortcode-importer` folder to the `/wp-content/plugins/` directory

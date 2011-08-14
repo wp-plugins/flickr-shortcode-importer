@@ -56,6 +56,9 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 8. After Flickr Shortcode Importer for [flickrset]
 
 == Changelog ==
+= trunk =
+* Add Estimated time required to import notice
+
 = 1.2.0 =
 * Add option Set Captions
 * Add option Force Set Featured Image
@@ -132,9 +135,7 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * None
 
 == TODO ==
-= Add options =
-* Add an a tag class attribute like 'lightbox'
-
-= Handle =
-* Flickr video importing - currently rendering as video/object/embed tag using Flickr
-* IMG tags to Flickr
+* Import Flickr-based A/IMG tags
+* Add estimated time remaining notice
+* Import Flickr video - currently rendering as video/object/embed tag using Flickr src
+* Add option set A tag class attribute like 'lightbox'. Not sure if really needed

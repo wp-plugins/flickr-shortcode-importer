@@ -166,7 +166,11 @@ class Flickr_Shortcode_Importer {
 
 
 	function show_status( $count, $posts ) {
-		echo '	<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 2 minutes per Flickr media item. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+		echo '<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 2 minutes per Flickr media item. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+
+		echo '<p>' . sprintf( __( 'Estimated time required to import is %1$s minutes.', 'flickr-shortcode-importer' ), ( $count * 3 ) ) . '</p>';
+
+		// TODO add estimated time remaining 
 
 		$text_goback = ( ! empty( $_GET['goback'] ) ) ? sprintf( __( 'To go back to the previous page, <a href="%s">click here</a>.', 'flickr-shortcode-importer' ), 'javascript:history.go(-1)' ) : '';
 
@@ -430,8 +434,6 @@ class Flickr_Shortcode_Importer {
 
 	function process_flickr_media( $photo, $args = false ) {
 		$markup					= '';
-
-		// TODO create processing message
 
 		if ( 'photo' == $photo['media'] ) {
 			// pull original Flickr image

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flickr Shortcode Importer 1.2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/flickr-shortcode-importer\n"
-"POT-Creation-Date: 2011-08-14 12:32:09+00:00\n"
+"POT-Creation-Date: 2011-08-14 13:17:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -210,51 +210,55 @@ msgid ""
 msgstr ""
 
 #: flickr-shortcode-importer.php:171
+msgid "Estimated time required to import is %1$s minutes."
+msgstr ""
+
+#: flickr-shortcode-importer.php:175
 msgid "To go back to the previous page, <a href=\"%s\">click here</a>."
 msgstr ""
 
-#: flickr-shortcode-importer.php:173
+#: flickr-shortcode-importer.php:177
 msgid ""
 "All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds "
 "and there were %3$s failure(s). To try importing the failed [flickr]s again, "
 "<a href=\"%4$s\">click here</a>. %5$s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:175
+#: flickr-shortcode-importer.php:179
 msgid ""
 "All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds "
 "and there were no failures. %3$s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:178 flickr-shortcode-importer.php:323
+#: flickr-shortcode-importer.php:182 flickr-shortcode-importer.php:327
 msgid "You must enable Javascript in order to proceed!"
 msgstr ""
 
-#: flickr-shortcode-importer.php:184
+#: flickr-shortcode-importer.php:188
 msgid "Abort Importing [flickr(set)]s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:186
+#: flickr-shortcode-importer.php:190
 msgid "Debugging Information"
 msgstr ""
 
-#: flickr-shortcode-importer.php:189
+#: flickr-shortcode-importer.php:193
 msgid "Total [flickr(set)]s: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:190
+#: flickr-shortcode-importer.php:194
 msgid "[flickr(set)]s Imported: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:191
+#: flickr-shortcode-importer.php:195
 msgid "Import Failures: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:222
+#: flickr-shortcode-importer.php:226
 msgid "Stopping, please wait a moment."
 msgstr ""
 
-#: flickr-shortcode-importer.php:311
+#: flickr-shortcode-importer.php:315
 msgid ""
 "Use this tool to import [flickr] shortcodes into the Media Library. The "
 "first [flickr] image found in post content is set as the post's Featured "
@@ -262,54 +266,54 @@ msgid ""
 "are then transitioned to like sized locally referenced images."
 msgstr ""
 
-#: flickr-shortcode-importer.php:313
+#: flickr-shortcode-importer.php:317
 msgid ""
 "[flickrset] shortcodes are handled similarly to [flickr] importing. The "
 "difference is that [flickrset] is replaced by [gallery] and the Featured "
 "Image of a post is set from the first image in the [flickrset] per Options."
 msgstr ""
 
-#: flickr-shortcode-importer.php:315
+#: flickr-shortcode-importer.php:319
 msgid ""
 "Flickr shortcode import is not reversible. Backup your database beforehand "
 "or be prepared to revert each transformmed post manually."
 msgstr ""
 
-#: flickr-shortcode-importer.php:317
+#: flickr-shortcode-importer.php:321
 msgid "Please review your %s before proceeding."
 msgstr ""
 
-#: flickr-shortcode-importer.php:319
+#: flickr-shortcode-importer.php:323
 msgid "To begin, just press the button below."
 msgstr ""
 
-#: flickr-shortcode-importer.php:321
+#: flickr-shortcode-importer.php:325
 msgid "Import Flickr Shortcode"
 msgstr ""
 
-#: flickr-shortcode-importer.php:351
+#: flickr-shortcode-importer.php:355
 msgid "Failed import: %s doesn't contain [flickr]."
 msgstr ""
 
-#: flickr-shortcode-importer.php:354
+#: flickr-shortcode-importer.php:358
 msgid "Your user account doesn't have permission to import images"
 msgstr ""
 
-#: flickr-shortcode-importer.php:378
+#: flickr-shortcode-importer.php:382
 msgid ""
 "&quot;<a href=\"%1$s\" target=\"_blank\">%2$s</a>&quot; Post ID %3$s was "
 "successfully processed in %4$s seconds."
 msgstr ""
 
-#: flickr-shortcode-importer.php:610
+#: flickr-shortcode-importer.php:612
 msgid "The originally uploaded image file cannot be found at %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:618
+#: flickr-shortcode-importer.php:620
 msgid "Unknown failure reason."
 msgstr ""
 
-#: flickr-shortcode-importer.php:632
+#: flickr-shortcode-importer.php:634
 msgid ""
 "&quot;%1$s&quot; Post ID %2$s failed to be processed. The error message was: "
 "%3$s"

@@ -12,6 +12,7 @@ Imports [flickr] & [flickrset] shortcode images into the Media Library.
 Imports [flickr] & [flickrset] shortcode images into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
 
 The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.  
+
 [flickrset] shortcode is converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
 
 This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
@@ -19,9 +20,9 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
 
 = Options =
-* Add option Default A Tag Class
-* Add option Default Image Alignment
-* Add option Default Image Size
+* Default A Tag Class
+* Default Image Alignment
+* Default Image Size
 * Import Flickr-based A/IMG tags
 * Set Captions
 * Set first [flickr] image as featured image or not
@@ -63,6 +64,9 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 8. After Flickr Shortcode Importer for [flickrset]
 
 == Changelog ==
+= trunk =
+* Update readme verbiage
+
 = 1.3.3 =
 * Add option Default A Tag Class
 

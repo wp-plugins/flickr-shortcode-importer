@@ -4,26 +4,29 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 
-Imports [flickr] shortcode images into the Media Library.
+Imports [flickr] & [flickrset] shortcode images into the Media Library.
 
 == Description ==
-Imports [flickr] shortcode images into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
+Imports [flickr] & [flickrset] shortcode images into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
 
 The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.
+
+[flickrset] shortcode is converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
 
 This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
 
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
 
 = Options =
-* Set limit of posts to be processed
 * Set first [flickr] image as featured image or not
 * Remove first [flickr] from post content or not
+* Set limit of posts to be processed
 
 = Handled shortcode samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
+* [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
 
 = Thank You =
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
@@ -43,11 +46,18 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 1. Flickr Shortcode Importer in Plugins
 2. Flickr Shortcode Importer in Tools
 3. Flickr Shortcode Importer progress
-4. Before Flickr Shortcode Importer
-5. After Flickr Shortcode Importer
+4. Before Flickr Shortcode Importer for [flickr]
+5. After Flickr Shortcode Importer for [flickr]
 6. Flickr Shortcode Importer Options
+7. Before Flickr Shortcode Importer for [flickrset]
+8. After Flickr Shortcode Importer for [flickrset]
 
 == Changelog ==
+= 1.2.0 =
+* Import [flickrset] shortcode content
+* Allow 2 minutes per photo import before timing out
+* Add Flickr Shortcode Importer before & after screenshots for [flickrset]
+
 = 1.1.0 =
 * Add Flickr Shortcode Importer Options screenshot
 * Add option Remove First Flickr Shortcode
@@ -121,4 +131,3 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 = Handle =
 * Flickr video importing - currently rendering as video/object/embed tag using Flickr
-* [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]

@@ -116,7 +116,7 @@ class FSI_Settings {
 		echo '</div>
 		<p class="submit"><input name="Submit" type="submit" class="button-primary" value="' . __( 'Save Changes' , 'flickr-shortcode-importer') . '" /></p>
 
-		<p>When ready, <a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('begin flickr shortcode importing', 'flickr-shortcode-importer').'</a>
+		<p>When ready, <a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('begin [flickr] importing', 'flickr-shortcode-importer').'</a>
 		
 	</form>';
 	
@@ -306,14 +306,6 @@ EOD;
 		/* General Settings
 		===========================================*/
 		
-		$this->settings['limit'] = array(
-			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),
-			'std'     => '',
-			'type'    => 'text',
-			'section' => 'general'
-		);
-		
 		$this->settings['set_featured_image'] = array(
 			'section' => 'general',
 			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),
@@ -330,6 +322,15 @@ EOD;
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);
 		
+		$this->settings['limit'] = array(
+			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),
+			'std'     => '',
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
+		// Here for reference
 		if ( false ) {
 		$this->settings['example_text'] = array(
 			'title'   => __( 'Example Text Input' , 'flickr-shortcode-importer'),

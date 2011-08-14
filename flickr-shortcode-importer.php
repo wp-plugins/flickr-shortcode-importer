@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr] shortcode images into the Media Library.
-Version: 1.1.0
+Version: 1.2.0
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -31,6 +31,7 @@ require_once( dirname(__FILE__) . '/class.options.php' );
 
 class Flickr_Shortcode_Importer {
 	var $menu_id;
+	var $in_flickset			= false;
 
 	// Plugin initialization
 	function Flickr_Shortcode_Importer() {
@@ -87,8 +88,7 @@ class Flickr_Shortcode_Importer {
 	// The user interface plus thumbnail regenerator
 	function user_interface() {
 		global $wpdb;
-
-		?>
+?>
 
 <div id="message" class="updated fade" style="display:none"></div>
 
@@ -124,10 +124,13 @@ class Flickr_Shortcode_Importer {
 					SELECT ID
 					FROM $wpdb->posts
 					WHERE 1 = 1
-						AND post_type = 'post'
-						AND post_parent = 0
-						AND post_content LIKE '%[flickr %'
-				";
+					AND post_type = 'post'
+					AND post_parent = 0
+					AND (
+						post_content LIKE '%[flickr %'
+						OR post_content LIKE '%[flickrset %'
+					)
+					";
 
 				$limit			= (int) fsi_options( 'limit' );
 				if ( $limit )
@@ -151,11 +154,25 @@ class Flickr_Shortcode_Importer {
 				$posts			= implode( ',', $posts );
 			}
 
-			echo '	<p>' . __( "Please be patient while the [flickr] shortcodes are processed. This can take a while, up to 5 minutes per post, if your server is slow, have low bandwidth, or have many [flickr] shortcodes in your post content. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+			$this->show_status( $count, $posts );
+		} else {
+			// No button click? Display the form.
+			$this->show_greeting();
+		}
+?>
+	</div>
+<?php
+	}
 
-			$text_goback = ( ! empty( $_GET['goback'] ) ) ? sprintf( __( 'To go back to the previous page, <a href="%s">click here</a>.', 'flickr-shortcode-importer' ), 'javascript:history.go(-1)' ) : '';
-			$text_failures = sprintf( __( 'All done! %1$s [flickr](s) were successfully processed in %2$s seconds and there were %3$s failure(s). To try importing the failed [flickr]s again, <a href="%4$s">click here</a>. %5$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", "' + rt_errors + '", esc_url( wp_nonce_url( admin_url( 'tools.php?page=flickr-shortcode-importer&goback=1' ), 'flickr-shortcode-importer' ) . '&posts=' ) . "' + rt_failedlist + '", $text_goback );
-			$text_nofailures = sprintf( __( 'All done! %1$s [flickr](s) were successfully processed in %2$s seconds and there were no failures. %3$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", $text_goback );
+
+	function show_status( $count, $posts ) {
+		echo '	<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 5 minutes per post, if your server is slow, have low bandwidth, or have many [flickr] shortcodes or photos in your [flickrset] in your post content. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+
+		$text_goback = ( ! empty( $_GET['goback'] ) ) ? sprintf( __( 'To go back to the previous page, <a href="%s">click here</a>.', 'flickr-shortcode-importer' ), 'javascript:history.go(-1)' ) : '';
+
+		$text_failures = sprintf( __( 'All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds and there were %3$s failure(s). To try importing the failed [flickr]s again, <a href="%4$s">click here</a>. %5$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", "' + rt_errors + '", esc_url( wp_nonce_url( admin_url( 'tools.php?page=flickr-shortcode-importer&goback=1' ), 'flickr-shortcode-importer' ) . '&posts=' ) . "' + rt_failedlist + '", $text_goback );
+
+		$text_nofailures = sprintf( __( 'All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds and there were no failures. %3$s', 'flickr-shortcode-importer' ), "' + rt_successes + '", "' + rt_totaltime + '", $text_goback );
 ?>
 
 	<noscript><p><em><?php _e( 'You must enable Javascript in order to proceed!', 'flickr-shortcode-importer' ) ?></em></p></noscript>
@@ -164,13 +181,13 @@ class Flickr_Shortcode_Importer {
 		<div id="fsiposts-bar-percent" style="position:absolute;left:50%;top:50%;width:300px;margin-left:-150px;height:25px;margin-top:-9px;font-weight:bold;text-align:center;"></div>
 	</div>
 
-	<p><input type="button" class="button hide-if-no-js" name="fsiposts-stop" id="fsiposts-stop" value="<?php _e( 'Abort Importing [flickr]s', 'flickr-shortcode-importer' ) ?>" /></p>
+	<p><input type="button" class="button hide-if-no-js" name="fsiposts-stop" id="fsiposts-stop" value="<?php _e( 'Abort Importing [flickr(set)]s', 'flickr-shortcode-importer' ) ?>" /></p>
 
 	<h3 class="title"><?php _e( 'Debugging Information', 'flickr-shortcode-importer' ) ?></h3>
 
 	<p>
-		<?php printf( __( 'Total [flickr]s: %s', 'flickr-shortcode-importer' ), $count ); ?><br />
-		<?php printf( __( '[flickr]s Imported: %s', 'flickr-shortcode-importer' ), '<span id="fsiposts-debug-successcount">0</span>' ); ?><br />
+		<?php printf( __( 'Total [flickr(set)]s: %s', 'flickr-shortcode-importer' ), $count ); ?><br />
+		<?php printf( __( '[flickr(set)]s Imported: %s', 'flickr-shortcode-importer' ), '<span id="fsiposts-debug-successcount">0</span>' ); ?><br />
 		<?php printf( __( 'Import Failures: %s', 'flickr-shortcode-importer' ), '<span id="fsiposts-debug-failurecount">0</span>' ); ?>
 	</p>
 
@@ -283,15 +300,17 @@ class Flickr_Shortcode_Importer {
 	// ]]>
 	</script>
 <?php
-		}
+	}
 
-		// No button click? Display the form.
-		else {
+
+	function show_greeting() {
 ?>
 	<form method="post" action="">
 <?php wp_nonce_field('flickr-shortcode-importer') ?>
 
 	<p><?php _e( "Use this tool to import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.", 'flickr-shortcode-importer' ); ?></p>
+
+	<p><?php _e( "[flickrset] shortcodes are handled similarly to [flickr] importing. The difference is that [flickrset] is replaced by [gallery] and the Featured Image of a post is set from the first image in the [flickrset] per Options.", 'flickr-shortcode-importer' ); ?></p>
 
 	<p><?php _e( "Flickr shortcode import is not reversible. Backup your database beforehand or be prepared to revert each transformmed post manually.", 'flickr-shortcode-importer' ); ?></p>
 
@@ -304,11 +323,6 @@ class Flickr_Shortcode_Importer {
 	<noscript><p><em><?php _e( 'You must enable Javascript in order to proceed!', 'flickr-shortcode-importer' ) ?></em></p></noscript>
 
 	</form>
-<?php
-		} // End if button
-?>
-</div>
-
 <?php
 	}
 
@@ -327,6 +341,7 @@ class Flickr_Shortcode_Importer {
 		// only use our shortcode handlers to prevent messing up post content 
 		remove_all_shortcodes();
 		add_shortcode('flickr', array( &$this, 'shortcode_flickr' ) );
+		add_shortcode('flickrset', array( &$this, 'shortcode_flickrset' ) );
 
 		$id						= (int) $_REQUEST['id'];
 		$post					= get_post( $id );
@@ -338,18 +353,20 @@ class Flickr_Shortcode_Importer {
 		if ( !current_user_can( 'manage_options' ) )
 			$this->die_json_error_msg( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
 
-		@set_time_limit( 300 ); // 5 minutes per post should be PLENTY
-
 		// Don't overwrite Featured Images
-		$this->featured_id		= ( ! has_post_thumbnail( $this->post_id ) ) ? true : false;
+		$this->featured_id		= false;
 		$this->first_image		= fsi_options( 'remove_first_flickr_shortcode' ) ? true : false;
 		$this->menu_order		= 1;
 
 		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
 
-		if ( $this->featured_id && fsi_options( 'set_featured_image' ) )
+		// TODO allow overriding Featured Image
+		if ( $this->featured_id
+			&& fsi_options( 'set_featured_image' )
+			&& ! has_post_thumbnail( $this->post_id ) ) {
 			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
+		}
 
 		$post					= array(
 			'ID'			=> $this->post_id,
@@ -363,24 +380,71 @@ class Flickr_Shortcode_Importer {
 
 	
 	// process each [flickr] entry
-	function shortcode_flickr($args) {
-		$markup					= '';
+	function shortcode_flickr( $args ) {
+		set_time_limit( 120 );
 
 		$photo					= $this->flickr->photos_getInfo( $args['id'] );
 		$photo					= $photo['photo'];
-		$contexts				= $this->flickr->photos_getAllContexts( $args['id'] );
-		$photo['caption']		= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
+
+		if ( isset( $args['caption'] ) ) {
+			$photo['caption']	= $args['caption'];
+		} else {
+			$contexts			= $this->flickr->photos_getAllContexts( $args['id'] );
+			$photo['caption']	= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
+		}
 		
+		$markup					= $this->process_flickr_media( $photo, $args );
+		
+		return $markup;
+	}
+
+	
+	// process each [flickrset] entry
+	function shortcode_flickrset( $args ) {
+		$this->in_flickset		= true;
+		$import_limit			= ( $args['photos'] ) ? $args['photos'] : -1;
+
+		$info					= $this->flickr->photosets_getInfo( $args['id'] );
+		$photos					= $this->flickr->photosets_getPhotos( $args['id'] );
+		$photos					= $photos['photoset']['photo'];
+
+		// increased because [flickrset] might have lots of photos
+		set_time_limit( 120 * count( $photos ) );
+
+		$args['caption']		= isset( $info['title'] ) ? $info['title'] : '';
+		
+		foreach( $photos as $entry ) {
+			$args['id']			= $entry['id'];
+			$this->shortcode_flickr( $args );
+
+			if ( 0 == --$import_limit )
+				break;
+		}
+		
+		$markup					= '[gallery]';
+		$this->in_flickset		= false;
+
+		return $markup;
+	}
+
+
+	function process_flickr_media( $photo, $args = false ) {
+		$markup					= '';
+
 		if ( 'photo' == $photo['media'] ) {
 			// pull original Flickr image
 			$src				= $this->flickr->buildPhotoURL( $photo, 'original' );
 			// add image to media library
-			$image_id			= $this->import_image( $src, $photo );
+			$image_id			= $this->import_flickr_photo( $src, $photo );
 
 			// if first image, set as featured 
 			if ( ! $this->featured_id ) {
 				$this->featured_id	= $image_id;
 			}
+
+			// no args, means nothing further to do
+			if ( false === $args )
+				return $markup;
 
 			// wrap in link to attachment itself
 			$size				= $this->get_shortcode_size( $args['thumbnail'] );
@@ -406,7 +470,7 @@ class Flickr_Shortcode_Importer {
 			// TODO import video
 			$markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
 		}
-		
+
 		return $markup;
 	}
 	
@@ -486,10 +550,13 @@ class Flickr_Shortcode_Importer {
 	}
 	
 
-	function import_image( $src, $photo ) {
+	function import_flickr_photo( $src, $photo ) {
 		global $wpdb;
 
 		$title				= $photo['title'];
+		// TODO check if title is a filename, if so, use caption - menu order instead
+		// basically, try to create a nice title
+		// $this->menu_order
 		$alt				= $title;
 		$desc				= $photo['description'];
 		$date				= $photo['dates']['taken'];
@@ -507,14 +574,20 @@ class Flickr_Shortcode_Importer {
 		";
 		$dup				= $wpdb->get_var( $query );
 
-		// TODO ignore dup if importing [flickrset]
-		if ( $dup )
-			return $dup;
+		if ( $dup ) {
+			// ignore dup if importing [flickrset]
+			if( ! $this->in_flickset ) {
+				return $dup;
+			} else {
+				// use local source to speed up transfer
+				$src		= wp_get_attachment_url( $dup );
+			}
+		}
 
 		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );
 		$filename			= $file_move['file'];
 
-		$wp_filetype		= wp_check_filetype($file, null);
+		$wp_filetype		= wp_check_filetype( $file, null );
 		$attachment			= array(
 			'menu_order'		=> $this->menu_order++,
 			'post_content'		=> $desc,
@@ -524,6 +597,7 @@ class Flickr_Shortcode_Importer {
 			'post_status'		=> 'inherit',
 			'post_title'		=> $title,
 		);
+
 		// relate image to post
 		$image_id			= wp_insert_attachment( $attachment, $filename, $this->post_id );
 

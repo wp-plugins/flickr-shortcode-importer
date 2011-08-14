@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 Imports [flickr] & [flickrset] shortcode images into the Media Library.
 
@@ -63,6 +63,9 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 8. After Flickr Shortcode Importer for [flickrset]
 
 == Changelog ==
+= 1.3.2 =
+* Properly call cbMkReadableStr
+
 = 1.3.1 =
 * Update plugin description
 

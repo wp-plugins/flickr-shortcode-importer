@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr] & [flickrset] shortcode images into the Media Library.
-Version: 1.3.1
+Version: 1.3.2
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -102,7 +102,9 @@ class Flickr_Shortcode_Importer {
 <?php
 		// testing helper
 		if ( $_REQUEST['importflickrshortcode'] ) {
-			$this->convert_flickr_sourced_tags();
+			// $this->convert_flickr_sourced_tags();
+			$this->ajax_process_shortcode();
+			exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );
 		}
 
 		// If the button was clicked
@@ -435,13 +437,6 @@ class Flickr_Shortcode_Importer {
 
 		header( 'Content-type: application/json' );
 
-		$this->flickr			= new phpFlickr($this->api_key, $this->secret);
-
-		// only use our shortcode handlers to prevent messing up post content 
-		remove_all_shortcodes();
-		add_shortcode('flickr', array( &$this, 'shortcode_flickr' ) );
-		add_shortcode('flickrset', array( &$this, 'shortcode_flickrset' ) );
-
 		$id						= (int) $_REQUEST['id'];
 		$post					= get_post( $id );
 		$this->post_id			= $post->ID;
@@ -449,13 +444,22 @@ class Flickr_Shortcode_Importer {
 		if ( ! $post || 'post' != $post->post_type || ! stristr( $post->post_content, '[flickr' ) )
 			die( json_encode( array( 'error' => sprintf( __( "Failed import: %s doesn't contain [flickr].", 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
 
-		if ( !current_user_can( 'manage_options' ) )
+		if ( ! current_user_can( 'manage_options' ) )
 			$this->die_json_error_msg( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
+
+		$this->flickr			= new phpFlickr($this->api_key, $this->secret);
+
+		// only use our shortcode handlers to prevent messing up post content 
+		remove_all_shortcodes();
+		add_shortcode( 'flickr', array( &$this, 'shortcode_flickr' ) );
+		add_shortcode( 'flickrset', array( &$this, 'shortcode_flickrset' ) );
 
 		// Don't overwrite Featured Images
 		$this->featured_id		= false;
 		$this->first_image		= fsi_options( 'remove_first_flickr_shortcode' ) ? true : false;
 		$this->menu_order		= 1;
+
+		// TODO progress by post
 
 		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
@@ -671,7 +675,7 @@ class Flickr_Shortcode_Importer {
 				&& ! empty( $set_title ) ) {
 				$title			= $set_title . '-' . $this->menu_order;
 			} elseif ( ! preg_match( '#\s#', $title ) ) {
-				$title		= $this->cbMkReadableStr();
+				$title		= $this->cbMkReadableStr( $title );
 			}
 		}
 

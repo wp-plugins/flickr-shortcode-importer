@@ -20,6 +20,8 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
 
 = Options =
+* Add option Default Image Alignment
+* Add option Default Image Size
 * Import Flickr-based A/IMG tags
 * Set Captions
 * Set first [flickr] image as featured image or not
@@ -62,6 +64,11 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = trunk =
+* Update Options screenshot
+* Replace preg_match_all with explode and preg_match to handle single line of many A/IMG tags
+* Line break after shortcodes to ensure proper reading by WordPress
+* Add option Default Image Alignment
+* Add option Default Image Size
 * Add warnings to readme
 * Import Flickr-based A/IMG tags
 * Set get_shortcode_size default to medium

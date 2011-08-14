@@ -185,7 +185,12 @@ class Flickr_Shortcode_Importer {
 		$posts					= $wpdb->get_results( $query );
 		$doc					= new DOMDocument();
 
-		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]';
+		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]' . "\n";
+		// looking for
+		// <a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>
+		$find_flickr_a_tag		= '#<a.*href=.*https?://www.flickr.com/.*><img.*src=.*flickr.com/.*></a>#i';
+		$a_tag_open				= '<a ';
+		$default_alignment		= fsi_options( 'default_image_alignment' );
 
 		foreach ( $posts as $post ) {
 			if ( ! isset( $post->ID ) )
@@ -194,49 +199,52 @@ class Flickr_Shortcode_Importer {
 			$post				= get_post( $post->ID );
 			$post_content		= $post->post_content;
 
-			// looking for
-			// <a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>
-			if ( ! preg_match_all( '#(<a.*href=.*https?://www.flickr.com/.*><img.*src=.*flickr.com/.*></a>)#', $post_content, $matches ) )
-				continue;
+			$matches_a			= explode( $a_tag_open, $post_content );
 
 			// for each A/IMG tag set
-			foreach ( $matches[0] as $html ) {
+			foreach ( $matches_a as $html ) {
+				$html			= $a_tag_open . $html;
+
+				if ( ! preg_match( $find_flickr_a_tag, $html ) ) {
+					continue;
+				}
+
 				// safer than home grown regex
 				if ( ! $doc->loadHTML( $html ) ) {
-					return;
+					continue;
 				}
 
 				// parse out parts id, thumbnail, align
-				$a_tags				= $doc->getElementsByTagName( 'a' );
-				$a_tag				= $a_tags->item( 0 );
+				$a_tags			= $doc->getElementsByTagName( 'a' );
+				$a_tag			= $a_tags->item( 0 );
 
 				// gives size tt-flickr tt-flickr-Medium
-				$size				= $a_tag->getAttribute( 'class' );
-				$size				= $this->get_shortcode_size( $size );
+				$size			= $a_tag->getAttribute( 'class' );
+				$size			= $this->get_shortcode_size( $size );
 
-				$image_tags			= $doc->getElementsByTagName( 'img' );
-				$image_tag			= $image_tags->item( 0 );
+				$image_tags		= $doc->getElementsByTagName( 'img' );
+				$image_tag		= $image_tags->item( 0 );
 
 				// give photo id http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg
-				$src				= $image_tag->getAttribute( 'src' );
-				$filename			= basename( $src );
-				$id					= preg_replace( '#^(\d+)_.*#', '\1', $filename );
+				$src			= $image_tag->getAttribute( 'src' );
+				$filename		= basename( $src );
+				$id				= preg_replace( '#^(\d+)_.*#', '\1', $filename );
 
 				// gives alginment alignnone
-				$align_primary		= $image_tag->getAttribute( 'class' );
+				$align_primary	= $image_tag->getAttribute( 'class' );
 				$align_secondary	= $image_tag->getAttribute( 'align' );
-				$align_combined		= $align_secondary . ' ' . $align_primary;
+				$align_combined	= $align_secondary . ' ' . $align_primary;
 
-				$find_align			= '#(none|left|center|right)#i';
+				$find_align		= '#(none|left|center|right)#i';
 				preg_match_all( $find_align, $align_combined, $align_matches );
 				// get the last align mentioned since that has precedence
-				$align				= ( isset( $align_matches[0] ) ) ? array_pop( $align_matches[0] ) : 'none';
+				$align			= ( count( $align_matches[0] ) ) ? array_pop( $align_matches[0] ) : $default_alignment;
 
 				// ceate simple [flickr] like
 				// [flickr id="5348222727" thumbnail="small" align="none"]
-				$replacement		= sprintf( $flickr_shortcode, $id, $size, $align );
+				$replacement	= sprintf( $flickr_shortcode, $id, $size, $align );
 				// replace A/IMG with new [flickr]
-				$post_content		= str_replace( $html, $replacement, $post_content );
+				$post_content	= str_replace( $html, $replacement, $post_content );
 			}
 
 			$update				= array(
@@ -539,7 +547,7 @@ class Flickr_Shortcode_Importer {
 			$image_link			= wp_get_attachment_link( $image_id, $size, true 	);
 
 			// correct class per args
-			$align				= $args['align'] ? $args['align'] : 'none';
+			$align				= $args['align'] ? $args['align'] : fsi_options( 'default_image_alignment' );
 			$align				= ' align' . $align;
 			$wp_image			= ' wp-image-' . $image_id;
 			$image_link			= preg_replace( '#(class="[^"]+)"#', '\1'
@@ -625,6 +633,11 @@ class Flickr_Shortcode_Importer {
 				$size			= 'thumbnail';
 				break;
 
+			case 'medium':
+			case 'medium_640':
+				$size			= 'medium';
+				break;
+
 			case 'large':
 				$size			= 'large';
 				break;
@@ -634,10 +647,8 @@ class Flickr_Shortcode_Importer {
 				$size			= 'full';
 				break;
 
-			case 'medium':
-			case 'medium_640':
 			default:
-				$size			= 'medium';
+				$size			= fsi_options( 'default_image_size' );
 				break;
 		}
 
@@ -651,6 +662,7 @@ class Flickr_Shortcode_Importer {
 		$set_title			= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
 		$title				= $photo['title'];
 		// if title is a filename, use set_title - menu order instead
+		// TODO handle camelCase and underscores as well
 		if ( fsi_options( 'make_nice_image_title' )
 			&& preg_match( '#\.[a-zA-Z]{3}$#', $title )
 			&& ! empty( $set_title ) ) {

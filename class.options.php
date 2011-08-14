@@ -354,6 +354,34 @@ EOD;
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);
 		
+		$this->settings['default_image_alignment'] = array(
+			'section' => 'general',
+			'title'   => __( 'Default Image Alignment' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Default alignment of image displayed in post when no alignment is found.' , 'flickr-shortcode-importer'),
+			'type'    => 'select',
+			'std'     => 'left',
+			'choices' => array(
+				'none'		=> 'None',
+				'left'		=> 'Left',
+				'center'	=> 'Center',
+				'right'		=> 'Right',
+			)
+		);
+		
+		$this->settings['default_image_size'] = array(
+			'section' => 'general',
+			'title'   => __( 'Default Image Size' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Default size of image displayed in post when no size is found.' , 'flickr-shortcode-importer'),
+			'type'    => 'select',
+			'std'     => 'medium',
+			'choices' => array(
+				'thumbnail'	=> 'Small',
+				'medium'	=> 'Medium',
+				'large'		=> 'Large',
+				'full'		=> 'Original',
+			)
+		);
+		
 		$this->settings['limit'] = array(
 			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),

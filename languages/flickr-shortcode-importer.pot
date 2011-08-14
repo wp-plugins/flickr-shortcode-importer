@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Flickr Shortcode Importer package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flickr Shortcode Importer 1.0.1\n"
+"Project-Id-Version: Flickr Shortcode Importer 1.2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/flickr-shortcode-importer\n"
-"POT-Creation-Date: 2011-08-12 13:13:35+00:00\n"
+"POT-Creation-Date: 2011-08-14 11:38:54+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Flickr Shortcode Importer Options"
 msgstr ""
 
-#: class.options.php:50 flickr-shortcode-importer.php:49
+#: class.options.php:50 flickr-shortcode-importer.php:50
 msgid "[flickr] Options"
 msgstr ""
 
@@ -45,123 +45,135 @@ msgid "Save Changes"
 msgstr ""
 
 #: class.options.php:119
-msgid "begin flickr shortcode importing"
-msgstr ""
-
-#: class.options.php:310
-msgid "Import Limit"
+msgid "begin [flickr] importing"
 msgstr ""
 
 #: class.options.php:311
-msgid ""
-"Useful for testing import on a limited amount of posts. 0 or blank means "
-"unlimited."
-msgstr ""
-
-#: class.options.php:319
 msgid "Set Featured Image"
 msgstr ""
 
-#: class.options.php:320
-msgid "Set the first [flickr] image found as the Featured Image?"
+#: class.options.php:312
+msgid ""
+"Set the first [flickr] image found as the Featured Image. Not done if the "
+"post already has a Featured Image set."
 msgstr ""
 
-#: class.options.php:327
+#: class.options.php:319
 msgid "Remove First Flickr Shortcode"
 msgstr ""
 
-#: class.options.php:328
+#: class.options.php:320
 msgid ""
 "Remove the first [flickr] from post content? If you use Featured Images, "
 "this will help prevent duplicate images in your post."
 msgstr ""
 
+#: class.options.php:327
+msgid "Make Nice Image Title?"
+msgstr ""
+
+#: class.options.php:328
+msgid ""
+"If the image title is a filename and the image is part of a Flickr set, the "
+"Flickr set title plus a numeric suffix will be used instead."
+msgstr ""
+
+#: class.options.php:334
+msgid "Import Limit"
+msgstr ""
+
 #: class.options.php:335
-msgid "Example Text Input"
-msgstr ""
-
-#: class.options.php:336
-msgid "This is a description for the text input."
-msgstr ""
-
-#: class.options.php:343
-msgid "Example Textarea Input"
+msgid ""
+"Useful for testing import on a limited amount of posts. 0 or blank means "
+"unlimited."
 msgstr ""
 
 #: class.options.php:344
-msgid "This is a description for the textarea input."
+msgid "Example Text Input"
+msgstr ""
+
+#: class.options.php:345
+msgid "This is a description for the text input."
 msgstr ""
 
 #: class.options.php:352
-msgid "Example Checkbox"
+msgid "Example Textarea Input"
 msgstr ""
 
 #: class.options.php:353
+msgid "This is a description for the textarea input."
+msgstr ""
+
+#: class.options.php:361
+msgid "Example Checkbox"
+msgstr ""
+
+#: class.options.php:362
 msgid "This is a description for the checkbox."
 msgstr ""
 
-#: class.options.php:367
+#: class.options.php:376
 msgid "Example Radio"
 msgstr ""
 
-#: class.options.php:368
+#: class.options.php:377
 msgid "This is a description for the radio buttons."
 msgstr ""
 
-#: class.options.php:380
+#: class.options.php:389
 msgid "Example Select"
 msgstr ""
 
-#: class.options.php:381
+#: class.options.php:390
 msgid "This is a description for the drop-down."
 msgstr ""
 
-#: class.options.php:397
+#: class.options.php:406
 msgid "Header Logo"
 msgstr ""
 
-#: class.options.php:398
+#: class.options.php:407
 msgid "Enter the URL to your logo for the plugin header."
 msgstr ""
 
-#: class.options.php:405
+#: class.options.php:414
 msgid "Favicon"
 msgstr ""
 
-#: class.options.php:406
+#: class.options.php:415
 msgid ""
 "Enter the URL to your custom favicon. It should be 16x16 pixels in size."
 msgstr ""
 
-#: class.options.php:412
+#: class.options.php:421
 msgid "Custom Styles"
 msgstr ""
 
-#: class.options.php:413
+#: class.options.php:422
 msgid "Enter any custom CSS here to apply it to your plugin."
 msgstr ""
 
-#: class.options.php:425
+#: class.options.php:434
 msgid "Reset plugin"
 msgstr ""
 
-#: class.options.php:429
+#: class.options.php:438
 msgid ""
 "Check this box and click \"Save Changes\" below to reset plugin options to "
 "their defaults."
 msgstr ""
 
-#: flickr-shortcode-importer.php:58
+#: flickr-shortcode-importer.php:59
 msgid "Import"
 msgstr ""
 
-#. #-#-#-#-#  flickr-shortcode-importer.pot (Flickr Shortcode Importer 1.0.1)  #-#-#-#-#
+#. #-#-#-#-#  flickr-shortcode-importer.pot (Flickr Shortcode Importer 1.2.0)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: flickr-shortcode-importer.php:68 flickr-shortcode-importer.php:97
+#: flickr-shortcode-importer.php:69 flickr-shortcode-importer.php:97
 msgid "Flickr Shortcode Importer"
 msgstr ""
 
-#: flickr-shortcode-importer.php:68
+#: flickr-shortcode-importer.php:69
 msgid "[flickr] Importer"
 msgstr ""
 
@@ -169,66 +181,64 @@ msgstr ""
 msgid "Cheatin&#8217; uh?"
 msgstr ""
 
-#: flickr-shortcode-importer.php:147
+#: flickr-shortcode-importer.php:150
 msgid "All done. No [flickr] codes found in posts"
 msgstr ""
 
-#: flickr-shortcode-importer.php:154
+#: flickr-shortcode-importer.php:169
 msgid ""
-"Please be patient while the [flickr] shortcodes are processed. This can take "
-"a while, up to 5 minutes per post, if your server is slow, have low "
-"bandwidth, or have many [flickr] shortcodes in your post content. Do not "
-"navigate away from this page until this script is done or the import will "
-"not be completed. You will be notified via this page when the import is "
-"completed."
+"Please be patient while the [flickr(set)] shortcodes are processed. This can "
+"take a while, up to 2 minutes per Flickr media item. Do not navigate away "
+"from this page until this script is done or the import will not be "
+"completed. You will be notified via this page when the import is completed."
 msgstr ""
 
-#: flickr-shortcode-importer.php:156
+#: flickr-shortcode-importer.php:171
 msgid "To go back to the previous page, <a href=\"%s\">click here</a>."
 msgstr ""
 
-#: flickr-shortcode-importer.php:157
+#: flickr-shortcode-importer.php:173
 msgid ""
-"All done! %1$s [flickr](s) were successfully processed in %2$s seconds and "
-"there were %3$s failure(s). To try importing the failed [flickr]s again, <a "
-"href=\"%4$s\">click here</a>. %5$s"
+"All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds "
+"and there were %3$s failure(s). To try importing the failed [flickr]s again, "
+"<a href=\"%4$s\">click here</a>. %5$s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:158
+#: flickr-shortcode-importer.php:175
 msgid ""
-"All done! %1$s [flickr](s) were successfully processed in %2$s seconds and "
-"there were no failures. %3$s"
+"All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds "
+"and there were no failures. %3$s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:161 flickr-shortcode-importer.php:304
+#: flickr-shortcode-importer.php:178 flickr-shortcode-importer.php:323
 msgid "You must enable Javascript in order to proceed!"
 msgstr ""
 
-#: flickr-shortcode-importer.php:167
-msgid "Abort Importing [flickr]s"
+#: flickr-shortcode-importer.php:184
+msgid "Abort Importing [flickr(set)]s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:169
+#: flickr-shortcode-importer.php:186
 msgid "Debugging Information"
 msgstr ""
 
-#: flickr-shortcode-importer.php:172
-msgid "Total [flickr]s: %s"
+#: flickr-shortcode-importer.php:189
+msgid "Total [flickr(set)]s: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:173
-msgid "[flickr]s Imported: %s"
+#: flickr-shortcode-importer.php:190
+msgid "[flickr(set)]s Imported: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:174
+#: flickr-shortcode-importer.php:191
 msgid "Import Failures: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:205
+#: flickr-shortcode-importer.php:222
 msgid "Stopping..."
 msgstr ""
 
-#: flickr-shortcode-importer.php:294
+#: flickr-shortcode-importer.php:311
 msgid ""
 "Use this tool to import [flickr] shortcodes into the Media Library. The "
 "first [flickr] image found in post content is set as the post's Featured "
@@ -236,47 +246,54 @@ msgid ""
 "are then transitioned to like sized locally referenced images."
 msgstr ""
 
-#: flickr-shortcode-importer.php:296
+#: flickr-shortcode-importer.php:313
+msgid ""
+"[flickrset] shortcodes are handled similarly to [flickr] importing. The "
+"difference is that [flickrset] is replaced by [gallery] and the Featured "
+"Image of a post is set from the first image in the [flickrset] per Options."
+msgstr ""
+
+#: flickr-shortcode-importer.php:315
 msgid ""
 "Flickr shortcode import is not reversible. Backup your database beforehand "
 "or be prepared to revert each transformmed post manually."
 msgstr ""
 
-#: flickr-shortcode-importer.php:298
+#: flickr-shortcode-importer.php:317
 msgid "Please review your %s before proceeding."
 msgstr ""
 
-#: flickr-shortcode-importer.php:300
+#: flickr-shortcode-importer.php:319
 msgid "To begin, just press the button below."
 msgstr ""
 
-#: flickr-shortcode-importer.php:302
+#: flickr-shortcode-importer.php:321
 msgid "Import Flickr Shortcode"
 msgstr ""
 
-#: flickr-shortcode-importer.php:336
+#: flickr-shortcode-importer.php:351
 msgid "Failed import: %s doesn't contain [flickr]."
 msgstr ""
 
-#: flickr-shortcode-importer.php:339
+#: flickr-shortcode-importer.php:354
 msgid "Your user account doesn't have permission to import images"
 msgstr ""
 
-#: flickr-shortcode-importer.php:360
+#: flickr-shortcode-importer.php:378
 msgid ""
 "&quot;<a href=\"%1$s\" target=\"_blank\">%2$s</a>&quot; Post ID %3$s was "
 "successfully processed in %4$s seconds."
 msgstr ""
 
-#: flickr-shortcode-importer.php:530
+#: flickr-shortcode-importer.php:607
 msgid "The originally uploaded image file cannot be found at %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:538
+#: flickr-shortcode-importer.php:615
 msgid "Unknown failure reason."
 msgstr ""
 
-#: flickr-shortcode-importer.php:552
+#: flickr-shortcode-importer.php:629
 msgid ""
 "&quot;%1$s&quot; Post ID %2$s failed to be processed. The error message was: "
 "%3$s"

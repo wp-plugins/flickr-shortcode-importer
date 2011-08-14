@@ -166,7 +166,7 @@ class Flickr_Shortcode_Importer {
 
 
 	function show_status( $count, $posts ) {
-		echo '	<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 5 minutes per post, if your server is slow, have low bandwidth, or have many [flickr] shortcodes or photos in your [flickrset] in your post content. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+		echo '	<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 2 minutes per Flickr media item. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
 
 		$text_goback = ( ! empty( $_GET['goback'] ) ) ? sprintf( __( 'To go back to the previous page, <a href="%s">click here</a>.', 'flickr-shortcode-importer' ), 'javascript:history.go(-1)' ) : '';
 
@@ -553,18 +553,20 @@ class Flickr_Shortcode_Importer {
 	function import_flickr_photo( $src, $photo ) {
 		global $wpdb;
 
+		$caption			= isset( $photo['caption'] ) ? $photo['caption'] : '';
 		$title				= $photo['title'];
-		// TODO check if title is a filename, if so, use caption - menu order instead
-		// basically, try to create a nice title
-		// $this->menu_order
+		// check if title is a filename, if so, use caption - menu order instead
+		if ( fsi_options( 'make_nice_image_title' )
+			&& preg_match( '#\.[a-zA-Z]{3}$#', $title )
+			&& ! empty( $caption ) ) {
+			$title			= $caption . '-' . $this->menu_order;
+		}
 		$alt				= $title;
 		$desc				= $photo['description'];
 		$date				= $photo['dates']['taken'];
-		$caption			= $photo['caption'];
 		$file				= basename( $src );
 
 		// see if src is duplicate, if so return image_id
-		// postmeta _flickr_src = $file
 		$query				= "
 			SELECT m.post_id
 			FROM $wpdb->postmeta m

@@ -57,6 +57,7 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * Import [flickrset] shortcode content
 * Allow 2 minutes per photo import before timing out
 * Add Flickr Shortcode Importer before & after screenshots for [flickrset]
+* Add option Make Nice Image Title?
 
 = 1.1.0 =
 * Add Flickr Shortcode Importer Options screenshot

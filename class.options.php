@@ -309,7 +309,7 @@ EOD;
 		$this->settings['set_featured_image'] = array(
 			'section' => 'general',
 			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Set the first [flickr] image found as the Featured Image?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Set the first [flickr] image found as the Featured Image. Not done if the post already has a Featured Image set.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);
@@ -318,6 +318,14 @@ EOD;
 			'section' => 'general',
 			'title'   => __( 'Remove First Flickr Shortcode' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Remove the first [flickr] from post content? If you use Featured Images, this will help prevent duplicate images in your post.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+		);
+		
+		$this->settings['make_nice_image_title'] = array(
+			'section' => 'general',
+			'title'   => __( 'Make Nice Image Title?' , 'flickr-shortcode-importer'),
+			'desc'    => __( "If the image title is a filename and the image is part of a Flickr set, the Flickr set title plus a numeric suffix will be used instead." , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);

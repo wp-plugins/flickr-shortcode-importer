@@ -1,4 +1,35 @@
 ------------------------------------------------------------------------
+r423462 | comprock | 2011-08-15 03:15:58 +0800 (Mon, 15 Aug 2011) | 3 lines
+
+* Fix over zealous replacement of content for A/IMG tag to [flickr] conversion
+* Use cbMkReadableStr to pretty print media filenames as a title as needed
+
+------------------------------------------------------------------------
+r423438 | comprock | 2011-08-15 02:23:56 +0800 (Mon, 15 Aug 2011) | 10 lines
+
+* Update Options screenshot
+* Replace preg_match_all with explode and preg_match to handle single line of many A/IMG tags
+* Line break after shortcodes to ensure proper reading by WordPress
+* Add option Default Image Alignment
+* Add option Default Image Size
+* Add warnings to readme
+* Import Flickr-based A/IMG tags
+* Set get_shortcode_size default to medium
+* Add Estimated time required to import notice
+
+------------------------------------------------------------------------
+r423380 | comprock | 2011-08-14 23:21:48 +0800 (Sun, 14 Aug 2011) | 4 lines
+
+* Add warnings to readme
+* Import Flickr-based A/IMG tags
+* Set get_shortcode_size default to medium
+
+------------------------------------------------------------------------
+r423330 | comprock | 2011-08-14 21:18:56 +0800 (Sun, 14 Aug 2011) | 2 lines
+
+* Add Estimated time required to import notice
+
+------------------------------------------------------------------------
 r423314 | comprock | 2011-08-14 20:41:45 +0800 (Sun, 14 Aug 2011) | 1 line
 
 * Release 1.2.0

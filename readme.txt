@@ -20,8 +20,11 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
 
 = Options =
+* Set Captions
 * Set first [flickr] image as featured image or not
+* Force Set Featured Image
 * Remove first [flickr] from post content or not
+* Make Nice Image Title?
 * Set limit of posts to be processed
 
 = Handled shortcode samples =
@@ -134,3 +137,4 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 = Handle =
 * Flickr video importing - currently rendering as video/object/embed tag using Flickr
+* IMG tags to Flickr

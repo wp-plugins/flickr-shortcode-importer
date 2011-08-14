@@ -309,7 +309,15 @@ EOD;
 		$this->settings['set_caption'] = array(
 			'section' => 'general',
 			'title'   => __( 'Set Captions' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Use media title as the caption.' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Uses media title as the caption.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+		);
+		
+		$this->settings['import_flickr_sourced_tags'] = array(
+			'section' => 'general',
+			'title'   => __( 'Import Flickr-sourced A/IMG tags' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Converts Flickr-sourced A/IMG tags to [flickr] and then proceeds with import.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);

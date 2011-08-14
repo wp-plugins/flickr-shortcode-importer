@@ -117,9 +117,11 @@ class Flickr_Shortcode_Importer {
 				$count			= count( $posts );
 				$posts			= implode( ',', $posts );
 			} else {
-				// Directly querying the database is normally frowned upon, but all
-				// of the API functions will return the full post objects which will
-				// suck up lots of memory. This is best, just not as future proof.
+				if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
+					$this->convert_flickr_sourced_tags();
+				}
+
+				// Directly querying the database is normally frowned upon, but all of the API functions will return the full post objects which will suck up lots of memory. This is best, just not as future proof.
 				$query			= "
 					SELECT ID
 					FROM $wpdb->posts
@@ -165,10 +167,92 @@ class Flickr_Shortcode_Importer {
 	}
 
 
-	function show_status( $count, $posts ) {
-		echo '<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 2 minutes per Flickr media item. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+	function convert_flickr_sourced_tags() {
+		global $wpdb;
 
-		echo '<p>' . sprintf( __( 'Estimated time required to import is %1$s minutes.', 'flickr-shortcode-importer' ), ( $count * 3 ) ) . '</p>';
+		// look for posts containing A/IMG tags referencing Flickr
+		$query					= "
+			SELECT ID
+			FROM $wpdb->posts
+			WHERE 1 = 1
+				AND post_content LIKE '%<a%href=%http://www.flickr.com/%><img%src=%flickr.com/%></a>%'
+			";
+
+		$limit					= (int) fsi_options( 'limit' );
+		if ( $limit )
+			$query				.= ' LIMIT ' . $limit;
+
+		$posts					= $wpdb->get_results( $query );
+		$doc					= new DOMDocument();
+
+		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]';
+
+		foreach ( $posts as $post ) {
+			if ( ! isset( $post->ID ) )
+				return;
+
+			$post				= get_post( $post->ID );
+			$post_content		= $post->post_content;
+
+			// looking for
+			// <a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>
+			if ( ! preg_match_all( '#(<a.*href=.*https?://www.flickr.com/.*><img.*src=.*flickr.com/.*></a>)#', $post_content, $matches ) )
+				continue;
+
+			// for each A/IMG tag set
+			foreach ( $matches[0] as $html ) {
+				// safer than home grown regex
+				if ( ! $doc->loadHTML( $html ) ) {
+					return;
+				}
+
+				// parse out parts id, thumbnail, align
+				$a_tags				= $doc->getElementsByTagName( 'a' );
+				$a_tag				= $a_tags->item( 0 );
+
+				// gives size tt-flickr tt-flickr-Medium
+				$size				= $a_tag->getAttribute( 'class' );
+				$size				= $this->get_shortcode_size( $size );
+
+				$image_tags			= $doc->getElementsByTagName( 'img' );
+				$image_tag			= $image_tags->item( 0 );
+
+				// give photo id http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg
+				$src				= $image_tag->getAttribute( 'src' );
+				$filename			= basename( $src );
+				$id					= preg_replace( '#^(\d+)_.*#', '\1', $filename );
+
+				// gives alginment alignnone
+				$align_primary		= $image_tag->getAttribute( 'class' );
+				$align_secondary	= $image_tag->getAttribute( 'align' );
+				$align_combined		= $align_secondary . ' ' . $align_primary;
+
+				$find_align			= '#(none|left|center|right)#i';
+				preg_match_all( $find_align, $align_combined, $align_matches );
+				// get the last align mentioned since that has precedence
+				$align				= ( isset( $align_matches[0] ) ) ? array_pop( $align_matches[0] ) : 'none';
+
+				// ceate simple [flickr] like
+				// [flickr id="5348222727" thumbnail="small" align="none"]
+				$replacement		= sprintf( $flickr_shortcode, $id, $size, $align );
+				// replace A/IMG with new [flickr]
+				$post_content		= str_replace( $html, $replacement, $post_content );
+			}
+
+			$update				= array(
+				'ID'			=> $post->ID,
+				'post_content'	=> $post_content,
+			);
+
+			wp_update_post( $update );
+		}
+	}
+
+
+	function show_status( $count, $posts ) {
+		echo '<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 2 minutes per individual Flickr media item. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
+
+		echo '<p>' . sprintf( __( 'Estimated time required to import is %1$s minutes.', 'flickr-shortcode-importer' ), ( $count * 2 ) ) . '</p>';
 
 		// TODO add estimated time remaining 
 
@@ -529,16 +613,16 @@ class Flickr_Shortcode_Importer {
 
 	// correct none thumbnail, medium, large or full size values
 	function get_shortcode_size( $size_name ) {
-		switch ( $size_name ) {
+		$find_size				= '#(square|thumbnail|small|medium|large|original|full)#i';
+		preg_match_all( $find_size, $size_name, $size_matches );
+		// get the last size mentioned since that has precedence
+		$size_name				= ( isset( $size_matches[0] ) ) ? array_pop( $size_matches[0] ) : '';
+
+		switch ( strtolower( $size_name ) ) {
 			case 'square':
 			case 'thumbnail':
 			case 'small':
 				$size			= 'thumbnail';
-				break;
-
-			case 'medium':
-			case 'medium_640':
-				$size			= 'medium';
 				break;
 
 			case 'large':
@@ -546,7 +630,14 @@ class Flickr_Shortcode_Importer {
 				break;
 
 			case 'original':
+			case 'full':
 				$size			= 'full';
+				break;
+
+			case 'medium':
+			case 'medium_640':
+			default:
+				$size			= 'medium';
 				break;
 		}
 

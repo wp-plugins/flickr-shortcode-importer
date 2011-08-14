@@ -20,6 +20,7 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
 
 = Options =
+* Import Flickr-based A/IMG tags
 * Set Captions
 * Set first [flickr] image as featured image or not
 * Force Set Featured Image
@@ -30,6 +31,10 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 = Handled shortcode samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
+
+= Warnings =
+* Backup your database before importing. You can use revision to revert individual posts, but doing so in mass is a major PITA.
+* It's strongly recommended to deactivate plugins like WordSocial, WP Smush.it and similar to prevent extended import times. You can always enable them and run them enmasse later.
 
 = Thank You =
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
@@ -57,6 +62,9 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = trunk =
+* Add warnings to readme
+* Import Flickr-based A/IMG tags
+* Set get_shortcode_size default to medium
 * Add Estimated time required to import notice
 
 = 1.2.0 =
@@ -135,7 +143,6 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * None
 
 == TODO ==
-* Import Flickr-based A/IMG tags
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src
 * Add option set A tag class attribute like 'lightbox'. Not sure if really needed

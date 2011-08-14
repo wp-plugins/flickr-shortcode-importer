@@ -4,15 +4,14 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 
 Imports [flickr] & [flickrset] shortcode images into the Media Library.
 
 == Description ==
 Imports [flickr] & [flickrset] shortcode images into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
 
-The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.
-
+The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.  
 [flickrset] shortcode is converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
 
 This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
@@ -20,6 +19,7 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
 
 = Options =
+* Add option Default A Tag Class
 * Add option Default Image Alignment
 * Add option Default Image Size
 * Import Flickr-based A/IMG tags
@@ -63,6 +63,9 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 8. After Flickr Shortcode Importer for [flickrset]
 
 == Changelog ==
+= 1.3.3 =
+* Add option Default A Tag Class
+
 = 1.3.2 =
 * Properly call cbMkReadableStr
 
@@ -158,6 +161,7 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * None
 
 == TODO ==
+* Put progress for a/img to shortcode conversion
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src
 * Add option set A tag class attribute like 'lightbox'. Not sure if really needed

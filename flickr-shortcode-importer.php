@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr] & [flickrset] shortcode images into the Media Library.
-Version: 1.3.2
+Version: 1.3.3
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -561,6 +561,14 @@ class Flickr_Shortcode_Importer {
 				. $align
 				. $wp_image
 				. '"', $image_link );
+
+			$class				= fsi_options( 'default_a_tag_class' );
+			if ( $class ) {
+				$image_link		= preg_replace(
+					'#(<a )#',
+					'\1class="' . $class . '" ',
+					$image_link );
+			}
 
 			if ( ! $this->first_image ) {
 				// remaining [flickr] converted to locally reference image

@@ -382,6 +382,14 @@ EOD;
 			)
 		);
 		
+		$this->settings['default_a_tag_class'] = array(
+			'title'   => __( 'Default A Tag Class' , 'flickr-shortcode-importer'),
+			'desc'    => __( "Useful for lightbox'ing." , 'flickr-shortcode-importer'),
+			'std'     => '',
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
 		$this->settings['limit'] = array(
 			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),

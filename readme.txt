@@ -54,11 +54,12 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = 1.2.0 =
-* Import [flickrset] shortcode content
+* Add option Set Captions
+* Add option Force Set Featured Image
+* Add option Make Nice Image Title?
 * Allow 2 minutes per photo import before timing out
 * Add Flickr Shortcode Importer before & after screenshots for [flickrset]
-* Add option Make Nice Image Title?
-* Add option Force Set Featured Image
+* Import [flickrset] shortcode content
 
 = 1.1.0 =
 * Add Flickr Shortcode Importer Options screenshot

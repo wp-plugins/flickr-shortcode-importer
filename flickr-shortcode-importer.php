@@ -219,7 +219,7 @@ class Flickr_Shortcode_Importer {
 			// Stop button
 			$("#fsiposts-stop").click(function() {
 				rt_continue = false;
-				$('#fsiposts-stop').val("<?php echo $this->esc_quotes( __( 'Stopping...', 'flickr-shortcode-importer' ) ); ?>");
+				$('#fsiposts-stop').val("<?php echo $this->esc_quotes( __( 'Stopping, please wait a moment.', 'flickr-shortcode-importer' ) ); ?>");
 			});
 
 			// Clear out the empty list element that's there for HTML validation purposes
@@ -386,11 +386,11 @@ class Flickr_Shortcode_Importer {
 		$photo					= $this->flickr->photos_getInfo( $args['id'] );
 		$photo					= $photo['photo'];
 
-		if ( isset( $args['caption'] ) ) {
-			$photo['caption']	= $args['caption'];
+		if ( isset( $args['set_title'] ) ) {
+			$photo['set_title']	= $args['set_title'];
 		} else {
 			$contexts			= $this->flickr->photos_getAllContexts( $args['id'] );
-			$photo['caption']	= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
+			$photo['set_title']	= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
 		}
 		
 		$markup					= $this->process_flickr_media( $photo, $args );
@@ -405,13 +405,13 @@ class Flickr_Shortcode_Importer {
 		$import_limit			= ( $args['photos'] ) ? $args['photos'] : -1;
 
 		$info					= $this->flickr->photosets_getInfo( $args['id'] );
+		$args['set_title']		= $info['title'];
+
 		$photos					= $this->flickr->photosets_getPhotos( $args['id'] );
 		$photos					= $photos['photoset']['photo'];
 
 		// increased because [flickrset] might have lots of photos
 		set_time_limit( 120 * count( $photos ) );
-
-		$args['caption']		= isset( $info['title'] ) ? $info['title'] : '';
 		
 		foreach( $photos as $entry ) {
 			$args['id']			= $entry['id'];
@@ -431,11 +431,13 @@ class Flickr_Shortcode_Importer {
 	function process_flickr_media( $photo, $args = false ) {
 		$markup					= '';
 
+		// TODO create processing message
+
 		if ( 'photo' == $photo['media'] ) {
 			// pull original Flickr image
 			$src				= $this->flickr->buildPhotoURL( $photo, 'original' );
 			// add image to media library
-			$image_id			= $this->import_flickr_photo( $src, $photo );
+			$image_id			= $this->import_flickr_media( $src, $photo );
 
 			// if first image, set as featured 
 			if ( ! $this->featured_id ) {
@@ -550,18 +552,19 @@ class Flickr_Shortcode_Importer {
 	}
 	
 
-	function import_flickr_photo( $src, $photo ) {
+	function import_flickr_media( $src, $photo ) {
 		global $wpdb;
 
-		$caption			= isset( $photo['caption'] ) ? $photo['caption'] : '';
+		$set_title			= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
 		$title				= $photo['title'];
-		// check if title is a filename, if so, use caption - menu order instead
+		// if title is a filename, use set_title - menu order instead
 		if ( fsi_options( 'make_nice_image_title' )
 			&& preg_match( '#\.[a-zA-Z]{3}$#', $title )
-			&& ! empty( $caption ) ) {
-			$title			= $caption . '-' . $this->menu_order;
+			&& ! empty( $set_title ) ) {
+			$title			= $set_title . '-' . $this->menu_order;
 		}
 		$alt				= $title;
+		$caption			= fsi_options( 'set_caption' ) ? $title : '';
 		$desc				= $photo['description'];
 		$date				= $photo['dates']['taken'];
 		$file				= basename( $src );

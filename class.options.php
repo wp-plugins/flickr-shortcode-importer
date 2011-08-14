@@ -306,6 +306,14 @@ EOD;
 		/* General Settings
 		===========================================*/
 		
+		$this->settings['set_caption'] = array(
+			'section' => 'general',
+			'title'   => __( 'Set Captions' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Use media title as the caption.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+		);
+		
 		$this->settings['set_featured_image'] = array(
 			'section' => 'general',
 			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),

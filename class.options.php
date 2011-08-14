@@ -309,9 +309,17 @@ EOD;
 		$this->settings['set_featured_image'] = array(
 			'section' => 'general',
 			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Set the first [flickr] image found as the Featured Image. Not done if the post already has a Featured Image set.' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Set the first [flickr] or [flickrset] image found as the Featured Image. Will not replace the current Featured Image of a post.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+		);
+		
+		$this->settings['force_set_featured_image'] = array(
+			'section' => 'general',
+			'title'   => __( 'Force Set Featured Image' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Set the Featured Image even if one already exists for a post.', 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);
 		
 		$this->settings['remove_first_flickr_shortcode'] = array(

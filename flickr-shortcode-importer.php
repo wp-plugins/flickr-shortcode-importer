@@ -361,10 +361,10 @@ class Flickr_Shortcode_Importer {
 		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
 
-		// TODO allow overriding Featured Image
+		// allow overriding Featured Image
 		if ( $this->featured_id
 			&& fsi_options( 'set_featured_image' )
-			&& ! has_post_thumbnail( $this->post_id ) ) {
+			&& ( ! has_post_thumbnail( $this->post_id ) || fsi_options( 'force_set_featured_image' ) ) ) {
 			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
 		}
 

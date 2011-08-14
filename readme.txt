@@ -64,6 +64,8 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = trunk =
+* Fix over zealous replacement of content for A/IMG tag to [flickr] conversion
+* Use cbMkReadableStr to pretty print media filenames as a title as needed
 * Update Options screenshot
 * Replace preg_match_all with explode and preg_match to handle single line of many A/IMG tags
 * Line break after shortcodes to ensure proper reading by WordPress

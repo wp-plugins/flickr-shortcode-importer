@@ -32,6 +32,9 @@ require_once( dirname(__FILE__) . '/class.options.php' );
 class Flickr_Shortcode_Importer {
 	var $menu_id;
 	var $in_flickset			= false;
+	// Peimic.com API key
+	var $api_key				= 'd7a73fed961744db01c498ca910a003d';
+	var $secret					= '7d8a757b8bc2b50b';
 
 	// Plugin initialization
 	function Flickr_Shortcode_Importer() {
@@ -99,7 +102,7 @@ class Flickr_Shortcode_Importer {
 <?php
 		// testing helper
 		if ( $_REQUEST['importflickrshortcode'] ) {
-			$this->ajax_process_shortcode();
+			$this->convert_flickr_sourced_tags();
 		}
 
 		// If the button was clicked
@@ -205,12 +208,15 @@ class Flickr_Shortcode_Importer {
 			foreach ( $matches_a as $html ) {
 				$html			= $a_tag_open . $html;
 
-				if ( ! preg_match( $find_flickr_a_tag, $html ) ) {
+				if ( ! preg_match( $find_flickr_a_tag, $html, $match ) ) {
 					continue;
 				}
 
+				// deal only with the A/IMG tag
+				$a_html			= $match[0];
+
 				// safer than home grown regex
-				if ( ! $doc->loadHTML( $html ) ) {
+				if ( ! $doc->loadHTML( $a_html ) ) {
 					continue;
 				}
 
@@ -244,7 +250,7 @@ class Flickr_Shortcode_Importer {
 				// [flickr id="5348222727" thumbnail="small" align="none"]
 				$replacement	= sprintf( $flickr_shortcode, $id, $size, $align );
 				// replace A/IMG with new [flickr]
-				$post_content	= str_replace( $html, $replacement, $post_content );
+				$post_content	= str_replace( $a_html, $replacement, $post_content );
 			}
 
 			$update				= array(
@@ -429,10 +435,7 @@ class Flickr_Shortcode_Importer {
 
 		header( 'Content-type: application/json' );
 
-		// Peimic.com API key
-		$api_key				= 'd7a73fed961744db01c498ca910a003d';
-		$secret					= '7d8a757b8bc2b50b';
-		$this->flickr			= new phpFlickr($api_key, $secret);
+		$this->flickr			= new phpFlickr($this->api_key, $this->secret);
 
 		// only use our shortcode handlers to prevent messing up post content 
 		remove_all_shortcodes();
@@ -661,13 +664,17 @@ class Flickr_Shortcode_Importer {
 
 		$set_title			= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
 		$title				= $photo['title'];
-		// if title is a filename, use set_title - menu order instead
-		// TODO handle camelCase and underscores as well
-		if ( fsi_options( 'make_nice_image_title' )
-			&& preg_match( '#\.[a-zA-Z]{3}$#', $title )
-			&& ! empty( $set_title ) ) {
-			$title			= $set_title . '-' . $this->menu_order;
+
+		if ( fsi_options( 'make_nice_image_title' ) ) {
+			// if title is a filename, use set_title - menu order instead
+			if ( preg_match( '#\.[a-zA-Z]{3}$#', $title )
+				&& ! empty( $set_title ) ) {
+				$title			= $set_title . '-' . $this->menu_order;
+			} elseif ( ! preg_match( '#\s#', $title ) ) {
+				$title		= $this->cbMkReadableStr();
+			}
 		}
+
 		$alt				= $title;
 		$caption			= fsi_options( 'set_caption' ) ? $title : '';
 		$desc				= $photo['description'];
@@ -741,6 +748,59 @@ class Flickr_Shortcode_Importer {
 	// Helper function to escape quotes in strings for use in Javascript
 	function esc_quotes( $string ) {
 		return str_replace( '"', '\"', $string );
+	}
+
+
+	/**
+	 * Returns string of a filename or string converted to a spaced extension
+	 * less header type string.
+	 *
+	 * @author Michael Cannon <michael@peimic.com>
+	 * @param string filename or arbitrary text
+	 * @return mixed string/boolean
+	 */
+	function cbMkReadableStr($str) {
+		if ( is_string($str) )
+		{
+			$clean_str = htmlspecialchars($str);
+
+			// remove file extension
+			$clean_str = preg_replace('/\.[[:alnum:]]+$/i', '', $clean_str);
+
+			// remove funky characters
+			$clean_str = preg_replace('/[^[:print:]]/', '_', $clean_str);
+
+			// Convert camelcase to underscore
+			$clean_str = preg_replace('/([[:alpha:]][a-z]+)/', "$1_", $clean_str);
+
+			// try to cactch N.N or the like
+			$clean_str = preg_replace('/([[:digit:]\.\-]+)/', "$1_", $clean_str);
+
+			// change underscore or underscore-hyphen to become space
+			$clean_str = preg_replace('/(_-|_)/', ' ', $clean_str);
+
+			// remove extra spaces
+			$clean_str = preg_replace('/ +/', ' ', $clean_str);
+
+			// convert stand alone s to 's
+			$clean_str = preg_replace('/ s /', "'s ", $clean_str);
+
+			// remove beg/end spaces
+			$clean_str = trim($clean_str);
+
+			// capitalize
+			$clean_str = ucwords($clean_str);
+
+			// restore previous entities facing &amp; issues
+			$clean_str = preg_replace( '/(&amp ;)([a-z0-9]+) ;/i'
+				, '&\2;'
+				, $clean_str
+			);
+
+			return $clean_str;
+		}
+
+		return false;
 	}
 }
 

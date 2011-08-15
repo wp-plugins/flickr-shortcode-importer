@@ -420,8 +420,7 @@ class Flickr_Shortcode_Importer {
 	function ajax_process_shortcode() {
 		@error_reporting( 0 ); // Don't break the JSON result
 
-		if ( ! $_REQUEST['importflickrshortcode'] )
-			header( 'Content-type: application/json' );
+		header( 'Content-type: application/json' );
 
 		$this->post_id			= (int) $_REQUEST['id'];
 		$post					= get_post( $this->post_id );
@@ -669,9 +668,10 @@ class Flickr_Shortcode_Importer {
 
 		if ( fsi_options( 'make_nice_image_title' ) ) {
 			// if title is a filename, use set_title - menu order instead
-			if ( preg_match( '#\.[a-zA-Z]{3}$#', $title )
+			if ( ( preg_match( '#\.[a-zA-Z]{3}$#', $title ) 
+			   	|| preg_match( '#^DSCF\d+#', $title ) )
 				&& ! empty( $set_title ) ) {
-				$title			= $set_title . '-' . $this->menu_order;
+				$title			= $set_title . ' - ' . $this->menu_order;
 			} elseif ( ! preg_match( '#\s#', $title ) ) {
 				$title		= $this->cbMkReadableStr( $title );
 			}
@@ -679,7 +679,7 @@ class Flickr_Shortcode_Importer {
 
 		$alt				= $title;
 		$caption			= fsi_options( 'set_caption' ) ? $title : '';
-		$desc				= $photo['description'];
+		$desc				= html_entity_decode( $photo['description'] );
 		$date				= $photo['dates']['taken'];
 		$file				= basename( $src );
 

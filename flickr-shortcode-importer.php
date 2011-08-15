@@ -127,8 +127,8 @@ class Flickr_Shortcode_Importer {
 				if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
 					$flickr_source_where = <<<EOD
 						OR (
-							post_content LIKE "%<a%href='http://www.flickr.com/%><img%src='http://farm%.static.flickr.com/%></a>%"
-							OR post_content LIKE '%<a%href="http://www.flickr.com/%><img%src="http://farm%.static.flickr.com/%></a>%'
+							post_content LIKE '%<a%href=%http://www.flickr.com/%><img%src=%http://farm%.static.flickr.com/%></a>%'
+							OR post_content LIKE '%<img%src=%http://farm%.static.flickr.com/%>%'
 						)
 EOD;
 				}
@@ -183,41 +183,65 @@ EOD;
 	function convert_flickr_sourced_tags( $post ) {
 		global $wpdb;
 
-		$doc					= new DOMDocument();
-
-		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]' . "\n";
-		// looking for
-		// <a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>
-		$find_flickr_a_tag		= '#<a.*href=.*https?://www.flickr.com/.*><img.*src=.*flickr.com/.*></a>#i';
-		$a_tag_open				= '<a ';
-		$default_alignment		= fsi_options( 'default_image_alignment' );
-
 		$post_content			= $post->post_content;
 
-		$matches_a				= explode( $a_tag_open, $post_content );
+		// looking for
+		// <a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>
+		// cycle through a/img
+		$find_flickr_a_tag		= '#<a.*href=.*http://www.flickr.com/.*><img.*src=.*http://farm\d+.static.flickr.com/.*></a>#i';
+		$a_tag_open				= '<a ';
+
+		$post_content			= $this->convert_tag_to_flickr( $post_content, $a_tag_open, $find_flickr_a_tag );
+		print_r($post_content); echo '<br />'; echo '' . __LINE__  . '<br />';	
+
+		// cycle through standalone img
+		$find_flickr_img_tag		= '#<img.*src=.*http://farm\d+.static.flickr.com/.*>#i';
+		$img_tag_open			= '<img ';
+		$post_content			= $this->convert_tag_to_flickr( $post_content, $img_tag_open, $find_flickr_img_tag, true );
+		print_r($post_content); echo '<br />'; echo '' . __LINE__  . '<br />';	
+		exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );	
+
+		$update					= array(
+			'ID'				=> $post->ID,
+			'post_content'		=> $post_content,
+		);
+
+		wp_update_post( $update );
+	}
+
+
+	function convert_tag_to_flickr( $post_content, $tag_open, $find_tag, $img_only = false ) {
+		$default_alignment		= fsi_options( 'default_image_alignment' );
+		$doc					= new DOMDocument();
+		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]' . "\n";
+		$matches				= explode( $tag_open, $post_content );
+		$size					= '';
 
 		// for each A/IMG tag set
-		foreach ( $matches_a as $html ) {
-			$html				= $a_tag_open . $html;
+		foreach ( $matches as $html ) {
+			$html				= $tag_open . $html;
 
-			if ( ! preg_match( $find_flickr_a_tag, $html, $match ) ) {
+			if ( ! preg_match( $find_tag, $html, $match ) ) {
 				continue;
 			}
 
 			// deal only with the A/IMG tag
-			$a_html				= $match[0];
+			$tag_html				= $match[0];
 
 			// safer than home grown regex
-			if ( ! $doc->loadHTML( $a_html ) ) {
+			if ( ! $doc->loadHTML( $tag_html ) ) {
 				continue;
 			}
 
-			// parse out parts id, thumbnail, align
-			$a_tags				= $doc->getElementsByTagName( 'a' );
-			$a_tag				= $a_tags->item( 0 );
+			if ( ! $img_only ) {
+				// parse out parts id, thumbnail, align
+				$a_tags				= $doc->getElementsByTagName( 'a' );
+				$a_tag				= $a_tags->item( 0 );
 
-			// gives size tt-flickr tt-flickr-Medium
-			$size				= $a_tag->getAttribute( 'class' );
+				// gives size tt-flickr tt-flickr-Medium
+				$size				= $a_tag->getAttribute( 'class' );
+			}
+
 			$size				= $this->get_shortcode_size( $size );
 
 			$image_tags			= $doc->getElementsByTagName( 'img' );
@@ -242,15 +266,10 @@ EOD;
 			// [flickr id="5348222727" thumbnail="small" align="none"]
 			$replacement		= sprintf( $flickr_shortcode, $id, $size, $align );
 			// replace A/IMG with new [flickr]
-			$post_content		= str_replace( $a_html, $replacement, $post_content );
+			$post_content		= str_replace( $tag_html, $replacement, $post_content );
 		}
 
-		$update					= array(
-			'ID'				=> $post->ID,
-			'post_content'		=> $post_content,
-		);
-
-		wp_update_post( $update );
+		return $post_content;
 	}
 
 
@@ -628,7 +647,7 @@ EOD;
 
 
 	// correct none thumbnail, medium, large or full size values
-	function get_shortcode_size( $size_name ) {
+	function get_shortcode_size( $size_name = '' ) {
 		$find_size				= '#(square|thumbnail|small|medium|large|original|full)#i';
 		preg_match_all( $find_size, $size_name, $size_matches );
 		// get the last size mentioned since that has precedence

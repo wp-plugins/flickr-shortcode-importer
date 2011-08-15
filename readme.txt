@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 
 Imports [flickr] & [flickrset] shortcode images into the Media Library.
 
@@ -65,6 +65,9 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = trunk =
+
+= 1.3.5 =
+* Convert Flickr sourced IMG to [flickr]
 
 = 1.3.4 =
 * Check for camera given photo title

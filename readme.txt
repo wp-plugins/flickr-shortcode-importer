@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 
 Imports [flickr] & [flickrset] shortcode images into the Media Library.
 
@@ -64,7 +64,8 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 8. After Flickr Shortcode Importer for [flickrset]
 
 == Changelog ==
-= trunk =
+= 1.3.4 =
+* Put progress for a/img to shortcode conversion - moved convert_flickr_sourced_tags() into ajax_process_shortcode()
 * Update readme verbiage
 
 = 1.3.3 =
@@ -165,7 +166,6 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * None
 
 == TODO ==
-* Put progress for a/img to shortcode conversion
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src
 * Add option set A tag class attribute like 'lightbox'. Not sure if really needed

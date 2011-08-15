@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr] & [flickrset] shortcode images into the Media Library.
-Version: 1.3.3
+Version: 1.3.4
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -102,7 +102,6 @@ class Flickr_Shortcode_Importer {
 <?php
 		// testing helper
 		if ( $_REQUEST['importflickrshortcode'] ) {
-			// $this->convert_flickr_sourced_tags();
 			$this->ajax_process_shortcode();
 			exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );
 		}
@@ -122,8 +121,12 @@ class Flickr_Shortcode_Importer {
 				$count			= count( $posts );
 				$posts			= implode( ',', $posts );
 			} else {
+				// look for posts containing A/IMG tags referencing Flickr
+				$flickr_source_where = "";
 				if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
-					$this->convert_flickr_sourced_tags();
+					$flickr_source_where = "
+						OR post_content LIKE '%<a%href=%http://www.flickr.com/%><img%src=%flickr.com/%></a>%'
+					";
 				}
 
 				// Directly querying the database is normally frowned upon, but all of the API functions will return the full post objects which will suck up lots of memory. This is best, just not as future proof.
@@ -136,6 +139,7 @@ class Flickr_Shortcode_Importer {
 					AND (
 						post_content LIKE '%[flickr %'
 						OR post_content LIKE '%[flickrset %'
+						$flickr_source_where
 					)
 					";
 
@@ -172,22 +176,9 @@ class Flickr_Shortcode_Importer {
 	}
 
 
-	function convert_flickr_sourced_tags() {
+	function convert_flickr_sourced_tags( $post ) {
 		global $wpdb;
 
-		// look for posts containing A/IMG tags referencing Flickr
-		$query					= "
-			SELECT ID
-			FROM $wpdb->posts
-			WHERE 1 = 1
-				AND post_content LIKE '%<a%href=%http://www.flickr.com/%><img%src=%flickr.com/%></a>%'
-			";
-
-		$limit					= (int) fsi_options( 'limit' );
-		if ( $limit )
-			$query				.= ' LIMIT ' . $limit;
-
-		$posts					= $wpdb->get_results( $query );
 		$doc					= new DOMDocument();
 
 		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]' . "\n";
@@ -197,71 +188,65 @@ class Flickr_Shortcode_Importer {
 		$a_tag_open				= '<a ';
 		$default_alignment		= fsi_options( 'default_image_alignment' );
 
-		foreach ( $posts as $post ) {
-			if ( ! isset( $post->ID ) )
-				return;
+		$post_content			= $post->post_content;
 
-			$post				= get_post( $post->ID );
-			$post_content		= $post->post_content;
+		$matches_a				= explode( $a_tag_open, $post_content );
 
-			$matches_a			= explode( $a_tag_open, $post_content );
+		// for each A/IMG tag set
+		foreach ( $matches_a as $html ) {
+			$html				= $a_tag_open . $html;
 
-			// for each A/IMG tag set
-			foreach ( $matches_a as $html ) {
-				$html			= $a_tag_open . $html;
-
-				if ( ! preg_match( $find_flickr_a_tag, $html, $match ) ) {
-					continue;
-				}
-
-				// deal only with the A/IMG tag
-				$a_html			= $match[0];
-
-				// safer than home grown regex
-				if ( ! $doc->loadHTML( $a_html ) ) {
-					continue;
-				}
-
-				// parse out parts id, thumbnail, align
-				$a_tags			= $doc->getElementsByTagName( 'a' );
-				$a_tag			= $a_tags->item( 0 );
-
-				// gives size tt-flickr tt-flickr-Medium
-				$size			= $a_tag->getAttribute( 'class' );
-				$size			= $this->get_shortcode_size( $size );
-
-				$image_tags		= $doc->getElementsByTagName( 'img' );
-				$image_tag		= $image_tags->item( 0 );
-
-				// give photo id http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg
-				$src			= $image_tag->getAttribute( 'src' );
-				$filename		= basename( $src );
-				$id				= preg_replace( '#^(\d+)_.*#', '\1', $filename );
-
-				// gives alginment alignnone
-				$align_primary	= $image_tag->getAttribute( 'class' );
-				$align_secondary	= $image_tag->getAttribute( 'align' );
-				$align_combined	= $align_secondary . ' ' . $align_primary;
-
-				$find_align		= '#(none|left|center|right)#i';
-				preg_match_all( $find_align, $align_combined, $align_matches );
-				// get the last align mentioned since that has precedence
-				$align			= ( count( $align_matches[0] ) ) ? array_pop( $align_matches[0] ) : $default_alignment;
-
-				// ceate simple [flickr] like
-				// [flickr id="5348222727" thumbnail="small" align="none"]
-				$replacement	= sprintf( $flickr_shortcode, $id, $size, $align );
-				// replace A/IMG with new [flickr]
-				$post_content	= str_replace( $a_html, $replacement, $post_content );
+			if ( ! preg_match( $find_flickr_a_tag, $html, $match ) ) {
+				continue;
 			}
 
-			$update				= array(
-				'ID'			=> $post->ID,
-				'post_content'	=> $post_content,
-			);
+			// deal only with the A/IMG tag
+			$a_html				= $match[0];
 
-			wp_update_post( $update );
+			// safer than home grown regex
+			if ( ! $doc->loadHTML( $a_html ) ) {
+				continue;
+			}
+
+			// parse out parts id, thumbnail, align
+			$a_tags				= $doc->getElementsByTagName( 'a' );
+			$a_tag				= $a_tags->item( 0 );
+
+			// gives size tt-flickr tt-flickr-Medium
+			$size				= $a_tag->getAttribute( 'class' );
+			$size				= $this->get_shortcode_size( $size );
+
+			$image_tags			= $doc->getElementsByTagName( 'img' );
+			$image_tag			= $image_tags->item( 0 );
+
+			// give photo id http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg
+			$src				= $image_tag->getAttribute( 'src' );
+			$filename			= basename( $src );
+			$id					= preg_replace( '#^(\d+)_.*#', '\1', $filename );
+
+			// gives alginment alignnone
+			$align_primary		= $image_tag->getAttribute( 'class' );
+			$align_secondary	= $image_tag->getAttribute( 'align' );
+			$align_combined		= $align_secondary . ' ' . $align_primary;
+
+			$find_align			= '#(none|left|center|right)#i';
+			preg_match_all( $find_align, $align_combined, $align_matches );
+			// get the last align mentioned since that has precedence
+			$align				= ( count( $align_matches[0] ) ) ? array_pop( $align_matches[0] ) : $default_alignment;
+
+			// ceate simple [flickr] like
+			// [flickr id="5348222727" thumbnail="small" align="none"]
+			$replacement		= sprintf( $flickr_shortcode, $id, $size, $align );
+			// replace A/IMG with new [flickr]
+			$post_content		= str_replace( $a_html, $replacement, $post_content );
 		}
+
+		$update					= array(
+			'ID'				=> $post->ID,
+			'post_content'		=> $post_content,
+		);
+
+		wp_update_post( $update );
 	}
 
 
@@ -435,11 +420,16 @@ class Flickr_Shortcode_Importer {
 	function ajax_process_shortcode() {
 		@error_reporting( 0 ); // Don't break the JSON result
 
-		header( 'Content-type: application/json' );
+		if ( ! $_REQUEST['importflickrshortcode'] )
+			header( 'Content-type: application/json' );
 
-		$id						= (int) $_REQUEST['id'];
-		$post					= get_post( $id );
-		$this->post_id			= $post->ID;
+		$this->post_id			= (int) $_REQUEST['id'];
+		$post					= get_post( $this->post_id );
+
+		if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
+			$this->convert_flickr_sourced_tags( $post );
+			$post				= get_post( $this->post_id );
+		}
 
 		if ( ! $post || 'post' != $post->post_type || ! stristr( $post->post_content, '[flickr' ) )
 			die( json_encode( array( 'error' => sprintf( __( "Failed import: %s doesn't contain [flickr].", 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );

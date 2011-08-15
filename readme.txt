@@ -64,6 +64,10 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 8. After Flickr Shortcode Importer for [flickrset]
 
 == Changelog ==
+= trunk =
+* Check for camera given photo title
+* html_entity_decode photo description
+
 = 1.3.4 =
 * Update Options screenshot
 * Put progress for a/img to shortcode conversion - moved convert_flickr_sourced_tags() into ajax_process_shortcode()

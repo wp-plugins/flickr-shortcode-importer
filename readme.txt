@@ -65,7 +65,6 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = trunk =
-* 
 
 = 1.3.4 =
 * Check for camera given photo title
@@ -172,6 +171,7 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * None
 
 == TODO ==
+* Convert Flickr sourced IMG to [flickr]
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src
 * Add option set A tag class attribute like 'lightbox'. Not sure if really needed

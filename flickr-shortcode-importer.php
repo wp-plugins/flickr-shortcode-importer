@@ -120,7 +120,7 @@ class Flickr_Shortcode_Importer {
 
 <?php
 		// testing helper
-		if ( $_REQUEST['importflickrshortcode'] ) {
+		if ( isset( $_REQUEST['importflickrshortcode'] ) && $_REQUEST['importflickrshortcode'] ) {
 			$this->ajax_process_shortcode();
 			exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );
 		}

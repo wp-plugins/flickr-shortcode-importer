@@ -51,6 +51,25 @@ class Flickr_Shortcode_Importer {
 		add_filter( 'plugin_action_links', array( &$this, 'add_plugin_action_links' ), 10, 2 );
 		
 		$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('[flickr] Options', 'flickr-shortcode-importer').'</a>';
+        
+		// TODO Make the Settings page link to the link list, and vice versa
+		// from broken link
+		if ( false ) {
+        add_screen_meta_link(
+        	'fsi-settings-link',
+			__('Go to Settings', 'flickr-shortcode-importer'),
+			admin_url('options-general.php?page=fsi-options'),
+			$links_page_hook,
+			array('style' => 'font-weight: bold;')
+		);
+		add_screen_meta_link(
+        	'fsi-links-page-link',
+			__('Go to Import', 'flickr-shortcode-importer'),
+			admin_url('tools.php?page=flickr-shortcode-importer'),
+			$options_page_hook,
+			array('style' => 'font-weight: bold;')
+		);
+		}
 	}
 
 

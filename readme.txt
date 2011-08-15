@@ -67,6 +67,7 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 = trunk =
 
 = 1.3.5 =
+* Rename ChangeLog to changelog.txt
 * Convert Flickr sourced IMG to [flickr]
 
 = 1.3.4 =
@@ -174,7 +175,7 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * None
 
 == TODO ==
-* Convert Flickr sourced IMG to [flickr]
+* Make the Settings page link to the link list, and vice versa
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src
 * Add option set A tag class attribute like 'lightbox'. Not sure if really needed

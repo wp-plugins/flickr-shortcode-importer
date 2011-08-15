@@ -192,14 +192,11 @@ EOD;
 		$a_tag_open				= '<a ';
 
 		$post_content			= $this->convert_tag_to_flickr( $post_content, $a_tag_open, $find_flickr_a_tag );
-		print_r($post_content); echo '<br />'; echo '' . __LINE__  . '<br />';	
 
 		// cycle through standalone img
 		$find_flickr_img_tag		= '#<img.*src=.*http://farm\d+.static.flickr.com/.*>#i';
 		$img_tag_open			= '<img ';
 		$post_content			= $this->convert_tag_to_flickr( $post_content, $img_tag_open, $find_flickr_img_tag, true );
-		print_r($post_content); echo '<br />'; echo '' . __LINE__  . '<br />';	
-		exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );	
 
 		$update					= array(
 			'ID'				=> $post->ID,

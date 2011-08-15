@@ -121,12 +121,16 @@ class Flickr_Shortcode_Importer {
 				$count			= count( $posts );
 				$posts			= implode( ',', $posts );
 			} else {
+				// TODO figure out way to skip aggressive grabbing
 				// look for posts containing A/IMG tags referencing Flickr
 				$flickr_source_where = "";
 				if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
-					$flickr_source_where = "
-						OR post_content LIKE '%<a%href=%http://www.flickr.com/%><img%src=%flickr.com/%></a>%'
-					";
+					$flickr_source_where = <<<EOD
+						OR (
+							post_content LIKE "%<a%href='http://www.flickr.com/%><img%src='http://farm%.static.flickr.com/%></a>%"
+							OR post_content LIKE '%<a%href="http://www.flickr.com/%><img%src="http://farm%.static.flickr.com/%></a>%'
+						)
+EOD;
 				}
 
 				// Directly querying the database is normally frowned upon, but all of the API functions will return the full post objects which will suck up lots of memory. This is best, just not as future proof.

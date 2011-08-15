@@ -39,6 +39,12 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Backup your database before importing. You can use revision to revert individual posts, but doing so in mass is a major PITA.
 * It's strongly recommended to deactivate plugins like WordSocial, WP Smush.it and similar to prevent extended import times. You can always enable them and run them enmasse later.
 
+During my own imports, a post with one [flickr] entry could take a minute. Then posts with many [flickr] entries, several Flickr-source'd A/IMG tags and [flickset] with 30 or so photos took over 10-minutes to import.
+
+During that importing time, it'll look like nothing is happening. The progress bar only moves after each import succeeds or fails.
+
+I recommend setting the limit in options to 1 and then testing your installation. That sure makes for easier recovery in case something goes wrong. If something doesn't work, report it, http://wordpress.org/extend/plugins/flickr-shortcode-importer/.
+
 = Thank You =
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
 * [flickr] shortcode handling code copied from Trent Gardner's very fine Flickr Manager plugin.
@@ -65,6 +71,8 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = trunk =
+-
+* Resolve http://wordpress.org/support/topic/flickr-shortcode-importer-plugin?replies=3#post-2283617
 
 = 1.4.0 =
 * Production worthy

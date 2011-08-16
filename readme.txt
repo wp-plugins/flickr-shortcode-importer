@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 
 Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -87,6 +87,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 == Changelog ==
 = trunk =
 -
+= 1.4.2 =
 * Add option Posts to Import
 * Add option Skip Importing Post IDs...
 * Add screenshots 9 & 10 for Before & After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag

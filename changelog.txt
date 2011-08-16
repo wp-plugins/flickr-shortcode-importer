@@ -1,4 +1,13 @@
 ------------------------------------------------------------------------
+r424047 | comprock | 2011-08-16 11:38:21 +0800 (Tue, 16 Aug 2011) | 2 lines
+
+* Add screenshots 9 & 10 for Before & After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
+
+------------------------------------------------------------------------
+r424037 | comprock | 2011-08-16 10:46:35 +0800 (Tue, 16 Aug 2011) | 1 line
+
+Update changelog
+------------------------------------------------------------------------
 r424036 | comprock | 2011-08-16 10:40:04 +0800 (Tue, 16 Aug 2011) | 3 lines
 
 * Add A/IMG, Warning and FAQ updates readme

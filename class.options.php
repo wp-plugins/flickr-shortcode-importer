@@ -390,6 +390,14 @@ EOD;
 			'section' => 'general'
 		);
 		
+		$this->settings['skip_importing_post_ids'] = array(
+			'title'   => __( 'Skip Importing Post IDs...' , 'flickr-shortcode-importer'),
+			'desc'    => __( "A CSV list of post ids to not import, like '1,2,3'." , 'flickr-shortcode-importer'),
+			'std'     => '',
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
 		$this->settings['limit'] = array(
 			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),
@@ -572,6 +580,11 @@ EOD;
 	*/
 	public function validate_settings( $input ) {
 		
+		// TODO validate for integer CSV
+		if ( false && isset( $input['skip_importing_post_ids'] ) ) {
+			return 'check' . $input['skip_importing_post_ids'];
+		}
+
 		if ( ! isset( $input['reset_plugin'] ) ) {
 			$options = get_option( 'fsi_options' );
 			
@@ -582,6 +595,7 @@ EOD;
 			
 			return $input;
 		}
+
 		return false;
 		
 	}

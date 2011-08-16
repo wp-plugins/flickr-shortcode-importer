@@ -166,6 +166,10 @@ EOD;
 					)
 					";
 
+				$skip_ids		= fsi_options( 'skip_importing_post_ids' );
+				if ( $skip_ids )
+					$query		.= ' AND ID NOT IN ( ' . $skip_ids . ' )';
+
 				$limit			= (int) fsi_options( 'limit' );
 				if ( $limit )
 					$query		.= ' LIMIT ' . $limit;

@@ -399,7 +399,7 @@ EOD;
 		);
 		
 		$this->settings['skip_importing_post_ids'] = array(
-			'title'   => __( 'Skip Importing Post IDs...' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Skip Importing Posts' , 'flickr-shortcode-importer'),
 			'desc'    => __( "A CSV list of post ids to not import, like '1,2,3'." , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'text',

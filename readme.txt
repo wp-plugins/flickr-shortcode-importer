@@ -36,8 +36,8 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 = Handled shortcode & media samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
-* <a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>
-* <img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" />
+* `<a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>`
+* `<img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" />`
 
 = Warnings =
 * Backup your database before importing. You can use revision to revert individual posts, but doing so in mass is a major PITA.
@@ -79,9 +79,12 @@ Is your disk quota large enough? See Warnings in Description for help.
 6. Flickr Shortcode Importer Options
 7. Before Flickr Shortcode Importer for [flickrset]
 8. After Flickr Shortcode Importer for [flickrset]
+9. Before Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
+10. After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 
 == Changelog ==
 = trunk =
+* Add screenshots 9 & 10 for Before & After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 
 = 1.4.1 =
 * Add A/IMG, Warning and FAQ updates readme

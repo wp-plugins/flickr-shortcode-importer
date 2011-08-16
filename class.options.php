@@ -390,6 +390,14 @@ EOD;
 			'section' => 'general'
 		);
 		
+		$this->settings['posts_to_import'] = array(
+			'title'   => __( 'Posts to Import' , 'flickr-shortcode-importer'),
+			'desc'    => __( "A CSV list of post ids to import, like '1,2,3'." , 'flickr-shortcode-importer'),
+			'std'     => '',
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
 		$this->settings['skip_importing_post_ids'] = array(
 			'title'   => __( 'Skip Importing Post IDs...' , 'flickr-shortcode-importer'),
 			'desc'    => __( "A CSV list of post ids to not import, like '1,2,3'." , 'flickr-shortcode-importer'),
@@ -581,9 +589,8 @@ EOD;
 	public function validate_settings( $input ) {
 		
 		// TODO validate for integer CSV
-		if ( false && isset( $input['skip_importing_post_ids'] ) ) {
-			return 'check' . $input['skip_importing_post_ids'];
-		}
+		// posts_to_import
+		// skip_importing_post_ids
 
 		if ( ! isset( $input['reset_plugin'] ) ) {
 			$options = get_option( 'fsi_options' );

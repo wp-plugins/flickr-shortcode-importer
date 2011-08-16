@@ -22,6 +22,7 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand via the post revision tool.
 
 = Options =
+* Posts to Import
 * Skip Importing Post IDs...
 * Default A Tag Class
 * Default Image Alignment
@@ -85,8 +86,9 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
-* Add option Skip Importing Post IDs...
 -
+* Add option Posts to Import
+* Add option Skip Importing Post IDs...
 * Add screenshots 9 & 10 for Before & After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 
 = 1.4.1 =
@@ -205,7 +207,6 @@ Is your disk quota large enough? See Warnings in Description for help.
 * None
 
 == TODO ==
-* Add means to set post IDs to skip by setting a bit in a post
 * skip_importing_post_ids validate for integer CSV
 * Make the Settings page link to the link list, and vice versa
 * Add estimated time remaining notice

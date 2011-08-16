@@ -166,6 +166,10 @@ EOD;
 					)
 					";
 
+				$include_ids		= fsi_options( 'posts_to_import' );
+				if ( $include_ids )
+					$query		.= ' AND ID IN ( ' . $include_ids . ' )';
+
 				$skip_ids		= fsi_options( 'skip_importing_post_ids' );
 				if ( $skip_ids )
 					$query		.= ' AND ID NOT IN ( ' . $skip_ids . ' )';

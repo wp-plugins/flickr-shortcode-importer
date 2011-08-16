@@ -1,4 +1,10 @@
 ------------------------------------------------------------------------
+r424036 | comprock | 2011-08-16 10:40:04 +0800 (Tue, 16 Aug 2011) | 3 lines
+
+* Add A/IMG, Warning and FAQ updates readme
+Prep for 1.4.1
+
+------------------------------------------------------------------------
 r423889 | comprock | 2011-08-16 01:44:01 +0800 (Tue, 16 Aug 2011) | 2 lines
 
 * Resolve http://wordpress.org/support/topic/flickr-shortcode-importer-plugin?replies=3#post-2283617

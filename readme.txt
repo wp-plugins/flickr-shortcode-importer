@@ -4,20 +4,22 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 
-Imports [flickr] & [flickrset] shortcode images into the Media Library.
+Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
 == Description ==
-Imports [flickr] & [flickrset] shortcode images into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
+Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
 
 The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.  
 
 [flickrset] shortcode is converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
 
+Flickr-sourced A/IMG tagged media is converted into [flickr] and then imported as normal. Great for finally bringing into your control all of those media items you've been using, but now Flickr is giving you 'Image is unavaiable' for. A/IMG tag is processed before IMG to prevent unexpected results.
+
 This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
 
-There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand.
+There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand via the post revision tool.
 
 = Options =
 * Default A Tag Class
@@ -31,19 +33,20 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Make Nice Image Title?
 * Set limit of posts to be processed
 
-= Handled shortcode samples =
+= Handled shortcode & media samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
+* <a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>
+* <img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" />
 
 = Warnings =
 * Backup your database before importing. You can use revision to revert individual posts, but doing so in mass is a major PITA.
 * It's strongly recommended to deactivate plugins like WordSocial, WP Smush.it and similar to prevent extended import times. You can always enable them and run them enmasse later.
-
-During my own imports, a post with one [flickr] entry could take a minute. Then posts with many [flickr] entries, several Flickr-source'd A/IMG tags and [flickset] with 30 or so photos took over 10-minutes to import.
-
-During that importing time, it'll look like nothing is happening. The progress bar only moves after each import succeeds or fails.
-
-I recommend setting the limit in options to 1 and then testing your installation. That sure makes for easier recovery in case something goes wrong. If something doesn't work, report it, http://wordpress.org/extend/plugins/flickr-shortcode-importer/.
+* Flickr-sourced IMG tags will now be linked to the attachment page.
+* During my own imports, a post with one [flickr] entry could take a minute. Then posts with many [flickr] entries, several Flickr-source'd A/IMG tags and [flickset] with 30 or so photos took over 10-minutes to import.
+* During that importing time, it'll look like nothing is happening. The progress bar only moves after each import succeeds or fails.
+* I recommend setting the limit in options to 1 and then testing your installation. That sure makes for easier recovery in case something goes wrong. If something doesn't work, report it, http://wordpress.org/extend/plugins/flickr-shortcode-importer/.
+* Make sure you have enough disk space. Figure on about 1 GB per 1,000 photos given your using Scissors-continued and have a maximum image size of 1280 x 1024. If your images can be larger, then you'll probably need 1 GB per 250 photos imported.
 
 = Thank You =
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
@@ -59,6 +62,14 @@ I recommend setting the limit in options to 1 and then testing your installation
 = Can I sponsor changes? =
 Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/about-peimic/donate/ "Help sponsor Flickr Shortcode Importer") and let me know what's wanted
 
+= Help, it doesn't work =
+Please leave a forum entry detailing exactly what error message you received, whether or not you attempted and succeeded with a 1 item import, a copy of post content and any other steps needed to replicate your troubles. Don't forget the WP and PHP versions.
+
+With this information, I should be able to have an idea on how to help resolve your issues.
+
+= Importing was working, but suddenly stopped =
+Is your disk quota large enough? See Warnings in Description for help.
+
 == Screenshots ==
 1. Flickr Shortcode Importer in Plugins
 2. Flickr Shortcode Importer in Tools
@@ -71,7 +82,9 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 
 == Changelog ==
 = trunk =
--
+
+= 1.4.1 =
+* Add A/IMG, Warning and FAQ updates readme
 * Resolve http://wordpress.org/support/topic/flickr-shortcode-importer-plugin?replies=3#post-2283617
 
 = 1.4.0 =
@@ -189,4 +202,3 @@ Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/
 * Make the Settings page link to the link list, and vice versa
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src
-* Add option set A tag class attribute like 'lightbox'. Not sure if really needed

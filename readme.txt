@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 
 Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -22,6 +22,7 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand via the post revision tool.
 
 = Options =
+* Set own Flickr API key
 * Posts to Import
 * Skip Importing Post IDs...
 * Default A Tag Class
@@ -42,6 +43,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * `<img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" />`
 
 = Warnings =
+* Using your own Flickr API Key might be necessary. Test a single import and see the results before setting your own.
 * Backup your database before importing. You can use revision to revert individual posts, but doing so in mass is a major PITA.
 * It's strongly recommended to deactivate plugins like WordSocial, WP Smush.it and similar to prevent extended import times. You can always enable them and run them enmasse later.
 * Flickr-sourced IMG tags will now be linked to the attachment page.
@@ -58,7 +60,8 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 == Installation ==
 1. Upload the `flickr-shortcode-importer` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Go to the Tools submenu, click on Flickr Shortcode Importer
+1. Edit defaults via Settings > [flickr] Options
+1. Import via Tools > [flickr] Importer
 
 == Frequently Asked Questions ==
 = Can I sponsor changes? =
@@ -87,6 +90,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 == Changelog ==
 = trunk =
 -
+
+= 1.4.3 =
+* Add option Set own Flickr API key
+
 = 1.4.2 =
 * Add option Posts to Import
 * Add option Skip Importing Post IDs...
@@ -209,6 +216,5 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == TODO ==
 * skip_importing_post_ids validate for integer CSV
-* Make the Settings page link to the link list, and vice versa
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src

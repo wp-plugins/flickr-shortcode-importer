@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.4.2
+Version: 1.4.3
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -32,9 +32,6 @@ require_once( dirname(__FILE__) . '/class.options.php' );
 class Flickr_Shortcode_Importer {
 	var $menu_id;
 	var $in_flickset			= false;
-	// Peimic.com API key
-	var $api_key				= 'd7a73fed961744db01c498ca910a003d';
-	var $secret					= '7d8a757b8bc2b50b';
 
 	// Plugin initialization
 	function Flickr_Shortcode_Importer() {
@@ -483,7 +480,10 @@ EOD;
 		if ( ! current_user_can( 'manage_options' ) )
 			$this->die_json_error_msg( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
 
-		$this->flickr			= new phpFlickr($this->api_key, $this->secret);
+		// default is Flickr Shortcode Import API key
+		$api_key				= fsi_options( 'flickr_api_key' );
+		$secret					= fsi_options( 'flickr_api_secret' );
+		$this->flickr			= new phpFlickr( $api_key, $secret );
 
 		// only use our shortcode handlers to prevent messing up post content 
 		remove_all_shortcodes();
@@ -586,11 +586,12 @@ EOD;
 				return $markup;
 
 			// wrap in link to attachment itself
-			$size				= $this->get_shortcode_size( $args['thumbnail'] );
+			$size				= isset( $args['thumbnail'] ) ? $args['thumbnail'] : '';
+			$size				= $this->get_shortcode_size( $size );
 			$image_link			= wp_get_attachment_link( $image_id, $size, true 	);
 
 			// correct class per args
-			$align				= $args['align'] ? $args['align'] : fsi_options( 'default_image_alignment' );
+			$align				= isset( $args['align'] ) ? $args['align'] : fsi_options( 'default_image_alignment' );
 			$align				= ' align' . $align;
 			$wp_image			= ' wp-image-' . $image_id;
 			$image_link			= preg_replace( '#(class="[^"]+)"#', '\1'

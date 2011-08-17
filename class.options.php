@@ -25,8 +25,7 @@ class FSI_Settings {
 		$this->get_settings();
 		
 		$this->sections['general']      = __( 'General Settings' , 'flickr-shortcode-importer');
-		// hide section in UI
-		// $this->sections['appearance']   = __( 'Appearance' );
+		$this->sections['api']   		= __( 'Flickr API' , 'flickr-shortcode-importer');
 		$this->sections['reset']        = __( 'Reset to Defaults' , 'flickr-shortcode-importer');
 		$this->sections['about']        = __( 'About Flickr Shortcode Importer' , 'flickr-shortcode-importer');
 		
@@ -412,6 +411,22 @@ EOD;
 			'std'     => '',
 			'type'    => 'text',
 			'section' => 'general'
+		);
+		
+		$this->settings['flickr_api_key'] = array(
+			'title'   => __( 'Flickr API Key' , 'flickr-shortcode-importer'),
+			'desc'    => __( '<a href="http://www.flickr.com/services/api/">Flickr API Documentation</a>' , 'flickr-shortcode-importer'),
+			'std'     => '9f9508c77dc554c1ee7fdc006aa1879e',
+			'type'    => 'text',
+			'section' => 'api'
+		);
+		
+		$this->settings['flickr_api_secret'] = array(
+			'title'   => __( 'Flickr API Secret' , 'flickr-shortcode-importer'),
+			'desc'    => __( '' , 'flickr-shortcode-importer'),
+			'std'     => 'e63952df7d02cc03',
+			'type'    => 'text',
+			'section' => 'api'
 		);
 		
 		// Here for reference

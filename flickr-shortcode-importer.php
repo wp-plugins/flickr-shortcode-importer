@@ -810,6 +810,10 @@ EOD;
 	 * @return mixed string/boolean
 	 */
 	function cbMkReadableStr($str) {
+		if ( is_numeric( $str ) ) {
+			return number_format( $str );
+		}
+
 		if ( is_string($str) )
 		{
 			$clean_str = htmlspecialchars($str);

@@ -35,6 +35,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Remove first [flickr] from post content or not
 * Make Nice Image Title?
 * Set limit of posts to be processed
+* Create flickr link in description?
 
 = Handled shortcode & media samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
@@ -93,6 +94,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 * Options > Settings verbiage update 
 * Create top right meta links between options and import screens
 -
+* Sectionalize settings
+* Create flickr link in description?
+* Enable debug mode
+* Edit flickr link text
 
 = 1.4.3 =
 * Add option Set own Flickr API key

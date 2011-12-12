@@ -32,7 +32,8 @@ require_once( 'screen-meta-links.php' );
 
 class Flickr_Shortcode_Importer {
 	var $menu_id;
-	var $in_flickset			= false;
+	var $flickr_id				= false;
+	var $flickset_id			= false;
 
 	// Plugin initialization
 	function Flickr_Shortcode_Importer() {
@@ -107,10 +108,13 @@ class Flickr_Shortcode_Importer {
 	<h2><?php _e('Flickr Shortcode Importer', 'flickr-shortcode-importer'); ?></h2>
 
 <?php
-		// testing helper
-		if ( isset( $_REQUEST['importflickrshortcode'] ) && $_REQUEST['importflickrshortcode'] ) {
-			$this->ajax_process_shortcode();
-			exit( __LINE__ . ':' . __FILE__ . " ERROR<br />\n" );
+		if ( fsi_options( 'debug_mode' ) ) {
+			$posts_to_import		= fsi_options( 'posts_to_import' );
+			$posts_to_import		= explode( ',', $posts_to_import );
+			foreach ( $posts_to_import as $key => $post_id ) {
+				$this->post_id		= $post_id;
+				$this->ajax_process_shortcode();
+			}
 		}
 
 		// If the button was clicked
@@ -128,8 +132,6 @@ class Flickr_Shortcode_Importer {
 				$count			= count( $posts );
 				$posts			= implode( ',', $posts );
 			} else {
-				// TODO figure out way to skip aggressive grabbing
-				// look for posts containing A/IMG tags referencing Flickr
 				$flickr_source_where = "";
 				if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
 					$flickr_source_where = <<<EOD
@@ -289,8 +291,6 @@ EOD;
 		echo '<p>' . __( "Please be patient while the [flickr(set)] shortcodes are processed. This can take a while, up to 2 minutes per individual Flickr media item. Do not navigate away from this page until this script is done or the import will not be completed. You will be notified via this page when the import is completed.", 'flickr-shortcode-importer' ) . '</p>';
 
 		echo '<p>' . sprintf( __( 'Estimated time required to import is %1$s minutes.', 'flickr-shortcode-importer' ), ( $count * 2 ) ) . '</p>';
-
-		// TODO add estimated time remaining 
 
 		$text_goback = ( ! empty( $_GET['goback'] ) ) ? sprintf( __( 'To go back to the previous page, <a href="%s">click here</a>.', 'flickr-shortcode-importer' ), 'javascript:history.go(-1)' ) : '';
 
@@ -453,11 +453,12 @@ EOD;
 
 	// Process a single image ID (this is an AJAX handler)
 	function ajax_process_shortcode() {
-		@error_reporting( 0 ); // Don't break the JSON result
+		if ( ! fsi_options( 'debug_mode' ) ) {
+			error_reporting( 0 ); // Don't break the JSON result
+			header( 'Content-type: application/json' );
+			$this->post_id		= (int) $_REQUEST['id'];
+		}
 
-		header( 'Content-type: application/json' );
-
-		$this->post_id			= (int) $_REQUEST['id'];
 		$post					= get_post( $this->post_id );
 
 		if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
@@ -486,8 +487,6 @@ EOD;
 		$this->first_image		= fsi_options( 'remove_first_flickr_shortcode' ) ? true : false;
 		$this->menu_order		= 1;
 
-		// TODO progress by post
-
 		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
 
@@ -511,15 +510,16 @@ EOD;
 	
 	// process each [flickr] entry
 	function shortcode_flickr( $args ) {
+		$this->flickr_id		= $args['id'];
 		set_time_limit( 120 );
 
-		$photo					= $this->flickr->photos_getInfo( $args['id'] );
+		$photo					= $this->flickr->photos_getInfo( $this->flickr_id );
 		$photo					= $photo['photo'];
 
 		if ( isset( $args['set_title'] ) ) {
 			$photo['set_title']	= $args['set_title'];
 		} else {
-			$contexts			= $this->flickr->photos_getAllContexts( $args['id'] );
+			$contexts			= $this->flickr->photos_getAllContexts( $this->flickr_id );
 			$photo['set_title']	= isset( $contexts['set'][0]['title'] ) ? $contexts['set'][0]['title'] : '';
 		}
 		
@@ -531,13 +531,13 @@ EOD;
 	
 	// process each [flickrset] entry
 	function shortcode_flickrset( $args ) {
-		$this->in_flickset		= true;
+		$this->flickset_id		= $args['id'];
 		$import_limit			= ( $args['photos'] ) ? $args['photos'] : -1;
 
-		$info					= $this->flickr->photosets_getInfo( $args['id'] );
+		$info					= $this->flickr->photosets_getInfo( $this->flickset_id );
 		$args['set_title']		= $info['title'];
 
-		$photos					= $this->flickr->photosets_getPhotos( $args['id'] );
+		$photos					= $this->flickr->photosets_getPhotos( $this->flickset_id );
 		$photos					= $photos['photoset']['photo'];
 
 		// increased because [flickrset] might have lots of photos
@@ -552,7 +552,7 @@ EOD;
 		}
 		
 		$markup					= '[gallery]';
-		$this->in_flickset		= false;
+		$this->flickset_id		= false;
 
 		return $markup;
 	}
@@ -734,12 +734,24 @@ EOD;
 
 		if ( $dup ) {
 			// ignore dup if importing [flickrset]
-			if( ! $this->in_flickset ) {
+			if( ! $this->flickset_id ) {
 				return $dup;
 			} else {
 				// use local source to speed up transfer
 				$src		= wp_get_attachment_url( $dup );
 			}
+		}
+
+		if ( fsi_options( 'flickr_link_in_desc' ) ) {
+			$desc			.= "\n" . fsi_options( 'flickr_link_text' );
+			$link			= ' <a href="' . $photo['urls']['url'][0]['_content'];
+
+			if( $this->flickset_id ) {
+				$link		.= 'in/set-' . $this->flickset_id . '/';
+			}
+
+			$link			.= '">flickr</a>';
+			$desc			.= $link;
 		}
 
 		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );

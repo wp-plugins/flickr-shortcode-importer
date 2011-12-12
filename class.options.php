@@ -424,12 +424,28 @@ EOD;
 			'std'     => 0
 		);
 		
+		$this->settings['flickr_link_text'] = array(
+			'title'   => __( 'Flickr Link Text' , 'flickr-shortcode-importer'),
+			'desc'    => __( '' , 'flickr-shortcode-importer'),
+			'std'     => __( 'This image was also posted on' , 'flickr-shortcode-importer'),
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
 		$this->settings['limit'] = array(
 			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'text',
 			'section' => 'testing'
+		);
+		
+		$this->settings['debug_mode'] = array(
+			'section' => 'testing',
+			'title'   => __( 'Debug Mode' , 'flickr-shortcode-importer'),
+			'desc'	  => __( 'Bypass Ajax controller to handle posts_to_import directly for testing purposes', 'flickr-shortcode-importer' ),
+			'type'    => 'checkbox',
+			'std'     => 0
 		);
 		
 		$this->settings['flickr_api_key'] = array(

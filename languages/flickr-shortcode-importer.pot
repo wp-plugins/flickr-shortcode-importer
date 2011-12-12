@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Flickr Shortcode Importer package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flickr Shortcode Importer 1.4.2\n"
+"Project-Id-Version: Flickr Shortcode Importer 1.4.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/flickr-shortcode-importer\n"
-"POT-Creation-Date: 2011-08-17 11:45:30+00:00\n"
+"POT-Creation-Date: 2011-12-12 20:16:05+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: class.options.php:27
-msgid "General Settings"
+msgid "Import Settings"
 msgstr ""
 
 #: class.options.php:28
@@ -21,262 +21,297 @@ msgid "Flickr API"
 msgstr ""
 
 #: class.options.php:29
-msgid "Reset to Defaults"
+msgid "Posts Selection"
 msgstr ""
 
 #: class.options.php:30
+msgid "Testing Options"
+msgstr ""
+
+#: class.options.php:31
+msgid "Reset to Defaults"
+msgstr ""
+
+#: class.options.php:32
 msgid "About Flickr Shortcode Importer"
 msgstr ""
 
-#: class.options.php:49 class.options.php:101
-msgid "Flickr Shortcode Importer Options"
+#: class.options.php:51 class.options.php:111
+msgid "Flickr Shortcode Importer Settings"
 msgstr ""
 
-#: class.options.php:49 flickr-shortcode-importer.php:50
-msgid "[flickr] Options"
+#: class.options.php:51 flickr-shortcode-importer.php:72
+msgid "[flickr] Importer"
 msgstr ""
 
-#: class.options.php:65
+#: class.options.php:58
+msgid "[Flickr] Importer"
+msgstr ""
+
+#: class.options.php:75
 msgid "Default Field"
 msgstr ""
 
-#: class.options.php:66
+#: class.options.php:76
 msgid "This is a default description."
 msgstr ""
 
-#: class.options.php:116
+#: class.options.php:126
 msgid "Save Changes"
 msgstr ""
 
-#: class.options.php:118
+#: class.options.php:128
 msgid "begin [flickr] importing"
 msgstr ""
 
-#: class.options.php:310
+#: class.options.php:321
 msgid "Set Captions"
 msgstr ""
 
-#: class.options.php:311
+#: class.options.php:322
 msgid "Uses media title as the caption."
 msgstr ""
 
-#: class.options.php:318
+#: class.options.php:329
 msgid "Import Flickr-sourced A/IMG tags"
 msgstr ""
 
-#: class.options.php:319
+#: class.options.php:330
 msgid ""
 "Converts Flickr-sourced A/IMG tags to [flickr] and then proceeds with import."
 msgstr ""
 
-#: class.options.php:326
+#: class.options.php:337
 msgid "Set Featured Image"
 msgstr ""
 
-#: class.options.php:327
+#: class.options.php:338
 msgid ""
 "Set the first [flickr] or [flickrset] image found as the Featured Image. "
 "Will not replace the current Featured Image of a post."
 msgstr ""
 
-#: class.options.php:334
+#: class.options.php:345
 msgid "Force Set Featured Image"
 msgstr ""
 
-#: class.options.php:335
+#: class.options.php:346
 msgid "Set the Featured Image even if one already exists for a post."
 msgstr ""
 
-#: class.options.php:342
+#: class.options.php:353
 msgid "Remove First Flickr Shortcode"
 msgstr ""
 
-#: class.options.php:343
+#: class.options.php:354
 msgid ""
 "Remove the first [flickr] from post content? If you use Featured Images, "
 "this will help prevent duplicate images in your post."
 msgstr ""
 
-#: class.options.php:350
+#: class.options.php:361
 msgid "Make Nice Image Title?"
 msgstr ""
 
-#: class.options.php:351
+#: class.options.php:362
 msgid ""
 "If the image title is a filename and the image is part of a Flickr set, the "
 "Flickr set title plus a numeric suffix will be used instead."
 msgstr ""
 
-#: class.options.php:358
+#: class.options.php:369
 msgid "Default Image Alignment"
 msgstr ""
 
-#: class.options.php:359
+#: class.options.php:370
 msgid ""
 "Default alignment of image displayed in post when no alignment is found."
 msgstr ""
 
-#: class.options.php:372
+#: class.options.php:383
 msgid "Default Image Size"
 msgstr ""
 
-#: class.options.php:373
+#: class.options.php:384
 msgid "Default size of image displayed in post when no size is found."
 msgstr ""
 
-#: class.options.php:385
+#: class.options.php:396
 msgid "Default A Tag Class"
 msgstr ""
 
-#: class.options.php:386
+#: class.options.php:397
 msgid "Useful for lightbox'ing."
 msgstr ""
 
-#: class.options.php:393
+#: class.options.php:404
 msgid "Posts to Import"
 msgstr ""
 
-#: class.options.php:394
+#: class.options.php:405
 msgid "A CSV list of post ids to import, like '1,2,3'."
 msgstr ""
 
-#: class.options.php:401
+#: class.options.php:412
 msgid "Skip Importing Posts"
 msgstr ""
 
-#: class.options.php:402
+#: class.options.php:413
 msgid "A CSV list of post ids to not import, like '1,2,3'."
 msgstr ""
 
-#: class.options.php:409
+#: class.options.php:421
+msgid "Create flickr link in description?"
+msgstr ""
+
+#: class.options.php:422
+msgid ""
+"Creates a back link to the original flickr image in the description field."
+msgstr ""
+
+#: class.options.php:428
+msgid "Flickr Link Text"
+msgstr ""
+
+#: class.options.php:430
+msgid "This image was also posted on"
+msgstr ""
+
+#: class.options.php:436
 msgid "Import Limit"
 msgstr ""
 
-#: class.options.php:410
+#: class.options.php:437
 msgid ""
 "Useful for testing import on a limited amount of posts. 0 or blank means "
 "unlimited."
 msgstr ""
 
-#: class.options.php:417
+#: class.options.php:445
+msgid "Debug Mode"
+msgstr ""
+
+#: class.options.php:446
+msgid ""
+"Bypass Ajax controller to handle posts_to_import directly for testing "
+"purposes"
+msgstr ""
+
+#: class.options.php:452
 msgid "Flickr API Key"
 msgstr ""
 
-#: class.options.php:418
+#: class.options.php:453
 msgid ""
 "<a href=\"http://www.flickr.com/services/api/\">Flickr API Documentation</a>"
 msgstr ""
 
-#: class.options.php:425
+#: class.options.php:460
 msgid "Flickr API Secret"
 msgstr ""
 
-#: class.options.php:435
+#: class.options.php:470
 msgid "Example Text Input"
 msgstr ""
 
-#: class.options.php:436
+#: class.options.php:471
 msgid "This is a description for the text input."
 msgstr ""
 
-#: class.options.php:443
+#: class.options.php:478
 msgid "Example Textarea Input"
 msgstr ""
 
-#: class.options.php:444
+#: class.options.php:479
 msgid "This is a description for the textarea input."
 msgstr ""
 
-#: class.options.php:452
+#: class.options.php:487
 msgid "Example Checkbox"
 msgstr ""
 
-#: class.options.php:453
+#: class.options.php:488
 msgid "This is a description for the checkbox."
 msgstr ""
 
-#: class.options.php:467
+#: class.options.php:502
 msgid "Example Radio"
 msgstr ""
 
-#: class.options.php:468
+#: class.options.php:503
 msgid "This is a description for the radio buttons."
 msgstr ""
 
-#: class.options.php:480
+#: class.options.php:515
 msgid "Example Select"
 msgstr ""
 
-#: class.options.php:481
+#: class.options.php:516
 msgid "This is a description for the drop-down."
 msgstr ""
 
-#: class.options.php:497
+#: class.options.php:532
 msgid "Header Logo"
 msgstr ""
 
-#: class.options.php:498
+#: class.options.php:533
 msgid "Enter the URL to your logo for the plugin header."
 msgstr ""
 
-#: class.options.php:505
+#: class.options.php:540
 msgid "Favicon"
 msgstr ""
 
-#: class.options.php:506
+#: class.options.php:541
 msgid ""
 "Enter the URL to your custom favicon. It should be 16x16 pixels in size."
 msgstr ""
 
-#: class.options.php:512
+#: class.options.php:547
 msgid "Custom Styles"
 msgstr ""
 
-#: class.options.php:513
+#: class.options.php:548
 msgid "Enter any custom CSS here to apply it to your plugin."
 msgstr ""
 
-#: class.options.php:525
+#: class.options.php:560
 msgid "Reset plugin"
 msgstr ""
 
-#: class.options.php:529
+#: class.options.php:564
 msgid ""
 "Check this box and click \"Save Changes\" below to reset plugin options to "
 "their defaults."
 msgstr ""
 
-#: flickr-shortcode-importer.php:57
-msgid "Go to Settings"
+#: flickr-shortcode-importer.php:52
+msgid "Settings"
 msgstr ""
 
-#: flickr-shortcode-importer.php:64
-msgid "Go to Import"
-msgstr ""
-
-#: flickr-shortcode-importer.php:78
+#: flickr-shortcode-importer.php:62
 msgid "Import"
 msgstr ""
 
-#. #-#-#-#-#  flickr-shortcode-importer.pot (Flickr Shortcode Importer 1.4.2)  #-#-#-#-#
+#. #-#-#-#-#  flickr-shortcode-importer.pot (Flickr Shortcode Importer 1.4.3)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: flickr-shortcode-importer.php:88 flickr-shortcode-importer.php:116
+#: flickr-shortcode-importer.php:72 flickr-shortcode-importer.php:108
 msgid "Flickr Shortcode Importer"
 msgstr ""
 
-#: flickr-shortcode-importer.php:88
-msgid "[flickr] Importer"
+#: flickr-shortcode-importer.php:76
+msgid "[Flickr] Settings"
 msgstr ""
 
-#: flickr-shortcode-importer.php:129
+#: flickr-shortcode-importer.php:124
 msgid "Cheatin&#8217; uh?"
 msgstr ""
 
-#: flickr-shortcode-importer.php:189
+#: flickr-shortcode-importer.php:182
 msgid "All done. No [flickr] codes found in posts"
 msgstr ""
 
-#: flickr-shortcode-importer.php:298
+#: flickr-shortcode-importer.php:291
 msgid ""
 "Please be patient while the [flickr(set)] shortcodes are processed. This can "
 "take a while, up to 2 minutes per individual Flickr media item. Do not "
@@ -285,56 +320,56 @@ msgid ""
 "completed."
 msgstr ""
 
-#: flickr-shortcode-importer.php:300
+#: flickr-shortcode-importer.php:293
 msgid "Estimated time required to import is %1$s minutes."
 msgstr ""
 
-#: flickr-shortcode-importer.php:304
+#: flickr-shortcode-importer.php:295
 msgid "To go back to the previous page, <a href=\"%s\">click here</a>."
 msgstr ""
 
-#: flickr-shortcode-importer.php:306
+#: flickr-shortcode-importer.php:297
 msgid ""
 "All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds "
 "and there were %3$s failure(s). To try importing the failed [flickr]s again, "
 "<a href=\"%4$s\">click here</a>. %5$s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:308
+#: flickr-shortcode-importer.php:299
 msgid ""
 "All done! %1$s [flickr(set)](s) were successfully processed in %2$s seconds "
 "and there were no failures. %3$s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:311 flickr-shortcode-importer.php:456
+#: flickr-shortcode-importer.php:302 flickr-shortcode-importer.php:447
 msgid "You must enable Javascript in order to proceed!"
 msgstr ""
 
-#: flickr-shortcode-importer.php:317
+#: flickr-shortcode-importer.php:308
 msgid "Abort Importing [flickr(set)]s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:319
+#: flickr-shortcode-importer.php:310
 msgid "Debugging Information"
 msgstr ""
 
-#: flickr-shortcode-importer.php:322
+#: flickr-shortcode-importer.php:313
 msgid "Total [flickr(set)]s: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:323
+#: flickr-shortcode-importer.php:314
 msgid "[flickr(set)]s Imported: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:324
+#: flickr-shortcode-importer.php:315
 msgid "Import Failures: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:355
+#: flickr-shortcode-importer.php:346
 msgid "Stopping, please wait a moment."
 msgstr ""
 
-#: flickr-shortcode-importer.php:444
+#: flickr-shortcode-importer.php:435
 msgid ""
 "Use this tool to import [flickr] shortcodes into the Media Library. The "
 "first [flickr] image found in post content is set as the post's Featured "
@@ -342,54 +377,54 @@ msgid ""
 "are then transitioned to like sized locally referenced images."
 msgstr ""
 
-#: flickr-shortcode-importer.php:446
+#: flickr-shortcode-importer.php:437
 msgid ""
 "[flickrset] shortcodes are handled similarly to [flickr] importing. The "
 "difference is that [flickrset] is replaced by [gallery] and the Featured "
 "Image of a post is set from the first image in the [flickrset] per Options."
 msgstr ""
 
-#: flickr-shortcode-importer.php:448
+#: flickr-shortcode-importer.php:439
 msgid ""
 "Flickr shortcode import is not reversible. Backup your database beforehand "
 "or be prepared to revert each transformmed post manually."
 msgstr ""
 
-#: flickr-shortcode-importer.php:450
+#: flickr-shortcode-importer.php:441
 msgid "Please review your %s before proceeding."
 msgstr ""
 
-#: flickr-shortcode-importer.php:452
+#: flickr-shortcode-importer.php:443
 msgid "To begin, just press the button below."
 msgstr ""
 
-#: flickr-shortcode-importer.php:454
+#: flickr-shortcode-importer.php:445
 msgid "Import Flickr Shortcode"
 msgstr ""
 
-#: flickr-shortcode-importer.php:478
+#: flickr-shortcode-importer.php:470
 msgid "Failed import: %s doesn't contain [flickr]."
 msgstr ""
 
-#: flickr-shortcode-importer.php:481
+#: flickr-shortcode-importer.php:473
 msgid "Your user account doesn't have permission to import images"
 msgstr ""
 
-#: flickr-shortcode-importer.php:517
+#: flickr-shortcode-importer.php:507
 msgid ""
 "&quot;<a href=\"%1$s\" target=\"_blank\">%2$s</a>&quot; Post ID %3$s was "
 "successfully processed in %4$s seconds."
 msgstr ""
 
-#: flickr-shortcode-importer.php:772
+#: flickr-shortcode-importer.php:775
 msgid "The originally uploaded image file cannot be found at %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:780
+#: flickr-shortcode-importer.php:783
 msgid "Unknown failure reason."
 msgstr ""
 
-#: flickr-shortcode-importer.php:794
+#: flickr-shortcode-importer.php:797
 msgid ""
 "&quot;%1$s&quot; Post ID %2$s failed to be processed. The error message was: "
 "%3$s"

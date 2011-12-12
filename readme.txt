@@ -35,7 +35,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Remove first [flickr] from post content or not
 * Make Nice Image Title?
 * Set limit of posts to be processed
-* Create flickr link in description?
+* Create flickr backlink in description?
 
 = Handled shortcode & media samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]

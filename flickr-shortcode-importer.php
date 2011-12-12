@@ -25,8 +25,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 // Load dependencies
-require_once( dirname(__FILE__) . '/lib/inc.flickr.php' );
-require_once( dirname(__FILE__) . '/class.options.php' );
+require_once( 'lib/inc.flickr.php' );
+require_once( 'class.options.php' );
+require_once( 'screen-meta-links.php' );
 
 
 class Flickr_Shortcode_Importer {
@@ -47,26 +48,8 @@ class Flickr_Shortcode_Importer {
 		add_action( 'wp_ajax_importflickrshortcode', array( &$this, 'ajax_process_shortcode' ) );
 		add_filter( 'plugin_action_links', array( &$this, 'add_plugin_action_links' ), 10, 2 );
 		
-		$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('[flickr] Options', 'flickr-shortcode-importer').'</a>';
+		$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('Settings', 'flickr-shortcode-importer').'</a>';
         
-		// TODO Make the Settings page link to the link list, and vice versa
-		// from broken link
-		if ( false ) {
-        add_screen_meta_link(
-        	'fsi-settings-link',
-			__('Go to Settings', 'flickr-shortcode-importer'),
-			admin_url('options-general.php?page=fsi-options'),
-			$links_page_hook,
-			array('style' => 'font-weight: bold;')
-		);
-		add_screen_meta_link(
-        	'fsi-links-page-link',
-			__('Go to Import', 'flickr-shortcode-importer'),
-			admin_url('tools.php?page=flickr-shortcode-importer'),
-			$options_page_hook,
-			array('style' => 'font-weight: bold;')
-		);
-		}
 	}
 
 
@@ -86,6 +69,14 @@ class Flickr_Shortcode_Importer {
 	// Register the management page
 	function add_admin_menu() {
 		$this->menu_id = add_management_page( __( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ), __( '[flickr] Importer', 'flickr-shortcode-importer' ), 'manage_options', 'flickr-shortcode-importer', array(&$this, 'user_interface') );
+
+        add_screen_meta_link(
+        	'fsi-settings-link',
+			__('[Flickr] Settings', 'flickr-shortcode-importer'),
+			admin_url('options-general.php?page=fsi-options'),
+			$this->menu_id,
+			array('style' => 'font-weight: bold;')
+		);
 	}
 
 

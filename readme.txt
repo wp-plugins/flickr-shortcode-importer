@@ -89,6 +89,9 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Validate CSV input
+* Options > Settings verbiage update 
+* Create top right meta links between options and import screens
 -
 
 = 1.4.3 =

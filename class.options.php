@@ -24,8 +24,10 @@ class FSI_Settings {
 		$this->settings					= array();
 		$this->get_settings();
 		
-		$this->sections['general']      = __( 'General Settings' , 'flickr-shortcode-importer');
+		$this->sections['general']      = __( 'Import Settings' , 'flickr-shortcode-importer');
 		$this->sections['api']   		= __( 'Flickr API' , 'flickr-shortcode-importer');
+		$this->sections['selection']	= __( 'Posts Selection' , 'flickr-shortcode-importer');
+		$this->sections['testing']		= __( 'Testing Options' , 'flickr-shortcode-importer');
 		$this->sections['reset']        = __( 'Reset to Defaults' , 'flickr-shortcode-importer');
 		$this->sections['about']        = __( 'About Flickr Shortcode Importer' , 'flickr-shortcode-importer');
 		
@@ -46,10 +48,18 @@ class FSI_Settings {
 	 */
 	public function add_pages() {
 		
-		$admin_page = add_options_page( __( 'Flickr Shortcode Importer Options' , 'flickr-shortcode-importer'), __( '[flickr] Options' , 'flickr-shortcode-importer'), 'manage_options', 'fsi-options', array( &$this, 'display_page' ) );
+		$admin_page = add_options_page( __( 'Flickr Shortcode Importer Settings' , 'flickr-shortcode-importer'), __( '[flickr] Importer' , 'flickr-shortcode-importer'), 'manage_options', 'fsi-options', array( &$this, 'display_page' ) );
 		
 		add_action( 'admin_print_scripts-' . $admin_page, array( &$this, 'scripts' ) );
 		add_action( 'admin_print_styles-' . $admin_page, array( &$this, 'styles' ) );
+
+		add_screen_meta_link(
+        	'fsi-importer-link',
+			__('[Flickr] Importer', 'flickr-shortcode-importer'),
+			admin_url('tools.php?page=flickr-shortcode-importer'),
+			$admin_page,
+			array('style' => 'font-weight: bold;')
+		);
 		
 	}
 	
@@ -98,7 +108,7 @@ class FSI_Settings {
 		
 		echo '<div class="wrap">
 	<div class="icon32" id="icon-options-general"></div>
-	<h2>' . __( 'Flickr Shortcode Importer Options' , 'flickr-shortcode-importer') . '</h2>';
+	<h2>' . __( 'Flickr Shortcode Importer Settings' , 'flickr-shortcode-importer') . '</h2>';
 	
 		echo '<form action="options.php" method="post">';
 	
@@ -118,6 +128,12 @@ class FSI_Settings {
 		<p>When ready, <a href="'.get_admin_url().'tools.php?page=flickr-shortcode-importer">'.__('begin [flickr] importing', 'flickr-shortcode-importer').'</a>
 		
 	</form>';
+
+		$copyright				= '<div class="copyright">Copyright %s <a href="http://typo3vagabond.com">TYPO3Vagabond.com.</a></div>';
+		$copyright				= sprintf( $copyright, date( 'Y' ) );
+		echo					<<<EOD
+				$copyright
+EOD;
 	
 	echo '<script type="text/javascript">
 		jQuery(document).ready(function($) {
@@ -194,14 +210,9 @@ class FSI_Settings {
 		
 		echo					<<<EOD
 			<div style="width: 50%;">
-				<p><img class="alignright size-medium" title="Michael in Red Square, Moscow, Russia" src="http://peimic.com/wp-content/uploads/2009/05/michael-cannon-red-square-300x2251.jpg" alt="Michael in Red Square, Moscow, Russia" width="300" height="225" /><a href="http://wordpress.org/extend/plugins/flickr-shortcode-importer/">Flickr Shortcode Importer</a> is by <a href="mailto:michael@peimic.com">Michael Cannon</a>.</p>
-				<p>He's Peichi’s man, an adventurous water rat & a TYPO3 support guru who’s living simply, roaming about & smiling more.</p>
-				<p>If you like this plugin, <a href="http://peimic.com/about-peimic/donate/">please donate</a>.</p>
-EOD;
-		$copyright				= '<p>Copyright %s <a href="http://peimic.com">Peimic.com.</a></p>';
-		$copyright				= sprintf( $copyright, date( 'Y' ) );
-		echo					<<<EOD
-				$copyright
+				<p><img class="alignright size-medium" title="Michael in Red Square, Moscow, Russia" src="/wp-content/plugins/flickr-shortcode-importer/media/michael-cannon-red-square-300x2251.jpg" alt="Michael in Red Square, Moscow, Russia" width="300" height="225" /><a href="http://wordpress.org/extend/plugins/flickr-shortcode-importer/">Flickr Shortcode Importer</a> is by <a href="mailto:michael@typo3vagabond.com">Michael Cannon</a>.</p>
+				<p>He's <a title="Lot's of stuff about Peichi Liu..." href="http://peimic.com/t/peichi-liu/">Peichi’s</a> smiling man, an adventurous&nbsp;<a title="Water rat" href="http://www.chinesezodiachoroscope.com/facebook/index1.php?user_id=690714457" target="_blank">water-rat</a>,&nbsp;<a title="Michael's poetic like literary ramblings" href="http://peimic.com/t/poetry/">poet</a>,&nbsp;<a title="Road biker, cyclist, biking; whatever you call, I love to ride" href="http://peimic.com/c/biking/">road biker</a>,&nbsp;<a title="My traveled to country list, is more than my age." href="http://peimic.com/c/travel/">world traveler</a>,&nbsp;<a title="World Wide Opportunities on Organic Farms" href="http://peimic.com/t/WWOOF/">WWOOF’er</a>&nbsp;and is the&nbsp;<a title="The TYPO3 Vagabond" href="http://typo3vagabond.com/c/featured/">TYPO3 Vagabond</a>&nbsp;with&nbsp;<a title="in2code. Wir leben TYPO3" href="http://www.in2code.de/">in2code</a>.</p>
+				<p>If you like this plugin, <a href="http://typo3vagabond.com/about-typo3-vagabond/donate/">please donate</a>.</p>
 			</div>
 EOD;
 		
@@ -310,7 +321,7 @@ EOD;
 			'title'   => __( 'Set Captions' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Uses media title as the caption.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
-			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+			'std'     => 0 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);
 		
 		$this->settings['import_flickr_sourced_tags'] = array(
@@ -394,7 +405,7 @@ EOD;
 			'desc'    => __( "A CSV list of post ids to import, like '1,2,3'." , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'text',
-			'section' => 'general'
+			'section' => 'selection'
 		);
 		
 		$this->settings['skip_importing_post_ids'] = array(
@@ -402,7 +413,15 @@ EOD;
 			'desc'    => __( "A CSV list of post ids to not import, like '1,2,3'." , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'text',
-			'section' => 'general'
+			'section' => 'selection'
+		);
+		
+		$this->settings['flickr_link_in_desc'] = array(
+			'section' => 'general',
+			'title'   => __( 'Create flickr link in description?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Creates a back link to the original flickr image in the description field.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0
 		);
 		
 		$this->settings['limit'] = array(
@@ -410,7 +429,7 @@ EOD;
 			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'text',
-			'section' => 'general'
+			'section' => 'testing'
 		);
 		
 		$this->settings['flickr_api_key'] = array(
@@ -603,9 +622,19 @@ EOD;
 	*/
 	public function validate_settings( $input ) {
 		
-		// TODO validate for integer CSV
-		// posts_to_import
-		// skip_importing_post_ids
+		if ( '' != $input['posts_to_import'] ) {
+			$posts_to_import		= $input['posts_to_import'];
+			$posts_to_import		= preg_replace( '#\s+#', '', $posts_to_import);
+
+			$input['posts_to_import']	= $posts_to_import;
+		}
+		
+		if ( '' != $input['skip_importing_post_ids'] ) {
+			$skip_importing_post_ids		= $input['skip_importing_post_ids'];
+			$skip_importing_post_ids		= preg_replace( '#\s+#', '', $skip_importing_post_ids);
+
+			$input['skip_importing_post_ids']	= $skip_importing_post_ids;
+		}
 
 		if ( ! isset( $input['reset_plugin'] ) ) {
 			$options = get_option( 'fsi_options' );
@@ -618,7 +647,7 @@ EOD;
 			return $input;
 		}
 
-		return false;
+		return $input;
 		
 	}
 	

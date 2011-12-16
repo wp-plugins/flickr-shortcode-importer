@@ -9,7 +9,7 @@
 class FSI_Settings {
 	
 	private $sections;
-	private $checkboxes;
+	private $reset;
 	private $settings;
 	
 	/**
@@ -20,7 +20,7 @@ class FSI_Settings {
 	public function __construct() {
 		
 		// This will keep track of the checkbox options for the validate_settings function.
-		$this->checkboxes				= array();
+		$this->reset					= array();
 		$this->settings					= array();
 		$this->get_settings();
 		
@@ -93,8 +93,7 @@ class FSI_Settings {
 			'class'     => $class
 		);
 		
-		if ( $type == 'checkbox' )
-			$this->checkboxes[] = $id;
+		$this->reset[$id] = $std;
 		
 		add_settings_field( $id, $title, array( $this, 'display_setting' ), 'fsi-options', $section, $field_args );
 	}
@@ -684,15 +683,12 @@ EOD;
 			$input['skip_importing_post_ids']	= $skip_importing_post_ids;
 		}
 
-		if ( ! isset( $input['reset_plugin'] ) ) {
-			$options = get_option( 'fsi_options' );
-			
-			foreach ( $this->checkboxes as $id ) {
-				if ( isset( $options[$id] ) && ! isset( $input[$id] ) )
-					unset( $options[$id] );
+		if ( $input['reset_plugin'] ) {
+			foreach ( $this->reset as $id => $std ) {
+				$input[$id]	= $std;
 			}
 			
-			return $input;
+			unset( $input['reset_plugin'] );
 		}
 
 		return $input;

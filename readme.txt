@@ -112,6 +112,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Fix reset operations
 -
 
 = 1.4.7 =

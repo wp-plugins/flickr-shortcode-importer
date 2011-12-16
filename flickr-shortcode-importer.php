@@ -108,8 +108,8 @@ class Flickr_Shortcode_Importer {
 	<h2><?php _e('Flickr Shortcode Importer', 'flickr-shortcode-importer'); ?></h2>
 
 <?php
-		if ( fsi_options( 'debug_mode' ) ) {
-			$posts_to_import		= fsi_options( 'posts_to_import' );
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			$posts_to_import		= fsi_get_options( 'posts_to_import' );
 			$posts_to_import		= explode( ',', $posts_to_import );
 			foreach ( $posts_to_import as $key => $post_id ) {
 				$this->post_id		= $post_id;
@@ -133,7 +133,7 @@ class Flickr_Shortcode_Importer {
 				$posts			= implode( ',', $posts );
 			} else {
 				$flickr_source_where = "";
-				if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
+				if ( fsi_get_options( 'import_flickr_sourced_tags' ) ) {
 					$flickr_source_where = <<<EOD
 						OR (
 							post_content LIKE '%<img%src=%http://farm%.static.flickr.com/%>%'
@@ -156,15 +156,15 @@ EOD;
 					)
 					";
 
-				$include_ids		= fsi_options( 'posts_to_import' );
+				$include_ids		= fsi_get_options( 'posts_to_import' );
 				if ( $include_ids )
 					$query		.= ' AND ID IN ( ' . $include_ids . ' )';
 
-				$skip_ids		= fsi_options( 'skip_importing_post_ids' );
+				$skip_ids		= fsi_get_options( 'skip_importing_post_ids' );
 				if ( $skip_ids )
 					$query		.= ' AND ID NOT IN ( ' . $skip_ids . ' )';
 
-				$limit			= (int) fsi_options( 'limit' );
+				$limit			= (int) fsi_get_options( 'limit' );
 				if ( $limit )
 					$query		.= ' LIMIT ' . $limit;
 
@@ -225,7 +225,7 @@ EOD;
 
 
 	function convert_tag_to_flickr( $post_content, $tag_open, $find_tag, $img_only = false ) {
-		$default_alignment		= fsi_options( 'default_image_alignment' );
+		$default_alignment		= fsi_get_options( 'default_image_alignment' );
 		$doc					= new DOMDocument();
 		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]' . "\n";
 		$matches				= explode( $tag_open, $post_content );
@@ -453,7 +453,7 @@ EOD;
 
 	// Process a single image ID (this is an AJAX handler)
 	function ajax_process_shortcode() {
-		if ( ! fsi_options( 'debug_mode' ) ) {
+		if ( ! fsi_get_options( 'debug_mode' ) ) {
 			error_reporting( 0 ); // Don't break the JSON result
 			header( 'Content-type: application/json' );
 			$this->post_id		= (int) $_REQUEST['id'];
@@ -461,7 +461,7 @@ EOD;
 
 		$post					= get_post( $this->post_id );
 
-		if ( fsi_options( 'import_flickr_sourced_tags' ) ) {
+		if ( fsi_get_options( 'import_flickr_sourced_tags' ) ) {
 			$this->convert_flickr_sourced_tags( $post );
 			$post				= get_post( $this->post_id );
 		}
@@ -473,8 +473,8 @@ EOD;
 			$this->die_json_error_msg( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
 
 		// default is Flickr Shortcode Import API key
-		$api_key				= fsi_options( 'flickr_api_key' );
-		$secret					= fsi_options( 'flickr_api_secret' );
+		$api_key				= fsi_get_options( 'flickr_api_key' );
+		$secret					= fsi_get_options( 'flickr_api_secret' );
 		$this->flickr			= new phpFlickr( $api_key, $secret );
 
 		// only use our shortcode handlers to prevent messing up post content 
@@ -484,7 +484,7 @@ EOD;
 
 		// Don't overwrite Featured Images
 		$this->featured_id		= false;
-		$this->first_image		= fsi_options( 'remove_first_flickr_shortcode' ) ? true : false;
+		$this->first_image		= fsi_get_options( 'remove_first_flickr_shortcode' ) ? true : false;
 		$this->menu_order		= 1;
 
 		// process [flickr] codes in posts
@@ -492,8 +492,8 @@ EOD;
 
 		// allow overriding Featured Image
 		if ( $this->featured_id
-			&& fsi_options( 'set_featured_image' )
-			&& ( ! has_post_thumbnail( $this->post_id ) || fsi_options( 'force_set_featured_image' ) ) ) {
+			&& fsi_get_options( 'set_featured_image' )
+			&& ( ! has_post_thumbnail( $this->post_id ) || fsi_get_options( 'force_set_featured_image' ) ) ) {
 			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
 		}
 
@@ -582,7 +582,7 @@ EOD;
 			$image_link			= wp_get_attachment_link( $image_id, $size, true 	);
 
 			// correct class per args
-			$align				= isset( $args['align'] ) ? $args['align'] : fsi_options( 'default_image_alignment' );
+			$align				= isset( $args['align'] ) ? $args['align'] : fsi_get_options( 'default_image_alignment' );
 			$align				= ' align' . $align;
 			$wp_image			= ' wp-image-' . $image_id;
 			$image_link			= preg_replace( '#(class="[^"]+)"#', '\1'
@@ -590,7 +590,7 @@ EOD;
 				. $wp_image
 				. '"', $image_link );
 
-			$class				= fsi_options( 'default_a_tag_class' );
+			$class				= fsi_get_options( 'default_a_tag_class' );
 			if ( $class ) {
 				$image_link		= preg_replace(
 					'#(<a )#',
@@ -601,6 +601,31 @@ EOD;
 			if ( ! $this->first_image ) {
 				// remaining [flickr] converted to locally reference image
 				$markup			= $image_link;
+
+				$do_attribution	= fsi_get_options( 'flickr_image_attribution' );
+				if ( $do_attribution ) {
+					$attribution_text	= fsi_get_options( 'flickr_image_attribution_text' );
+					$wrap_class			= fsi_get_options( 'flickr_image_attribution_wrap_class' );
+					if ( $wrap_class ) {
+						$markup			.= '<span class="'. $wrap_class . '">';
+					}
+
+					$attribution_link	= ' <a href="' . $photo['urls']['url'][0]['_content'];
+					$username			= $photo['owner']['username'];
+					$attribution_link	.= '">' . $username . '</a>';
+
+					$markup				.= $attribution_text;
+					$markup				.= $attribution_link;
+
+					if ( $wrap_class ) {
+						$markup			.= '</span>';
+					}
+				}
+
+				$image_wrap_class		= fsi_get_options( 'image_wrap_class' );
+				if ( $image_wrap_class ) {
+					$markup				= '<span class="'. $image_wrap_class . '">' . $markup . '</span>';
+				}
 			} else {
 				// remove [flickr] from post
 				$this->first_image	= false;
@@ -691,7 +716,7 @@ EOD;
 				break;
 
 			default:
-				$size			= fsi_options( 'default_image_size' );
+				$size			= fsi_get_options( 'default_image_size' );
 				break;
 		}
 
@@ -705,7 +730,7 @@ EOD;
 		$set_title			= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
 		$title				= $photo['title'];
 
-		if ( fsi_options( 'make_nice_image_title' ) ) {
+		if ( fsi_get_options( 'make_nice_image_title' ) ) {
 			// if title is a filename, use set_title - menu order instead
 			if ( ( preg_match( '#\.[a-zA-Z]{3}$#', $title ) 
 			   	|| preg_match( '#^DSCF\d+#', $title ) )
@@ -717,7 +742,7 @@ EOD;
 		}
 
 		$alt				= $title;
-		$caption			= fsi_options( 'set_caption' ) ? $title : '';
+		$caption			= fsi_get_options( 'set_caption' ) ? $title : '';
 		$desc				= html_entity_decode( $photo['description'] );
 		$date				= $photo['dates']['taken'];
 		$file				= basename( $src );
@@ -742,15 +767,16 @@ EOD;
 			}
 		}
 
-		if ( fsi_options( 'flickr_link_in_desc' ) ) {
-			$desc			.= "\n" . fsi_options( 'flickr_link_text' );
+		if ( fsi_get_options( 'flickr_link_in_desc' ) ) {
+			$desc			.= "\n" . fsi_get_options( 'flickr_link_text' );
 			$link			= ' <a href="' . $photo['urls']['url'][0]['_content'];
 
 			if( $this->flickset_id ) {
 				$link		.= 'in/set-' . $this->flickset_id . '/';
 			}
 
-			$link			.= '">flickr</a>';
+			$username		= $photo['owner']['username'];
+			$link			.= '">' . $username . '</a>';
 			$desc			.= $link;
 		}
 

@@ -17,25 +17,47 @@ The first [flickr] image found in post content is set as the post's Featured Ima
 
 Flickr-sourced A/IMG tagged media is converted into [flickr] and then imported as normal. Great for finally bringing into your control all of those media items you've been using, but now Flickr is giving you 'Image is unavaiable' for. A/IMG tag is processed before IMG to prevent unexpected results.
 
+Image attribution links can be added if enabled via Settings.
+
 This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
 
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand via the post revision tool.
 
 = Options =
-* Set own Flickr API key
-* Posts to Import
-* Skip Importing Post IDs...
-* Default A Tag Class
+**Import Settings**
+
+* Set Captions
+* Import Flickr-sourced A/IMG tags
+* Set Featured Image
+* Force Set Featured Image
+* Remove First Flickr Shortcode
+* Make Nice Image Title?
+* Image Wrap Class
 * Default Image Alignment
 * Default Image Size
-* Import Flickr-based A/IMG tags
-* Set Captions
-* Set first [flickr] image as featured image or not
-* Force Set Featured Image
-* Remove first [flickr] from post content or not
-* Make Nice Image Title?
-* Set limit of posts to be processed
-* Create flickr backlink in description?
+* Default A Tag Class
+* Add Flickr Link in Description?
+* Flickr Link Text
+* Include Flickr Author Attribution?
+* Flickr Author Attribution Text
+* Flickr Author Attribution Wrap Class
+
+**Posts Selection**
+
+* Posts to Import
+* Skip Importing Posts
+
+**Testing Options**
+
+* Import Limit
+* Debug Mode
+
+**Flickr API**
+
+* Flickr API Key
+* Flickr API Secret
+
+**Reset to Defaults**
 
 = Handled shortcode & media samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
@@ -90,6 +112,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Enable Image Wrap Class 
+* Enable Attribution
+* skip_importing_post_ids validate for integer CSV
+* Use Flickr username for backlink 
 -
 
 = 1.4.5 =
@@ -228,6 +254,5 @@ Is your disk quota large enough? See Warnings in Description for help.
 * None
 
 == TODO ==
-* skip_importing_post_ids validate for integer CSV
 * Add estimated time remaining notice
 * Import Flickr video - currently rendering as video/object/embed tag using Flickr src

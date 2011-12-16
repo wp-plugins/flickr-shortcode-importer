@@ -364,6 +364,14 @@ EOD;
 			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
 		);
 		
+		$this->settings['image_wrap_class'] = array(
+			'title'   => __( 'Image Wrap Class' , 'flickr-shortcode-importer'),
+			'desc'   => __( 'Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
+			'std'     => __( '' , 'flickr-shortcode-importer'),
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
 		$this->settings['default_image_alignment'] = array(
 			'section' => 'general',
 			'title'   => __( 'Default Image Alignment' , 'flickr-shortcode-importer'),
@@ -418,8 +426,8 @@ EOD;
 		
 		$this->settings['flickr_link_in_desc'] = array(
 			'section' => 'general',
-			'title'   => __( 'Create flickr link in description?' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Creates a back link to the original flickr image in the description field.' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Add Flickr Link in Description?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Adds a back link to the original Flickr image in the description field.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 0
 		);
@@ -428,6 +436,30 @@ EOD;
 			'title'   => __( 'Flickr Link Text' , 'flickr-shortcode-importer'),
 			'desc'    => __( '' , 'flickr-shortcode-importer'),
 			'std'     => __( 'This image was also posted on' , 'flickr-shortcode-importer'),
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
+		$this->settings['flickr_image_attribution'] = array(
+			'section' => 'general',
+			'title'   => __( 'Include Flickr Author Attribution?' , 'flickr-shortcode-importer'),
+			'desc'    => __( '' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0
+		);
+		
+		$this->settings['flickr_image_attribution_text'] = array(
+			'title'   => __( 'Flickr Author Attribution Text' , 'flickr-shortcode-importer'),
+			'desc'    => __( '' , 'flickr-shortcode-importer'),
+			'std'     => __( 'Photo by ' , 'flickr-shortcode-importer'),
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
+		$this->settings['flickr_image_attribution_wrap_class'] = array(
+			'title'   => __( 'Flickr Author Attribution Wrap Class' , 'flickr-shortcode-importer'),
+			'desc'   => __( 'Attribution  wrap span tag class. e.g. Providing `flickr-attribution` results in `&lt;span class="flickr-attribution"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
+			'std'     => __( '' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
 			'section' => 'general'
 		);
@@ -671,7 +703,7 @@ EOD;
 
 $FSI_Settings					= new FSI_Settings();
 
-function fsi_options( $option ) {
+function fsi_get_options( $option ) {
 	$options					= get_option( 'fsi_options' );
 	if ( isset( $options[$option] ) )
 		return $options[$option];

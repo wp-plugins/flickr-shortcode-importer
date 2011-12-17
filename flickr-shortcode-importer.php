@@ -532,8 +532,6 @@ EOD;
 	
 	// process each [flickr-gallery] entry from plugin flickr-gallery
 	function shortcode_flickr_gallery( $args ) {
-		print_r($args); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-
 		// attributes for passing to flickr directly
 		$attr					= $args;
 		unset( $attr['mode'] );

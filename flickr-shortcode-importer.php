@@ -479,6 +479,7 @@ EOD;
 
 		// only use our shortcode handlers to prevent messing up post content 
 		remove_all_shortcodes();
+		add_shortcode( 'flickr-gallery', array( &$this, 'shortcode_flickr_gallery' ) );
 		add_shortcode( 'flickr', array( &$this, 'shortcode_flickr' ) );
 		add_shortcode( 'flickrset', array( &$this, 'shortcode_flickrset' ) );
 
@@ -525,6 +526,76 @@ EOD;
 		
 		$markup					= $this->process_flickr_media( $photo, $args );
 		
+		return $markup;
+	}
+
+	
+	// process each [flickr-gallery] entry from plugin flickr-gallery
+	function shortcode_flickr_gallery( $args ) {
+		print_r($args); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+
+		// attributes for passing to flickr directly
+		$attr					= $args;
+		unset( $attr['mode'] );
+
+		if ( ! isset( $attr[ 'user_id' ] ) ) {
+			// fg-user_id of flickr-gallery plugin
+			$attr[ 'user_id' ]	= get_option('fg-user_id');
+			// developer's user id (comprock)
+			// $attr[ 'user_id' ]	= get_option('fg-user_id', '90901451@N00');
+		}
+
+		if ( ! isset( $attr[ 'per_page' ] ) ) {
+			$attr[ 'per_page' ]	= get_option('fg-per_page');
+		}
+
+		switch ( $args['mode'] ) {
+			case 'photoset':
+				$this->flickset_id	= $args['photoset'];
+				$info				= $this->flickr->photosets_getInfo( $this->flickset_id );
+				$args['set_title']	= $info['title'];
+
+				$photos			= $this->flickr->photosets_getPhotos( $this->flickset_id );
+				$photos			= $photos['photoset']['photo'];
+				break;
+
+			case 'recent':
+			case 'tag':
+				$photos			= $this->flickr->photos_search( $attr );
+				$photos			= $photos['photo'];
+				break;
+
+			case 'interesting':
+				$attr['sort']	= 'interestingness-desc';
+				$photos			= $this->flickr->photos_search( $attr );
+				$photos			= $photos['photo'];
+				break;
+
+			case 'search':
+				unset( $attr[ 'user_id' ] );
+				$photos			= $this->flickr->photos_search( $attr );
+				$photos			= $photos['photo'];
+				break;
+
+			default:
+				break;
+		}
+
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($photos); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			exit( __LINE__ . ':' . basename( __FILE__ ) . " ERROR<br />\n" );	
+		}
+
+		set_time_limit( 120 * count( $photos ) );
+		
+		foreach( $photos as $entry ) {
+			$args['id']			= $entry['id'];
+			$this->shortcode_flickr( $args );
+		}
+		
+		$markup					= '[gallery]';
+		$this->flickset_id		= false;
+
 		return $markup;
 	}
 

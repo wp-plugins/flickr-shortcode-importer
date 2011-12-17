@@ -6,14 +6,14 @@ Requires at least: 3.0.0
 Tested up to: 3.2.1
 Stable tag: 1.5.1
 
-Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
+Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
 == Description ==
-Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
+Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
 
 The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.  
 
-[flickrset] shortcode is converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
+[flickrset] and [flickr-gallery] shortcodes are converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
 
 Flickr-sourced A/IMG tagged media is converted into [flickr] and then imported as normal. Great for finally bringing into your control all of those media items you've been using, but now Flickr is giving you 'Image is unavaiable' for. A/IMG tag is processed before IMG to prevent unexpected results.
 
@@ -62,6 +62,11 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 = Handled shortcode & media samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
+* [flickr-gallery mode="photoset" photoset="72157626986038277"]
+* [flickr-gallery mode="tag" tags="foo,bar" tag_mode="all"]
+* [flickr-gallery mode="interesting"]
+* [flickr-gallery mode="recent"]
+* [flickr-gallery mode="search" tags="barcamp" group_id="431412@N25"]
 * `<a class="tt-flickr tt-flickr-Medium" title="Khan Sao Road, Bangkok, Thailand" href="http://www.flickr.com/photos/comprock/4334303694/" target="_blank"><img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" /></a>`
 * `<img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" />`
 
@@ -106,12 +111,17 @@ Is your disk quota large enough? See Warnings in Description for help.
 5. After Flickr Shortcode Importer for [flickr]
 6. Flickr Shortcode Importer Options
 7. Before Flickr Shortcode Importer for [flickrset]
-8. After Flickr Shortcode Importer for [flickrset]
+8. After Flickr Shortcode Importer for [flickrset] & [flickr-gallery]
 9. Before Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 10. After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 
 == Changelog ==
 = trunk =
+* Import [flickr-gallery mode="photoset" photoset="72157626986038277"] shortcode content
+* Import [flickr-gallery mode="tag" tags="typo3" tag_mode="all"] shortcode content
+* Import [flickr-gallery mode="interesting"] shortcode content
+* Import [flickr-gallery mode="recent"] shortcode content
+* Import [flickr-gallery mode="search" tags="barcamp" group_id="431412@N25"] shortcode content
 -
 
 = 1.5.1 =

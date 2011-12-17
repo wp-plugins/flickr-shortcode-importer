@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -117,12 +117,14 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+-
+
+= 1.5.2 =
 * Import [flickr-gallery mode="photoset" photoset="72157626986038277"] shortcode content
 * Import [flickr-gallery mode="tag" tags="typo3" tag_mode="all"] shortcode content
 * Import [flickr-gallery mode="interesting"] shortcode content
 * Import [flickr-gallery mode="recent"] shortcode content
 * Import [flickr-gallery mode="search" tags="barcamp" group_id="431412@N25"] shortcode content
--
 
 = 1.5.1 =
 * Reduce find tag greediness

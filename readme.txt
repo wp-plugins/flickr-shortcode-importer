@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.4.9
+Stable tag: 1.5.0
 
 Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -113,6 +113,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 == Changelog ==
 = trunk =
 -
+
+= 1.5.0 =
+* Pull in largest original source when no original secret or format exists
+* Update POT
 
 = 1.4.9 =
 * Update languages

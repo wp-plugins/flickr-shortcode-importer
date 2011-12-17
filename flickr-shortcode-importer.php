@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr] & [flickrset] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.4.9
+Version: 1.5.0
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -746,6 +746,7 @@ EOD;
 		$desc				= html_entity_decode( $photo['description'] );
 		$date				= $photo['dates']['taken'];
 		$file				= basename( $src );
+		$file				= str_replace( '?zz=1', '', $file );
 
 		// see if src is duplicate, if so return image_id
 		$query				= "
@@ -783,6 +784,10 @@ EOD;
 		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );
 		$filename			= $file_move['file'];
 
+		if ( ! $filename ) {
+			$this->die_json_error_msg( $this->post_id, sprintf( __( 'Source file not found: %s', 'flickr-shortcode-importer' ), $src ) );
+		}
+
 		$wp_filetype		= wp_check_filetype( $file, null );
 		$attachment			= array(
 			'menu_order'		=> $this->menu_order++,
@@ -798,7 +803,7 @@ EOD;
 		$image_id			= wp_insert_attachment( $attachment, $filename, $this->post_id );
 
 		if ( ! $image_id )
-			$this->die_json_error_msg( $this->post_id, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), '<code>' . esc_html( $filename ) . '</code>' ) );
+			$this->die_json_error_msg( $this->post_id, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), esc_html( $filename ) ) );
 
 		$metadata				= wp_generate_attachment_metadata( $image_id, $filename );
 

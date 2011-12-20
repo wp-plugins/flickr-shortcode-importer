@@ -320,7 +320,7 @@ EOD;
 			'title'   => __( 'Set Captions' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Uses media title as the caption.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
-			'std'     => 0 // Set to 1 to be checked by default, 0 to be unchecked by default.
+			'std'     => 0
 		);
 		
 		$this->settings['import_flickr_sourced_tags'] = array(
@@ -328,7 +328,7 @@ EOD;
 			'title'   => __( 'Import Flickr-sourced A/IMG tags' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Converts Flickr-sourced A/IMG tags to [flickr] and then proceeds with import.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
-			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+			'std'     => 1
 		);
 		
 		$this->settings['set_featured_image'] = array(
@@ -336,7 +336,7 @@ EOD;
 			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Set the first [flickr] or [flickrset] image found as the Featured Image. Will not replace the current Featured Image of a post.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
-			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+			'std'     => 1
 		);
 		
 		$this->settings['force_set_featured_image'] = array(
@@ -344,7 +344,7 @@ EOD;
 			'title'   => __( 'Force Set Featured Image' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Set the Featured Image even if one already exists for a post.', 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
-			'std'     => 0 // Set to 1 to be checked by default, 0 to be unchecked by default.
+			'std'     => 0
 		);
 		
 		$this->settings['remove_first_flickr_shortcode'] = array(
@@ -352,7 +352,7 @@ EOD;
 			'title'   => __( 'Remove First Flickr Shortcode' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Remove the first [flickr] from post content? If you use Featured Images, this will help prevent duplicate images in your post.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
-			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+			'std'     => 0
 		);
 		
 		$this->settings['make_nice_image_title'] = array(
@@ -360,7 +360,7 @@ EOD;
 			'title'   => __( 'Make Nice Image Title?' , 'flickr-shortcode-importer'),
 			'desc'    => __( "If the image title is a filename and the image is part of a Flickr set, the Flickr set title plus a numeric suffix will be used instead." , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
-			'std'     => 1 // Set to 1 to be checked by default, 0 to be unchecked by default.
+			'std'     => 1
 		);
 		
 		$this->settings['image_wrap_class'] = array(

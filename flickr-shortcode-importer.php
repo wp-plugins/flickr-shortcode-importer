@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.5.2
+Version: 1.5.3
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -51,6 +51,8 @@ class Flickr_Shortcode_Importer {
 		
 		$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('Settings', 'flickr-shortcode-importer').'</a>';
         
+		// needed to include has_post_thumbnail code
+		add_theme_support( 'post-thumbnails' );
 	}
 
 
@@ -491,13 +493,6 @@ EOD;
 		// process [flickr] codes in posts
 		$post_content			= do_shortcode( $post->post_content );
 
-		// allow overriding Featured Image
-		if ( $this->featured_id
-			&& fsi_get_options( 'set_featured_image' )
-			&& ( ! has_post_thumbnail( $this->post_id ) || fsi_get_options( 'force_set_featured_image' ) ) ) {
-			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
-		}
-
 		$post					= array(
 			'ID'			=> $this->post_id,
 			'post_content'	=> $post_content,
@@ -505,16 +500,30 @@ EOD;
 
 		wp_update_post( $post );
 
+		// allow overriding Featured Image
+		if ( $this->featured_id
+			&& fsi_get_options( 'set_featured_image' )
+			&& ( ! has_post_thumbnail( $this->post_id ) || fsi_get_options( 'force_set_featured_image' ) ) ) {
+			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
+		}
+
 		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $this->post_id ), esc_html( get_the_title( $this->post_id ) ), $this->post_id, timer_stop() ) ) ) );
 	}
 
 	
 	// process each [flickr] entry
 	function shortcode_flickr( $args ) {
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($args); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
 		$this->flickr_id		= $args['id'];
 		set_time_limit( 120 );
 
 		$photo					= $this->flickr->photos_getInfo( $this->flickr_id );
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($photo); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
 		$photo					= $photo['photo'];
 
 		if ( isset( $args['set_title'] ) ) {
@@ -525,7 +534,10 @@ EOD;
 		}
 		
 		$markup					= $this->process_flickr_media( $photo, $args );
-		
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($markup); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
 		return $markup;
 	}
 
@@ -633,8 +645,16 @@ EOD;
 		if ( 'photo' == $photo['media'] ) {
 			// pull original Flickr image
 			$src				= $this->flickr->buildPhotoURL( $photo, 'original' );
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			}
+
 			// add image to media library
 			$image_id			= $this->import_flickr_media( $src, $photo );
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r($image_id); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			}
+
 
 			// if first image, set as featured 
 			if ( ! $this->featured_id ) {
@@ -665,6 +685,10 @@ EOD;
 					'#(<a )#',
 					'\1class="' . $class . '" ',
 					$image_link );
+			}
+
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r($image_link); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 			}
 
 			if ( ! $this->first_image ) {

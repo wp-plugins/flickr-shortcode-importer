@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.5.3
+Version: 1.6.0
 Author: Michael Cannon
 Author URI: http://peimic.com/contact-peimic/
 License: GPL2
@@ -512,11 +512,39 @@ EOD;
 
 	
 	// process each [flickr] entry
-	function shortcode_flickr( $args ) {
+	function shortcode_flickr( $args, $content = null ) {
 		if ( fsi_get_options( 'debug_mode' ) ) {
 			print_r($args); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($content); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 		}
-		$this->flickr_id		= $args['id'];
+
+		if ( isset( $args['id'] ) ) {
+			$this->flickr_id	= $args['id'];
+		} else {
+			if ( preg_match( '#/([0-9]+)/?$#', $content, $match ) ) {
+				$this->flickr_id	= $match[1];
+			} elseif ( preg_match( '#^([0-9]+)$#', $content, $match ) ) {
+				$this->flickr_id	= $content;
+			} else {
+				return '';
+			}
+
+			if ( isset( $args['size'] ) )
+				$args['thumbnail']	= $args['size'];
+
+			// for [flickr-gallery] width denotes video
+			if ( isset( $args['width'] ) && isset( $args['height'] ) )
+				$args['thumbnail']	= 'video_player';
+
+			if ( isset( $args['float'] ) )
+				$args['align']	= $args['float'];
+
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r($this->flickr_id); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+				print_r($args); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			}
+		}
+
 		set_time_limit( 120 );
 
 		$photo					= $this->flickr->photos_getInfo( $this->flickr_id );
@@ -593,7 +621,6 @@ EOD;
 
 		if ( fsi_get_options( 'debug_mode' ) ) {
 			print_r($photos); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-			exit( __LINE__ . ':' . basename( __FILE__ ) . " ERROR<br />\n" );	
 		}
 
 		set_time_limit( 120 * count( $photos ) );
@@ -643,94 +670,102 @@ EOD;
 		$markup					= '';
 
 		if ( 'photo' == $photo['media'] ) {
-			// pull original Flickr image
-			$src				= $this->flickr->buildPhotoURL( $photo, 'original' );
-			if ( fsi_get_options( 'debug_mode' ) ) {
-				print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-			}
-
-			// add image to media library
-			$image_id			= $this->import_flickr_media( $src, $photo );
-			if ( fsi_get_options( 'debug_mode' ) ) {
-				print_r($image_id); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-			}
-
-
-			// if first image, set as featured 
-			if ( ! $this->featured_id ) {
-				$this->featured_id	= $image_id;
-			}
-
-			// no args, means nothing further to do
-			if ( false === $args )
-				return $markup;
-
-			// wrap in link to attachment itself
-			$size				= isset( $args['thumbnail'] ) ? $args['thumbnail'] : '';
-			$size				= $this->get_shortcode_size( $size );
-			$image_link			= wp_get_attachment_link( $image_id, $size, true 	);
-
-			// correct class per args
-			$align				= isset( $args['align'] ) ? $args['align'] : fsi_get_options( 'default_image_alignment' );
-			$align				= ' align' . $align;
-			$wp_image			= ' wp-image-' . $image_id;
-			$image_link			= preg_replace( '#(class="[^"]+)"#', '\1'
-				. $align
-				. $wp_image
-				. '"', $image_link );
-
-			$class				= fsi_get_options( 'default_a_tag_class' );
-			if ( $class ) {
-				$image_link		= preg_replace(
-					'#(<a )#',
-					'\1class="' . $class . '" ',
-					$image_link );
-			}
-
-			if ( fsi_get_options( 'debug_mode' ) ) {
-				print_r($image_link); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-			}
-
-			if ( ! $this->first_image ) {
-				// remaining [flickr] converted to locally reference image
-				$markup			= $image_link;
-
-				$do_attribution	= fsi_get_options( 'flickr_image_attribution' );
-				if ( $do_attribution ) {
-					$attribution_text	= fsi_get_options( 'flickr_image_attribution_text' );
-					$wrap_class			= fsi_get_options( 'flickr_image_attribution_wrap_class' );
-					if ( $wrap_class ) {
-						$markup			.= '<span class="'. $wrap_class . '">';
-					}
-
-					$attribution_link	= ' <a href="' . $photo['urls']['url'][0]['_content'];
-					$username			= $photo['owner']['username'];
-					$attribution_link	.= '">' . $username . '</a>';
-
-					$markup				.= $attribution_text;
-					$markup				.= $attribution_link;
-
-					if ( $wrap_class ) {
-						$markup			.= '</span>';
-					}
-				}
-
-				$image_wrap_class		= fsi_get_options( 'image_wrap_class' );
-				if ( $image_wrap_class ) {
-					$markup				= '<span class="'. $image_wrap_class . '">' . $markup . '</span>';
-				}
-			} else {
-				// remove [flickr] from post
-				$this->first_image	= false;
-			}
-		} elseif ($photo['media'] == 'video' && in_array($args['thumbnail'], array('video_player','site_mp4'))) {
-			// TODO import video
-			$markup				= $this->RenderVideo($args['id'], ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash');
+			$markup				= $this->render_photo($photo, $args);
+		} elseif ( $photo['media'] == 'video' && in_array( $args['thumbnail'], array('video_player','site_mp4') ) ) {
+			$mode				= ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash';
+			$video_id			= $this->import_flickr_media( null, $photo, $mode);
+			$markup				= $this->RenderVideo($this->flickr_id, $mode);
 		}
 
 		return $markup;
 	}
+
 	
+	function render_photo( $photo, $args = false ) {
+		// pull original Flickr image
+		$src					= $this->flickr->buildPhotoURL( $photo, 'original' );
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
+		// add image to media library
+		$image_id				= $this->import_flickr_media( $src, $photo );
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($image_id); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
+
+		// if first image, set as featured 
+		if ( ! $this->featured_id ) {
+			$this->featured_id	= $image_id;
+		}
+
+		// no args, means nothing further to do
+		if ( false === $args )
+			return $markup;
+
+		// wrap in link to attachment itself
+		$size					= isset( $args['thumbnail'] ) ? $args['thumbnail'] : '';
+		$size					= $this->get_shortcode_size( $size );
+		$image_link				= wp_get_attachment_link( $image_id, $size, true 	);
+
+		// correct class per args
+		$align					= isset( $args['align'] ) ? $args['align'] : fsi_get_options( 'default_image_alignment' );
+		$align					= ' align' . $align;
+		$wp_image				= ' wp-image-' . $image_id;
+		$image_link				= preg_replace( '#(class="[^"]+)"#', '\1'
+			. $align
+			. $wp_image
+			. '"', $image_link );
+
+		$class					= fsi_get_options( 'default_a_tag_class' );
+		if ( $class ) {
+			$image_link			= preg_replace(
+				'#(<a )#',
+				'\1class="' . $class . '" ',
+				$image_link );
+		}
+
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($image_link); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
+		if ( ! $this->first_image ) {
+			// remaining [flickr] converted to locally reference image
+			$markup				= $image_link;
+
+			$do_attribution		= fsi_get_options( 'flickr_image_attribution' );
+			if ( $do_attribution ) {
+				$attribution_text	= fsi_get_options( 'flickr_image_attribution_text' );
+				$wrap_class			= fsi_get_options( 'flickr_image_attribution_wrap_class' );
+				if ( $wrap_class ) {
+					$markup			.= '<span class="'. $wrap_class . '">';
+				}
+
+				$attribution_link	= ' <a href="' . $photo['urls']['url'][0]['_content'];
+				$username			= $photo['owner']['username'];
+				$attribution_link	.= '">' . $username . '</a>';
+
+				$markup			.= $attribution_text;
+				$markup			.= $attribution_link;
+
+				if ( $wrap_class ) {
+					$markup		.= '</span>';
+				}
+			}
+
+			$image_wrap_class	= fsi_get_options( 'image_wrap_class' );
+			if ( $image_wrap_class ) {
+				$markup			= '<span class="'. $image_wrap_class . '">' . $markup . '</span>';
+			}
+		} else {
+			// remove [flickr] from post
+			$this->first_image	= false;
+		}
+
+		return $markup;
+	}
+
 
 	/*
 	From...
@@ -740,10 +775,22 @@ EOD;
 		Author: Trent Gardner
 	*/
 	function RenderVideo($vid, $type = 'flash', $sizes = null) {
-		if(empty($sizes)) {
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($vid); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($type); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($sizes); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
+		// TODO import media
+
+		if(is_null($sizes)) {
 			$sizes = $this->flickr->photos_getSizes($vid);
 		}
 		
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($sizes); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
 		if($type == 'html5') {
 			
 			$video = array();
@@ -757,7 +804,7 @@ EOD;
 			return sprintf('<video width="%s" height="%s" controls><source src="%s" type="video/mp4">%s</video>'
 							, $video['width']
 							, $video['height']
-							, $video['source']
+							, $this->video_source
 							, $this->RenderVideo($vid, 'flash', $sizes));
 			
 		} else {
@@ -771,10 +818,11 @@ EOD;
 			}
 			
 			return sprintf('<object width="%s" height="%s" data="%s" type="application/x-shockwave-flash" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
-								<param name="flashvars" value="flickr_show_info_box=false"></param>
-								<param name="movie" value="%s"></param>
-								<param name="allowFullScreen" value="true"></param>
-							</object>', $video['width'], $video['height'], $video['source'], $video['source']);
+	<param name="flashvars" value="flickr_show_info_box=false"></param>
+	<param name="movie" value="%s"></param>
+	<param name="allowFullScreen" value="true"></param>
+	<embed type="application/x-shockwave-flash" flashvars="flickr_show_info_box=false" src="%s" allowfullscreen="true" height="%s" width="%s"></embed>
+</object>', $video['width'], $video['height'], $this->video_source, $this->video_source, $this->video_source, $video['height'], $video['width']);
 								
 		}
 	}
@@ -817,11 +865,11 @@ EOD;
 	}
 	
 
-	function import_flickr_media( $src, $photo ) {
+	function import_flickr_media( $src, $photo, $mode = true ) {
 		global $wpdb;
 
-		$set_title			= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
-		$title				= $photo['title'];
+		$set_title				= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
+		$title					= $photo['title'];
 
 		if ( fsi_get_options( 'make_nice_image_title' ) ) {
 			// if title is a filename, use set_title - menu order instead
@@ -830,59 +878,104 @@ EOD;
 				&& ! empty( $set_title ) ) {
 				$title			= $set_title . ' - ' . $this->menu_order;
 			} elseif ( ! preg_match( '#\s#', $title ) ) {
-				$title		= $this->cbMkReadableStr( $title );
+				$title			= $this->cbMkReadableStr( $title );
 			}
 		}
 
-		$alt				= $title;
-		$caption			= fsi_get_options( 'set_caption' ) ? $title : '';
-		$desc				= html_entity_decode( $photo['description'] );
-		$date				= $photo['dates']['taken'];
-		$file				= basename( $src );
-		$file				= str_replace( '?zz=1', '', $file );
+		$alt					= $title;
+		$caption				= fsi_get_options( 'set_caption' ) ? $title : '';
+		$desc					= html_entity_decode( $photo['description'] );
+		$date					= $photo['dates']['taken'];
+		if ( true === $mode ) {
+			$file				= basename( $src );
+			$file				= str_replace( '?zz=1', '', $file );
+		} else {
+			$sizes				= $this->flickr->photos_getSizes( $photo['id'] );
+			foreach( $sizes as $v ) {
+				if ( 'html5' == $mode && $v['label'] == 'Site MP4' ) {
+					$video		= $v;
+					$ext		= '.mp4';
+					break;
+				} elseif ( 'flash' == $mode && $v['label'] == 'Video Player' ) {
+					$video		= $v;
+					$ext		= '.swf';
+					break;
+				}
+			}
+
+			$src				= $video['source'];
+			if ( fsi_get_options( 'skip_videos' ) ) {
+				// TODO can video import from Flickr be made to work?
+				$this->video_source	= $src;
+				return null;
+			}
+
+			$file				= preg_replace( '#[^\w]#', '-', $title );
+			$file				= preg_replace( '#-{2,}#', '-', $file );
+			$file				.= $ext;
+		}
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($file); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
 
 		// see if src is duplicate, if so return image_id
-		$query				= "
+		$query					= "
 			SELECT m.post_id
 			FROM $wpdb->postmeta m
 			WHERE 1 = 1
 				AND m.meta_key LIKE '_flickr_src'
 				AND m.meta_value LIKE '$src'
 		";
-		$dup				= $wpdb->get_var( $query );
+		$dup					= $wpdb->get_var( $query );
 
 		if ( $dup ) {
+			if ( true !== $mode ) {
+				$this->video_source	= wp_get_attachment_url( $dup );
+
+				if ( fsi_get_options( 'debug_mode' ) ) {
+					print_r($this->video_source); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+				}
+
+				return $dup;
+			}
+
 			// ignore dup if importing [flickrset]
 			if( ! $this->flickset_id ) {
 				return $dup;
 			} else {
 				// use local source to speed up transfer
-				$src		= wp_get_attachment_url( $dup );
+				$src			= wp_get_attachment_url( $dup );
 			}
 		}
 
 		if ( fsi_get_options( 'flickr_link_in_desc' ) ) {
-			$desc			.= "\n" . fsi_get_options( 'flickr_link_text' );
-			$link			= ' <a href="' . $photo['urls']['url'][0]['_content'];
+			$desc				.= "\n" . fsi_get_options( 'flickr_link_text' );
+			$link				= ' <a href="' . $photo['urls']['url'][0]['_content'];
 
 			if( $this->flickset_id ) {
-				$link		.= 'in/set-' . $this->flickset_id . '/';
+				$link			.= 'in/set-' . $this->flickset_id . '/';
 			}
 
-			$username		= $photo['owner']['username'];
-			$link			.= '">' . $username . '</a>';
-			$desc			.= $link;
+			$username			= $photo['owner']['username'];
+			$link				.= '">' . $username . '</a>';
+			$desc				.= $link;
 		}
 
-		$file_move			= wp_upload_bits( $file, null, file_get_contents( $src ) );
-		$filename			= $file_move['file'];
+		$file_move				= wp_upload_bits( $file, null, file_get_contents( $src ) );
+		$filename				= $file_move['file'];
+
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($file_move); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($filename); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
 
 		if ( ! $filename ) {
 			$this->die_json_error_msg( $this->post_id, sprintf( __( 'Source file not found: %s', 'flickr-shortcode-importer' ), $src ) );
 		}
 
-		$wp_filetype		= wp_check_filetype( $file, null );
-		$attachment			= array(
+		$wp_filetype			= wp_check_filetype( $file, null );
+		$attachment				= array(
 			'menu_order'		=> $this->menu_order++,
 			'post_content'		=> $desc,
 			'post_date'			=> $date,
@@ -891,26 +984,43 @@ EOD;
 			'post_status'		=> 'inherit',
 			'post_title'		=> $title,
 		);
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($wp_filetype); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($attachment); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
 
 		// relate image to post
-		$image_id			= wp_insert_attachment( $attachment, $filename, $this->post_id );
+		$image_id				= wp_insert_attachment( $attachment, $filename, $this->post_id );
+		if ( true !== $mode ) {
+			$this->video_source	= wp_get_attachment_url( $image_id );
+
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r($this->video_source); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			}
+		}
 
 		if ( ! $image_id )
 			$this->die_json_error_msg( $this->post_id, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), esc_html( $filename ) ) );
 
-		$metadata				= wp_generate_attachment_metadata( $image_id, $filename );
-
-		if ( is_wp_error( $metadata ) )
-			$this->die_json_error_msg( $this->post_id, $metadata->get_error_message() );
-
-		if ( empty( $metadata ) )
-			$this->die_json_error_msg( $this->post_id, __( 'Unknown failure reason.', 'flickr-shortcode-importer' ) );
-
-		// If this fails, then it just means that nothing was changed (old value == new value)
-		wp_update_attachment_metadata( $image_id, $metadata );
-		update_post_meta( $image_id, '_wp_attachment_image_alt', $alt );
 		// help keep track of what's been imported already
 		update_post_meta( $image_id, '_flickr_src', $src );
+
+		if ( true === $mode ) {
+			$metadata			= wp_generate_attachment_metadata( $image_id, $filename );
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r($metadata); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			}
+
+			if ( is_wp_error( $metadata ) )
+				$this->die_json_error_msg( $this->post_id, $metadata->get_error_message() );
+
+			if ( empty( $metadata ) )
+				$this->die_json_error_msg( $this->post_id, __( 'Unknown failure reason.', 'flickr-shortcode-importer' ) );
+
+			// If this fails, then it just means that nothing was changed (old value == new value)
+			wp_update_attachment_metadata( $image_id, $metadata );
+			update_post_meta( $image_id, '_wp_attachment_image_alt', $alt );
+		}
 
 		return $image_id;
 	}

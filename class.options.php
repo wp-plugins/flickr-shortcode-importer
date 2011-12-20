@@ -323,6 +323,14 @@ EOD;
 			'std'     => 0
 		);
 		
+		$this->settings['skip_videos'] = array(
+			'section' => 'general',
+			'title'   => __( 'Skip Importing Videos' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Importing videos from Flickr often fails. Shortcode is still converted to object/embed linking to Flickr.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1
+		);
+		
 		$this->settings['import_flickr_sourced_tags'] = array(
 			'section' => 'general',
 			'title'   => __( 'Import Flickr-sourced A/IMG tags' , 'flickr-shortcode-importer'),

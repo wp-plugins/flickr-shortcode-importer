@@ -4,7 +4,7 @@ Donate link: http://peimic.com/about-peimic/donate/
 Tags: flickr,featured image,import,media library,photo
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.5.3
+Stable tag: 1.6.0
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -27,6 +27,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 **Import Settings**
 
 * Set Captions
+* Skip Importing Videos
 * Import Flickr-sourced A/IMG tags
 * Set Featured Image
 * Force Set Featured Image
@@ -61,6 +62,9 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 
 = Handled shortcode & media samples =
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
+* [flickr size="small" float="left"]http://www.flickr.com/photos/dancoulter/2619594365/[/flickr] (image)
+* [flickr height="300" width="400"]http://www.flickr.com/photos/dancoulter/2422361554/[/flickr] (video)
+** WARNING: Video media imported, but doesn't seem to work
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
 * [flickr-gallery mode="photoset" photoset="72157626986038277"]
 * [flickr-gallery mode="tag" tags="foo,bar" tag_mode="all"]
@@ -118,6 +122,14 @@ Is your disk quota large enough? See Warnings in Description for help.
 == Changelog ==
 = trunk =
 -
+
+= 1.6.0 =
+* Remove repeated comment
+* CHANGE Don't remove first [flickr] from post by default
+* Support [flickr]flickr URL[/flickr] shortcodes
+* Revised video importing - Imported swf videos are no-go
+* Source formatting
+* Skip Importing Videos
 
 = 1.5.3 =
 * Add add_theme_support( 'post-thumbnails' )

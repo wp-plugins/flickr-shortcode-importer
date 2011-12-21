@@ -61,10 +61,10 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 **Reset to Defaults**
 
 = Handled shortcode & media samples =
-* [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickr size="small" float="left"]http://www.flickr.com/photos/dancoulter/2619594365/[/flickr] (image)
 * [flickr height="300" width="400"]http://www.flickr.com/photos/dancoulter/2422361554/[/flickr] (video)
-** WARNING: Video media imported, but doesn't seem to work
+* WARNING: Video media imported, but doesn't seem to work
+* [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157626986038277" thumbnail="small" photos="" overlay="true" size="large"]
 * [flickr-gallery mode="photoset" photoset="72157626986038277"]
 * [flickr-gallery mode="tag" tags="foo,bar" tag_mode="all"]
@@ -121,6 +121,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Import Flickr video - optional rendering as video/object/embed tag using Flickr src or locally
 -
 
 = 1.6.0 =
@@ -129,7 +130,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 * Support [flickr]flickr URL[/flickr] shortcodes
 * Revised video importing - Imported swf videos are no-go
 * Source formatting
-* Skip Importing Videos
+* Add option Skip Importing Videos
 
 = 1.5.3 =
 * Add add_theme_support( 'post-thumbnails' )
@@ -302,4 +303,3 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == TODO ==
 * Add estimated time remaining notice
-* Import Flickr video - currently rendering as video/object/embed tag using Flickr src

@@ -11,6 +11,8 @@ Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/I
 == Description ==
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library. Furthermore, it transforms the post content [flickr] shortcodes into links containing the Media Library based image of the proper size and alignment.
 
+Import can be run directly from edit page and post screens.
+
 The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transfromed as image links to their attachment page.  
 
 [flickrset] and [flickr-gallery] shortcodes are converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
@@ -126,6 +128,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Enable importing from edit page and post screen
 -
 
 = 1.6.1 =

@@ -47,12 +47,30 @@ class Flickr_Shortcode_Importer {
 		add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueues' ) );
 		add_action( 'wp_ajax_importflickrshortcode', array( &$this, 'ajax_process_shortcode' ) );
+
 		add_filter( 'plugin_action_links', array( &$this, 'add_plugin_action_links' ), 10, 2 );
+
+		add_action( 'add_meta_boxes', array( &$this, 'flickr_import_meta_boxes' ) );
 		
 		$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('Settings', 'flickr-shortcode-importer').'</a>';
         
 		// needed to include has_post_thumbnail code
 		add_theme_support( 'post-thumbnails' );
+	}
+
+
+	function flickr_import_meta_boxes() {
+		add_meta_box( 'flickr_import', __( '[flickr] Importer', 'flickr-shortcode-importer' ), array( &$this, 'post_flickr_import_meta_box' ), 'page', 'side' );
+		add_meta_box( 'flickr_import', __( '[flickr] Importer', 'flickr-shortcode-importer' ), array( &$this, 'post_flickr_import_meta_box' ), 'post', 'side' );
+	}
+
+
+	function post_flickr_import_meta_box( $post ) {
+		wp_nonce_field( 'flickr_import', 'flickr-shortcode-importer' );
+		echo '<label for="flickr_import" class="selectit">';
+		echo '<input name="flickr_import" type="checkbox" id="flickr_import" value="1" ' . checked($post->flickr_import, 0) . ' /> ';
+		echo __( 'Import [flickr] content', 'flickr-shortcode-importer' );
+		echo '</label>';
 	}
 
 
@@ -98,9 +116,14 @@ class Flickr_Shortcode_Importer {
 	}
 
 
-	// The user interface plus thumbnail regenerator
 	function user_interface() {
 		global $wpdb;
+
+		// Capability check
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
+		}
+
 ?>
 
 <div id="message" class="updated fade" style="display:none"></div>
@@ -121,11 +144,7 @@ class Flickr_Shortcode_Importer {
 
 		// If the button was clicked
 		if ( ! empty( $_POST['flickr-shortcode-importer'] ) || ! empty( $_REQUEST['posts'] ) ) {
-			// Capability check
-			if ( !current_user_can( 'manage_options' ) )
-				wp_die( __( 'Cheatin&#8217; uh?' , 'flickr-shortcode-importer') );
-
-			// Form nonce check
+-			// Form nonce check
 			check_admin_referer( 'flickr-shortcode-importer' );
 
 			// Create the list of image IDs
@@ -149,7 +168,7 @@ EOD;
 					SELECT ID
 					FROM $wpdb->posts
 					WHERE 1 = 1
-					AND post_type = 'post'
+					AND ( post_type = 'post' OR post_type = 'page' )
 					AND post_parent = 0
 					AND (
 						post_content LIKE '%[flickr %'
@@ -432,7 +451,7 @@ EOD;
 	function show_greeting() {
 ?>
 	<form method="post" action="">
-<?php wp_nonce_field('flickr-shortcode-importer') ?>
+<?php wp_nonce_field( 'flickr-shortcode-importer' ); ?>
 
 	<p><?php _e( "Use this tool to import [flickr] shortcodes into the Media Library. The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transitioned to like sized locally referenced images.", 'flickr-shortcode-importer' ); ?></p>
 
@@ -453,7 +472,27 @@ EOD;
 	}
 
 
-	// Process a single image ID (this is an AJAX handler)
+	// Process a single post ID
+	function process_flickr_shortcode( $post_id ) {
+		$this->post_id			= (int) $post_id;
+		$post					= get_post( $this->post_id );
+
+		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) )  )
+			return;
+
+		if ( fsi_get_options( 'import_flickr_sourced_tags' ) ) {
+			$this->convert_flickr_sourced_tags( $post );
+			$post				= get_post( $this->post_id );
+		}
+
+		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) ) || ! stristr( $post->post_content, '[flickr' ) )
+			return;
+
+	   	$this->_process_shortcode( $post );
+	}
+
+
+	// Process a single post ID (this is an AJAX handler)
 	function ajax_process_shortcode() {
 		if ( ! fsi_get_options( 'debug_mode' ) ) {
 			error_reporting( 0 ); // Don't break the JSON result
@@ -463,17 +502,24 @@ EOD;
 
 		$post					= get_post( $this->post_id );
 
+		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) )  )
+			return;
+
 		if ( fsi_get_options( 'import_flickr_sourced_tags' ) ) {
 			$this->convert_flickr_sourced_tags( $post );
 			$post				= get_post( $this->post_id );
 		}
 
-		if ( ! $post || 'post' != $post->post_type || ! stristr( $post->post_content, '[flickr' ) )
+		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) ) || ! stristr( $post->post_content, '[flickr' ) )
 			die( json_encode( array( 'error' => sprintf( __( "Failed import: %s doesn't contain [flickr].", 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
+		
+	   	$this->_process_shortcode( $post );
 
-		if ( ! current_user_can( 'manage_options' ) )
-			$this->die_json_error_msg( $this->post_id, __( "Your user account doesn't have permission to import images", 'flickr-shortcode-importer' ) );
+		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $this->post_id ), esc_html( get_the_title( $this->post_id ) ), $this->post_id, timer_stop() ) ) ) );
+	}
 
+
+	function _process_shortcode( $post ) {
 		// default is Flickr Shortcode Import API key
 		$api_key				= fsi_get_options( 'flickr_api_key' );
 		$secret					= fsi_get_options( 'flickr_api_secret' );
@@ -506,8 +552,6 @@ EOD;
 			&& ( ! has_post_thumbnail( $this->post_id ) || fsi_get_options( 'force_set_featured_image' ) ) ) {
 			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
 		}
-
-		die( json_encode( array( 'success' => sprintf( __( '&quot;<a href="%1$s" target="_blank">%2$s</a>&quot; Post ID %3$s was successfully processed in %4$s seconds.', 'flickr-shortcode-importer' ), get_permalink( $this->post_id ), esc_html( get_the_title( $this->post_id ) ), $this->post_id, timer_stop() ) ) ) );
 	}
 
 	
@@ -1138,5 +1182,31 @@ function Flickr_Shortcode_Importer() {
 }
 
 add_action( 'init', 'Flickr_Shortcode_Importer' );
+
+
+function fsi_save_post( $post_id ) {
+	global $Flickr_Shortcode_Importer;
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
+		return;
+
+	if ( ! is_numeric( $post_id ) )
+		return;
+
+	// check that post is wanting the flickr codes imported
+	if ( ! wp_verify_nonce( $_POST['flickr-shortcode-importer'], 'flickr_import' ) )
+		return;
+
+	if ( empty( $_POST['flickr_import'] ) )
+		return;
+
+	remove_action( 'save_post', 'fsi_save_post', 99 );
+
+	$Flickr_Shortcode_Importer->process_flickr_shortcode( $post_id );
+	
+	add_action( 'save_post', 'fsi_save_post', 99 );
+}
+
+add_action( 'save_post', 'fsi_save_post', 99 );
 
 ?>

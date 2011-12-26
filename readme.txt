@@ -39,6 +39,8 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Default Image Alignment
 * Default Image Size
 * Default A Tag Class
+* Image Link Size
+* Link Image to Attachment Page?
 * Add Flickr Link in Description?
 * Flickr Link Text
 * Include Flickr Author Attribution?
@@ -131,6 +133,9 @@ Is your disk quota large enough? See Warnings in Description for help.
 * Update settings verbiage
 * Give fsi_get_options default option
 * Set class description for checkbox labels
+* Add option Image Link Size
+* Add option Link Image to Attachment Page?
+* Set fsi_get_options defaults where applicable
 -
 
 = 1.6.0 =

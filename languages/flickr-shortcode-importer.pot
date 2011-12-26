@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flickr Shortcode Importer 1.6.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/flickr-shortcode-importer\n"
-"POT-Creation-Date: 2011-12-26 12:38:25+00:00\n"
+"POT-Creation-Date: 2011-12-26 13:14:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -167,181 +167,199 @@ msgstr ""
 msgid "Useful for lightbox'ing."
 msgstr ""
 
-#: class.options.php:428
+#: class.options.php:429
+msgid "Image Link Size"
+msgstr ""
+
+#: class.options.php:430
+msgid "Default size of image displayed when clicked on in single post view."
+msgstr ""
+
+#: class.options.php:443
+msgid "Link Image to Attachment Page?"
+msgstr ""
+
+#: class.options.php:444
+msgid ""
+"If set, post single view images are linked to attachment pages. Otherwise "
+"the image links to its source."
+msgstr ""
+
+#: class.options.php:450
 msgid "Image Wrap Class"
 msgstr ""
 
-#: class.options.php:429
+#: class.options.php:451
 msgid ""
 "Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing "
 "`flickr-image` results in `&lt;span class=\"flickr-image\"&gt;|&lt;/span&gt;`"
 msgstr ""
 
-#: class.options.php:437
+#: class.options.php:459
 msgid "Set Captions?"
 msgstr ""
 
-#: class.options.php:438
+#: class.options.php:460
 msgid "Uses media title as the caption."
 msgstr ""
 
-#: class.options.php:445
+#: class.options.php:467
 msgid "Add Flickr Link in Description?"
 msgstr ""
 
-#: class.options.php:446
+#: class.options.php:468
 msgid "Adds a back link to the original Flickr image in the description field."
 msgstr ""
 
-#: class.options.php:452
+#: class.options.php:474
 msgid "Flickr Link Text"
 msgstr ""
 
-#: class.options.php:454
+#: class.options.php:476
 msgid "Photo by"
 msgstr ""
 
-#: class.options.php:461
+#: class.options.php:483
 msgid "Include Flickr Author Attribution?"
 msgstr ""
 
-#: class.options.php:468
+#: class.options.php:490
 msgid "Flickr Author Attribution Text"
 msgstr ""
 
-#: class.options.php:470
+#: class.options.php:492 flickr-shortcode-importer.php:739
 msgid "Photo by "
 msgstr ""
 
-#: class.options.php:476
+#: class.options.php:498
 msgid "Flickr Author Attribution Wrap Class"
 msgstr ""
 
-#: class.options.php:477
+#: class.options.php:499
 msgid ""
 "Attribution  wrap span tag class. e.g. Providing `flickr-attribution` "
 "results in `&lt;span class=\"flickr-attribution\"&gt;|&lt;/span&gt;`"
 msgstr ""
 
-#: class.options.php:484
+#: class.options.php:506
 msgid "Posts to Import"
 msgstr ""
 
-#: class.options.php:485
+#: class.options.php:507
 msgid "A CSV list of post ids to import, like '1,2,3'."
 msgstr ""
 
-#: class.options.php:492
+#: class.options.php:514
 msgid "Skip Importing Posts"
 msgstr ""
 
-#: class.options.php:493
+#: class.options.php:515
 msgid "A CSV list of post ids to not import, like '1,2,3'."
 msgstr ""
 
-#: class.options.php:500
+#: class.options.php:522
 msgid "Import Limit"
 msgstr ""
 
-#: class.options.php:501
+#: class.options.php:523
 msgid ""
 "Useful for testing import on a limited amount of posts. 0 or blank means "
 "unlimited."
 msgstr ""
 
-#: class.options.php:509
+#: class.options.php:531
 msgid "Debug Mode?"
 msgstr ""
 
-#: class.options.php:510
+#: class.options.php:532
 msgid ""
 "Bypass Ajax controller to handle posts_to_import directly for testing "
 "purposes"
 msgstr ""
 
-#: class.options.php:516
+#: class.options.php:538
 msgid "Flickr API Key"
 msgstr ""
 
-#: class.options.php:517
+#: class.options.php:539
 msgid ""
 "<a href=\"http://www.flickr.com/services/api/\">Flickr API Documentation</a>"
 msgstr ""
 
-#: class.options.php:524
+#: class.options.php:546
 msgid "Flickr API Secret"
 msgstr ""
 
-#: class.options.php:534
+#: class.options.php:556
 msgid "Example Text Input"
 msgstr ""
 
-#: class.options.php:535
+#: class.options.php:557
 msgid "This is a description for the text input."
 msgstr ""
 
-#: class.options.php:542
+#: class.options.php:564
 msgid "Example Textarea Input"
 msgstr ""
 
-#: class.options.php:543
+#: class.options.php:565
 msgid "This is a description for the textarea input."
 msgstr ""
 
-#: class.options.php:551
+#: class.options.php:573
 msgid "Example Checkbox"
 msgstr ""
 
-#: class.options.php:552
+#: class.options.php:574
 msgid "This is a description for the checkbox."
 msgstr ""
 
-#: class.options.php:566
+#: class.options.php:588
 msgid "Example Radio"
 msgstr ""
 
-#: class.options.php:567
+#: class.options.php:589
 msgid "This is a description for the radio buttons."
 msgstr ""
 
-#: class.options.php:579
+#: class.options.php:601
 msgid "Example Select"
 msgstr ""
 
-#: class.options.php:580
+#: class.options.php:602
 msgid "This is a description for the drop-down."
 msgstr ""
 
-#: class.options.php:596
+#: class.options.php:618
 msgid "Header Logo"
 msgstr ""
 
-#: class.options.php:597
+#: class.options.php:619
 msgid "Enter the URL to your logo for the plugin header."
 msgstr ""
 
-#: class.options.php:604
+#: class.options.php:626
 msgid "Favicon"
 msgstr ""
 
-#: class.options.php:605
+#: class.options.php:627
 msgid ""
 "Enter the URL to your custom favicon. It should be 16x16 pixels in size."
 msgstr ""
 
-#: class.options.php:611
+#: class.options.php:633
 msgid "Custom Styles"
 msgstr ""
 
-#: class.options.php:612
+#: class.options.php:634
 msgid "Enter any custom CSS here to apply it to your plugin."
 msgstr ""
 
-#: class.options.php:624
+#: class.options.php:646
 msgid "Reset plugin"
 msgstr ""
 
-#: class.options.php:628
+#: class.options.php:650
 msgid ""
 "Check this box and click \"Save Changes\" below to reset plugin options to "
 "their defaults."
@@ -478,19 +496,19 @@ msgid ""
 "successfully processed in %4$s seconds."
 msgstr ""
 
-#: flickr-shortcode-importer.php:1003
+#: flickr-shortcode-importer.php:1009
 msgid "Source file not found: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:1032
+#: flickr-shortcode-importer.php:1038
 msgid "The originally uploaded image file cannot be found at %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:1047
+#: flickr-shortcode-importer.php:1053
 msgid "Unknown failure reason."
 msgstr ""
 
-#: flickr-shortcode-importer.php:1060
+#: flickr-shortcode-importer.php:1066
 msgid ""
 "&quot;%1$s&quot; Post ID %2$s failed to be processed. The error message was: "
 "%3$s"

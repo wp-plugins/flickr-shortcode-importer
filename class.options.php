@@ -424,6 +424,28 @@ EOD;
 			'section' => 'general'
 		);
 		
+		$this->settings['image_link_size'] = array(
+			'section' => 'general',
+			'title'   => __( 'Image Link Size' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Default size of image displayed when clicked on in single post view.' , 'flickr-shortcode-importer'),
+			'type'    => 'select',
+			'std'     => 'medium',
+			'choices' => array(
+				'thumbnail'	=> 'Thumbnail',
+				'medium'	=> 'Medium',
+				'large'		=> 'Large',
+				'full'		=> 'Full',
+			)
+		);
+		
+		$this->settings['link_image_to_attach_page'] = array(
+			'section' => 'general',
+			'title'   => __( 'Link Image to Attachment Page?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'If set, post single view images are linked to attachment pages. Otherwise the image links to its source.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1
+		);
+		
 		$this->settings['image_wrap_class'] = array(
 			'title'   => __( 'Image Wrap Class' , 'flickr-shortcode-importer'),
 			'desc'   => __( 'Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),

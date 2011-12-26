@@ -227,7 +227,7 @@ EOD;
 
 
 	function convert_tag_to_flickr( $post_content, $tag_open, $find_tag, $img_only = false ) {
-		$default_alignment		= fsi_get_options( 'default_image_alignment' );
+		$default_alignment		= fsi_get_options( 'default_image_alignment', 'left' );
 		$doc					= new DOMDocument();
 		$flickr_shortcode		= '[flickr id="%1$s" thumbnail="%2$s" align="%3$s"]' . "\n";
 		$matches				= explode( $tag_open, $post_content );
@@ -699,12 +699,18 @@ EOD;
 			return $markup;
 
 		// wrap in link to attachment itself
-		$size					= isset( $args['thumbnail'] ) ? $args['thumbnail'] : '';
+		$size					= fsi_get_options( 'image_link_size', 'medium' );
 		$size					= $this->get_shortcode_size( $size );
-		$image_link				= wp_get_attachment_link( $image_id, $size, true 	);
+		$link_to_attach_page	= fsi_get_options( 'link_image_to_attach_page' ) ? true : false;
+		$image_link				= wp_get_attachment_link( $image_id, $size, $link_to_attach_page );
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($size); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			var_dump($link_to_attach_page); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($image_link); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
 
 		// correct class per args
-		$align					= isset( $args['align'] ) ? $args['align'] : fsi_get_options( 'default_image_alignment' );
+		$align					= isset( $args['align'] ) ? $args['align'] : fsi_get_options( 'default_image_alignment', 'left' );
 		$align					= ' align' . $align;
 		$wp_image				= ' wp-image-' . $image_id;
 		$image_link				= preg_replace( '#(class="[^"]+)"#', '\1'
@@ -730,7 +736,7 @@ EOD;
 
 			$do_attribution		= fsi_get_options( 'flickr_image_attribution' );
 			if ( $do_attribution ) {
-				$attribution_text	= fsi_get_options( 'flickr_image_attribution_text' );
+				$attribution_text	= fsi_get_options( 'flickr_image_attribution_text', __( 'Photo by ' , 'flickr-shortcode-importer') );
 				$wrap_class			= fsi_get_options( 'flickr_image_attribution_wrap_class' );
 				if ( $wrap_class ) {
 					$markup			.= '<span class="'. $wrap_class . '">';
@@ -851,7 +857,7 @@ EOD;
 				break;
 
 			default:
-				$size			= fsi_get_options( 'default_image_size' );
+				$size			= fsi_get_options( 'default_image_size', 'medium' );
 				break;
 		}
 

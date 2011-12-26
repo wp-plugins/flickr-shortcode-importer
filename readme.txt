@@ -4,7 +4,7 @@ Donate link: http://typo3vagabond.com/about-typo3-vagabond/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.6.1
+Stable tag: 1.7.0
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -129,9 +129,11 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+-
+
+= 1.7.0 =
 * Enable importing from edit page and post screen
 * Add screenshot 13
--
 
 = 1.6.1 =
 * Import Flickr video - optional rendering as video/object/embed tag using Flickr src or locally

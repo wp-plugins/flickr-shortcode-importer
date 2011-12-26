@@ -699,7 +699,7 @@ EOD;
 			return $markup;
 
 		// wrap in link to attachment itself
-		$size					= fsi_get_options( 'image_link_size', 'medium' );
+		$size					= isset( $args['thumbnail'] ) ? $args['thumbnail'] : '';
 		$size					= $this->get_shortcode_size( $size );
 		$link_to_attach_page	= fsi_get_options( 'link_image_to_attach_page' ) ? true : false;
 		$image_link				= wp_get_attachment_link( $image_id, $size, $link_to_attach_page );
@@ -985,7 +985,7 @@ EOD;
 		}
 
 		if ( fsi_get_options( 'flickr_link_in_desc' ) ) {
-			$desc				.= "\n" . fsi_get_options( 'flickr_link_text' );
+			$desc				.= "\n" . fsi_get_options( 'flickr_link_text', __( 'Photo by' , 'flickr-shortcode-importer') );
 			$link				= ' <a href="' . $photo['urls']['url'][0]['_content'];
 
 			if( $this->flickset_id ) {

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flickr Shortcode Importer 1.6.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/flickr-shortcode-importer\n"
-"POT-Creation-Date: 2011-12-26 13:14:28+00:00\n"
+"POT-Creation-Date: 2011-12-26 13:41:09+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -117,8 +117,8 @@ msgstr ""
 
 #: class.options.php:364
 msgid ""
-"If the image title is a filename and the image is part of a Flickr set, the "
-"Flickr set title plus a numeric suffix will be used instead."
+"Try to make a nice title if none is set. For Flickr set images, Flickr set "
+"title plus a numeric suffix is applied."
 msgstr ""
 
 #: class.options.php:371
@@ -164,202 +164,197 @@ msgid "Default A Tag Class"
 msgstr ""
 
 #: class.options.php:421
-msgid "Useful for lightbox'ing."
+msgid ""
+"Inserts a class into links around imported images. Useful for lightbox'ing."
 msgstr ""
 
 #: class.options.php:429
-msgid "Image Link Size"
-msgstr ""
-
-#: class.options.php:430
-msgid "Default size of image displayed when clicked on in single post view."
-msgstr ""
-
-#: class.options.php:443
 msgid "Link Image to Attachment Page?"
 msgstr ""
 
-#: class.options.php:444
+#: class.options.php:430
 msgid ""
 "If set, post single view images are linked to attachment pages. Otherwise "
-"the image links to its source."
+"the image links to its source file."
 msgstr ""
 
-#: class.options.php:450
+#: class.options.php:436
 msgid "Image Wrap Class"
 msgstr ""
 
-#: class.options.php:451
+#: class.options.php:437
 msgid ""
-"Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing "
-"`flickr-image` results in `&lt;span class=\"flickr-image\"&gt;|&lt;/span&gt;`"
+"If set, a span tag is wrapped around the image with the given class. Also "
+"wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;"
+"span class=\"flickr-image\"&gt;|&lt;/span&gt;`"
 msgstr ""
 
-#: class.options.php:459
+#: class.options.php:445
 msgid "Set Captions?"
 msgstr ""
 
-#: class.options.php:460
+#: class.options.php:446
 msgid "Uses media title as the caption."
 msgstr ""
 
-#: class.options.php:467
+#: class.options.php:453
 msgid "Add Flickr Link in Description?"
 msgstr ""
 
-#: class.options.php:468
+#: class.options.php:454
 msgid "Adds a back link to the original Flickr image in the description field."
 msgstr ""
 
-#: class.options.php:474
+#: class.options.php:460
 msgid "Flickr Link Text"
 msgstr ""
 
-#: class.options.php:476
+#: class.options.php:462 flickr-shortcode-importer.php:988
 msgid "Photo by"
 msgstr ""
 
-#: class.options.php:483
+#: class.options.php:469
 msgid "Include Flickr Author Attribution?"
 msgstr ""
 
-#: class.options.php:490
+#: class.options.php:476
 msgid "Flickr Author Attribution Text"
 msgstr ""
 
-#: class.options.php:492 flickr-shortcode-importer.php:739
+#: class.options.php:478 flickr-shortcode-importer.php:739
 msgid "Photo by "
 msgstr ""
 
-#: class.options.php:498
+#: class.options.php:484
 msgid "Flickr Author Attribution Wrap Class"
 msgstr ""
 
-#: class.options.php:499
+#: class.options.php:485
 msgid ""
-"Attribution  wrap span tag class. e.g. Providing `flickr-attribution` "
-"results in `&lt;span class=\"flickr-attribution\"&gt;|&lt;/span&gt;`"
+"If set, a span tag is wrapped around the attribution with the given class. e."
+"g. Providing `flickr-attribution` results in `&lt;span class=\"flickr-"
+"attribution\"&gt;|&lt;/span&gt;`"
 msgstr ""
 
-#: class.options.php:506
+#: class.options.php:492
 msgid "Posts to Import"
 msgstr ""
 
-#: class.options.php:507
+#: class.options.php:493
 msgid "A CSV list of post ids to import, like '1,2,3'."
 msgstr ""
 
-#: class.options.php:514
+#: class.options.php:500
 msgid "Skip Importing Posts"
 msgstr ""
 
-#: class.options.php:515
+#: class.options.php:501
 msgid "A CSV list of post ids to not import, like '1,2,3'."
 msgstr ""
 
-#: class.options.php:522
+#: class.options.php:508
 msgid "Import Limit"
 msgstr ""
 
-#: class.options.php:523
+#: class.options.php:509
 msgid ""
 "Useful for testing import on a limited amount of posts. 0 or blank means "
 "unlimited."
 msgstr ""
 
-#: class.options.php:531
+#: class.options.php:517
 msgid "Debug Mode?"
 msgstr ""
 
-#: class.options.php:532
+#: class.options.php:518
 msgid ""
 "Bypass Ajax controller to handle posts_to_import directly for testing "
 "purposes"
 msgstr ""
 
-#: class.options.php:538
+#: class.options.php:524
 msgid "Flickr API Key"
 msgstr ""
 
-#: class.options.php:539
+#: class.options.php:525
 msgid ""
 "<a href=\"http://www.flickr.com/services/api/\">Flickr API Documentation</a>"
 msgstr ""
 
-#: class.options.php:546
+#: class.options.php:532
 msgid "Flickr API Secret"
 msgstr ""
 
-#: class.options.php:556
+#: class.options.php:542
 msgid "Example Text Input"
 msgstr ""
 
-#: class.options.php:557
+#: class.options.php:543
 msgid "This is a description for the text input."
 msgstr ""
 
-#: class.options.php:564
+#: class.options.php:550
 msgid "Example Textarea Input"
 msgstr ""
 
-#: class.options.php:565
+#: class.options.php:551
 msgid "This is a description for the textarea input."
 msgstr ""
 
-#: class.options.php:573
+#: class.options.php:559
 msgid "Example Checkbox"
 msgstr ""
 
-#: class.options.php:574
+#: class.options.php:560
 msgid "This is a description for the checkbox."
 msgstr ""
 
-#: class.options.php:588
+#: class.options.php:574
 msgid "Example Radio"
 msgstr ""
 
-#: class.options.php:589
+#: class.options.php:575
 msgid "This is a description for the radio buttons."
 msgstr ""
 
-#: class.options.php:601
+#: class.options.php:587
 msgid "Example Select"
 msgstr ""
 
-#: class.options.php:602
+#: class.options.php:588
 msgid "This is a description for the drop-down."
 msgstr ""
 
-#: class.options.php:618
+#: class.options.php:604
 msgid "Header Logo"
 msgstr ""
 
-#: class.options.php:619
+#: class.options.php:605
 msgid "Enter the URL to your logo for the plugin header."
 msgstr ""
 
-#: class.options.php:626
+#: class.options.php:612
 msgid "Favicon"
 msgstr ""
 
-#: class.options.php:627
+#: class.options.php:613
 msgid ""
 "Enter the URL to your custom favicon. It should be 16x16 pixels in size."
 msgstr ""
 
-#: class.options.php:633
+#: class.options.php:619
 msgid "Custom Styles"
 msgstr ""
 
-#: class.options.php:634
+#: class.options.php:620
 msgid "Enter any custom CSS here to apply it to your plugin."
 msgstr ""
 
-#: class.options.php:646
+#: class.options.php:632
 msgid "Reset plugin"
 msgstr ""
 
-#: class.options.php:650
+#: class.options.php:636
 msgid ""
 "Check this box and click \"Save Changes\" below to reset plugin options to "
 "their defaults."

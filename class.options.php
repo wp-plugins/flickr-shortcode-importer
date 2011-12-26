@@ -361,7 +361,7 @@ EOD;
 		$this->settings['make_nice_image_title'] = array(
 			'section' => 'general',
 			'title'   => __( 'Make Nice Image Title?' , 'flickr-shortcode-importer'),
-			'desc'    => __( "If the image title is a filename and the image is part of a Flickr set, the Flickr set title plus a numeric suffix will be used instead." , 'flickr-shortcode-importer'),
+			'desc'    => __( "Try to make a nice title if none is set. For Flickr set images, Flickr set title plus a numeric suffix is applied." , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1
 		);
@@ -409,46 +409,32 @@ EOD;
 			'type'    => 'select',
 			'std'     => 'medium',
 			'choices' => array(
-				'thumbnail'	=> 'Small',
+				'thumbnail'	=> 'Thumbnail',
 				'medium'	=> 'Medium',
 				'large'		=> 'Large',
-				'full'		=> 'Original',
+				'full'		=> 'Full'
 			)
 		);
 		
 		$this->settings['default_a_tag_class'] = array(
 			'title'   => __( 'Default A Tag Class' , 'flickr-shortcode-importer'),
-			'desc'    => __( "Useful for lightbox'ing." , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Inserts a class into links around imported images. Useful for lightbox\'ing.' , 'flickr-shortcode-importer'),
 			'std'     => '',
 			'type'    => 'text',
 			'section' => 'general'
 		);
 		
-		$this->settings['image_link_size'] = array(
-			'section' => 'general',
-			'title'   => __( 'Image Link Size' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Default size of image displayed when clicked on in single post view.' , 'flickr-shortcode-importer'),
-			'type'    => 'select',
-			'std'     => 'medium',
-			'choices' => array(
-				'thumbnail'	=> 'Thumbnail',
-				'medium'	=> 'Medium',
-				'large'		=> 'Large',
-				'full'		=> 'Full',
-			)
-		);
-		
 		$this->settings['link_image_to_attach_page'] = array(
 			'section' => 'general',
 			'title'   => __( 'Link Image to Attachment Page?' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'If set, post single view images are linked to attachment pages. Otherwise the image links to its source.' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'If set, post single view images are linked to attachment pages. Otherwise the image links to its source file.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1
 		);
 		
 		$this->settings['image_wrap_class'] = array(
 			'title'   => __( 'Image Wrap Class' , 'flickr-shortcode-importer'),
-			'desc'   => __( 'Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
+			'desc'   => __( 'If set, a span tag is wrapped around the image with the given class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
 			'std'     => __( '' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
 			'section' => 'general'
@@ -496,7 +482,7 @@ EOD;
 		
 		$this->settings['flickr_image_attribution_wrap_class'] = array(
 			'title'   => __( 'Flickr Author Attribution Wrap Class' , 'flickr-shortcode-importer'),
-			'desc'   => __( 'Attribution  wrap span tag class. e.g. Providing `flickr-attribution` results in `&lt;span class="flickr-attribution"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
+			'desc'   => __( 'If set, a span tag is wrapped around the attribution with the given class. e.g. Providing `flickr-attribution` results in `&lt;span class="flickr-attribution"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
 			'std'     => __( '' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
 			'section' => 'general'

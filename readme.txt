@@ -26,7 +26,6 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 = Options =
 **Import Settings**
 
-* Set Captions
 * Skip Importing Videos
 * Import Flickr-sourced A/IMG tags
 * Set Featured Image
@@ -35,12 +34,12 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Make Nice Image Title?
 * Replace Filename with Image Title?
 * Image Import Size
-* Image Wrap Class
 * Default Image Alignment
 * Default Image Size
 * Default A Tag Class
-* Image Link Size
 * Link Image to Attachment Page?
+* Image Wrap Class
+* Set Captions
 * Add Flickr Link in Description?
 * Flickr Link Text
 * Include Flickr Author Attribution?
@@ -123,6 +122,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 9. Before Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 10. After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 11. Before Flickr Shortcode Importer for [flickr-gallery]
+12. Image wrap class and Flickr attribution sample
 
 == Changelog ==
 = trunk =
@@ -136,6 +136,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 * Add option Image Link Size
 * Add option Link Image to Attachment Page?
 * Set fsi_get_options defaults where applicable
+* Clean up options
+* Remove option Image Link Size - redundant
+* Add [flickr-gallery] screenshot
+* Add image wrap and attribution screenshot
 -
 
 = 1.6.0 =

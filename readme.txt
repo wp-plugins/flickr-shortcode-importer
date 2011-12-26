@@ -34,6 +34,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Remove First Flickr Shortcode
 * Make Nice Image Title?
 * Replace Filename with Image Title?
+* Image Import Size
 * Image Wrap Class
 * Default Image Alignment
 * Default Image Size
@@ -122,8 +123,13 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
-* Add option Replace Filename with Image Title?
 * Import Flickr video - optional rendering as video/object/embed tag using Flickr src or locally
+* Add option Replace Filename with Image Title?
+* Add option Image Import Size
+* Reorder settings slightly
+* Update settings verbiage
+* Give fsi_get_options default option
+* Set class description for checkbox labels
 -
 
 = 1.6.0 =

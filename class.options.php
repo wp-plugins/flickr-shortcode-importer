@@ -245,8 +245,11 @@ EOD;
 			
 			case 'checkbox':
 				
-				echo '<input class="checkbox' . $field_class . '" type="checkbox" id="' . $id . '" name="fsi_options[' . $id . ']" value="1" ' . checked( $options[$id], 1, false ) . ' /> <label for="' . $id . '">' . $desc . '</label>';
+				echo '<input class="checkbox' . $field_class . '" type="checkbox" id="' . $id . '" name="fsi_options[' . $id . ']" value="1" ' . checked( $options[$id], 1, false ) . ' /> ';
 				
+				if ( $desc != '' )
+					echo '<label for="' . $id . '"><span class="description">' . $desc . '</span></label>';
+
 				break;
 			
 			case 'select':
@@ -315,17 +318,9 @@ EOD;
 		/* General Settings
 		===========================================*/
 		
-		$this->settings['set_caption'] = array(
-			'section' => 'general',
-			'title'   => __( 'Set Captions' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Uses media title as the caption.' , 'flickr-shortcode-importer'),
-			'type'    => 'checkbox',
-			'std'     => 0
-		);
-		
 		$this->settings['skip_videos'] = array(
 			'section' => 'general',
-			'title'   => __( 'Skip Importing Videos' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Skip Importing Videos?' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Importing videos from Flickr often fails. Shortcode is still converted to object/embed linking to Flickr.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1
@@ -333,7 +328,7 @@ EOD;
 		
 		$this->settings['import_flickr_sourced_tags'] = array(
 			'section' => 'general',
-			'title'   => __( 'Import Flickr-sourced A/IMG tags' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Import Flickr-sourced A/IMG tags?' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Converts Flickr-sourced A/IMG tags to [flickr] and then proceeds with import.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1
@@ -341,7 +336,7 @@ EOD;
 		
 		$this->settings['set_featured_image'] = array(
 			'section' => 'general',
-			'title'   => __( 'Set Featured Image' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Set Featured Image?' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Set the first [flickr] or [flickrset] image found as the Featured Image. Will not replace the current Featured Image of a post.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1
@@ -349,7 +344,7 @@ EOD;
 		
 		$this->settings['force_set_featured_image'] = array(
 			'section' => 'general',
-			'title'   => __( 'Force Set Featured Image' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Force Set Featured Image?' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Set the Featured Image even if one already exists for a post.', 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 0
@@ -357,8 +352,8 @@ EOD;
 		
 		$this->settings['remove_first_flickr_shortcode'] = array(
 			'section' => 'general',
-			'title'   => __( 'Remove First Flickr Shortcode' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Remove the first [flickr] from post content? If you use Featured Images, this will help prevent duplicate images in your post.' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Remove First Flickr Shortcode?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Removes the first [flickr] from post content. If you use Featured Images as header or lead images, then this might prevent duplicate images in your post.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 0
 		);
@@ -374,17 +369,23 @@ EOD;
 		$this->settings['replace_file_name'] = array(
 			'section' => 'general',
 			'title'   => __( 'Replace Filename with Image Title?' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Mainly for SEO purposes. This option replaces the imported media filename with the media\'s title. For non-images, this is always done.' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Mainly for SEO purposes. This setting replaces the imported media filename with the media\'s title. For non-images, this is always done.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 1
 		);
 		
-		$this->settings['image_wrap_class'] = array(
-			'title'   => __( 'Image Wrap Class' , 'flickr-shortcode-importer'),
-			'desc'   => __( 'Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
-			'std'     => __( '' , 'flickr-shortcode-importer'),
-			'type'    => 'text',
-			'section' => 'general'
+		$this->settings['image_import_size'] = array(
+			'section' => 'general',
+			'title'   => __( 'Image Import Size' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Size of image to import into media library from Flickr. If requested size doesn\'t exist, then original is imported because it\'s the closest to the requested import size.' , 'flickr-shortcode-importer'),
+			'type'    => 'select',
+			'std'     => 'Large',
+			'choices' => array(
+				'Small'			=> 'Small (240px wide)',
+				'Medium 640'	=> 'Medium (640px wide)',
+				'Large'			=> 'Large (1024px wide)',
+				'Original'		=> 'Original'
+			)
 		);
 		
 		$this->settings['default_image_alignment'] = array(
@@ -423,20 +424,20 @@ EOD;
 			'section' => 'general'
 		);
 		
-		$this->settings['posts_to_import'] = array(
-			'title'   => __( 'Posts to Import' , 'flickr-shortcode-importer'),
-			'desc'    => __( "A CSV list of post ids to import, like '1,2,3'." , 'flickr-shortcode-importer'),
-			'std'     => '',
+		$this->settings['image_wrap_class'] = array(
+			'title'   => __( 'Image Wrap Class' , 'flickr-shortcode-importer'),
+			'desc'   => __( 'Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
+			'std'     => __( '' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
-			'section' => 'selection'
+			'section' => 'general'
 		);
 		
-		$this->settings['skip_importing_post_ids'] = array(
-			'title'   => __( 'Skip Importing Posts' , 'flickr-shortcode-importer'),
-			'desc'    => __( "A CSV list of post ids to not import, like '1,2,3'." , 'flickr-shortcode-importer'),
-			'std'     => '',
-			'type'    => 'text',
-			'section' => 'selection'
+		$this->settings['set_caption'] = array(
+			'section' => 'general',
+			'title'   => __( 'Set Captions?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Uses media title as the caption.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0
 		);
 		
 		$this->settings['flickr_link_in_desc'] = array(
@@ -479,6 +480,22 @@ EOD;
 			'section' => 'general'
 		);
 		
+		$this->settings['posts_to_import'] = array(
+			'title'   => __( 'Posts to Import' , 'flickr-shortcode-importer'),
+			'desc'    => __( "A CSV list of post ids to import, like '1,2,3'." , 'flickr-shortcode-importer'),
+			'std'     => '',
+			'type'    => 'text',
+			'section' => 'selection'
+		);
+		
+		$this->settings['skip_importing_post_ids'] = array(
+			'title'   => __( 'Skip Importing Posts' , 'flickr-shortcode-importer'),
+			'desc'    => __( "A CSV list of post ids to not import, like '1,2,3'." , 'flickr-shortcode-importer'),
+			'std'     => '',
+			'type'    => 'text',
+			'section' => 'selection'
+		);
+		
 		$this->settings['limit'] = array(
 			'title'   => __( 'Import Limit' , 'flickr-shortcode-importer'),
 			'desc'    => __( 'Useful for testing import on a limited amount of posts. 0 or blank means unlimited.' , 'flickr-shortcode-importer'),
@@ -489,7 +506,7 @@ EOD;
 		
 		$this->settings['debug_mode'] = array(
 			'section' => 'testing',
-			'title'   => __( 'Debug Mode' , 'flickr-shortcode-importer'),
+			'title'   => __( 'Debug Mode?' , 'flickr-shortcode-importer'),
 			'desc'	  => __( 'Bypass Ajax controller to handle posts_to_import directly for testing purposes', 'flickr-shortcode-importer' ),
 			'type'    => 'checkbox',
 			'std'     => 0
@@ -715,8 +732,9 @@ EOD;
 
 $FSI_Settings					= new FSI_Settings();
 
-function fsi_get_options( $option ) {
-	$options					= get_option( 'fsi_options' );
+function fsi_get_options( $option, $default = false ) {
+	$options					= get_option( 'fsi_options', $default );
+
 	if ( isset( $options[$option] ) )
 		return $options[$option];
 	else

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flickr Shortcode Importer 1.6.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/flickr-shortcode-importer\n"
-"POT-Creation-Date: 2011-12-26 11:12:23+00:00\n"
+"POT-Creation-Date: 2011-12-26 12:38:25+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,273 +64,284 @@ msgstr ""
 msgid "begin [flickr] importing"
 msgstr ""
 
-#: class.options.php:320
-msgid "Set Captions"
+#: class.options.php:323
+msgid "Skip Importing Videos?"
 msgstr ""
 
-#: class.options.php:321
-msgid "Uses media title as the caption."
-msgstr ""
-
-#: class.options.php:328
-msgid "Skip Importing Videos"
-msgstr ""
-
-#: class.options.php:329
+#: class.options.php:324
 msgid ""
 "Importing videos from Flickr often fails. Shortcode is still converted to "
 "object/embed linking to Flickr."
 msgstr ""
 
-#: class.options.php:336
-msgid "Import Flickr-sourced A/IMG tags"
+#: class.options.php:331
+msgid "Import Flickr-sourced A/IMG tags?"
 msgstr ""
 
-#: class.options.php:337
+#: class.options.php:332
 msgid ""
 "Converts Flickr-sourced A/IMG tags to [flickr] and then proceeds with import."
 msgstr ""
 
-#: class.options.php:344
-msgid "Set Featured Image"
+#: class.options.php:339
+msgid "Set Featured Image?"
 msgstr ""
 
-#: class.options.php:345
+#: class.options.php:340
 msgid ""
 "Set the first [flickr] or [flickrset] image found as the Featured Image. "
 "Will not replace the current Featured Image of a post."
 msgstr ""
 
-#: class.options.php:352
-msgid "Force Set Featured Image"
+#: class.options.php:347
+msgid "Force Set Featured Image?"
 msgstr ""
 
-#: class.options.php:353
+#: class.options.php:348
 msgid "Set the Featured Image even if one already exists for a post."
 msgstr ""
 
-#: class.options.php:360
-msgid "Remove First Flickr Shortcode"
+#: class.options.php:355
+msgid "Remove First Flickr Shortcode?"
 msgstr ""
 
-#: class.options.php:361
+#: class.options.php:356
 msgid ""
-"Remove the first [flickr] from post content? If you use Featured Images, "
-"this will help prevent duplicate images in your post."
+"Removes the first [flickr] from post content. If you use Featured Images as "
+"header or lead images, then this might prevent duplicate images in your post."
 msgstr ""
 
-#: class.options.php:368
+#: class.options.php:363
 msgid "Make Nice Image Title?"
 msgstr ""
 
-#: class.options.php:369
+#: class.options.php:364
 msgid ""
 "If the image title is a filename and the image is part of a Flickr set, the "
 "Flickr set title plus a numeric suffix will be used instead."
 msgstr ""
 
-#: class.options.php:376
+#: class.options.php:371
 msgid "Replace Filename with Image Title?"
 msgstr ""
 
-#: class.options.php:377
+#: class.options.php:372
 msgid ""
-"Mainly for SEO purposes. This option replaces the imported media filename "
+"Mainly for SEO purposes. This setting replaces the imported media filename "
 "with the media's title. For non-images, this is always done."
 msgstr ""
 
-#: class.options.php:383
+#: class.options.php:379
+msgid "Image Import Size"
+msgstr ""
+
+#: class.options.php:380
+msgid ""
+"Size of image to import into media library from Flickr. If requested size "
+"doesn't exist, then original is imported because it's the closest to the "
+"requested import size."
+msgstr ""
+
+#: class.options.php:393
+msgid "Default Image Alignment"
+msgstr ""
+
+#: class.options.php:394
+msgid ""
+"Default alignment of image displayed in post when no alignment is found."
+msgstr ""
+
+#: class.options.php:407
+msgid "Default Image Size"
+msgstr ""
+
+#: class.options.php:408
+msgid "Default size of image displayed in post when no size is found."
+msgstr ""
+
+#: class.options.php:420
+msgid "Default A Tag Class"
+msgstr ""
+
+#: class.options.php:421
+msgid "Useful for lightbox'ing."
+msgstr ""
+
+#: class.options.php:428
 msgid "Image Wrap Class"
 msgstr ""
 
-#: class.options.php:384
+#: class.options.php:429
 msgid ""
 "Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing "
 "`flickr-image` results in `&lt;span class=\"flickr-image\"&gt;|&lt;/span&gt;`"
 msgstr ""
 
-#: class.options.php:392
-msgid "Default Image Alignment"
+#: class.options.php:437
+msgid "Set Captions?"
 msgstr ""
 
-#: class.options.php:393
-msgid ""
-"Default alignment of image displayed in post when no alignment is found."
-msgstr ""
-
-#: class.options.php:406
-msgid "Default Image Size"
-msgstr ""
-
-#: class.options.php:407
-msgid "Default size of image displayed in post when no size is found."
-msgstr ""
-
-#: class.options.php:419
-msgid "Default A Tag Class"
-msgstr ""
-
-#: class.options.php:420
-msgid "Useful for lightbox'ing."
-msgstr ""
-
-#: class.options.php:427
-msgid "Posts to Import"
-msgstr ""
-
-#: class.options.php:428
-msgid "A CSV list of post ids to import, like '1,2,3'."
-msgstr ""
-
-#: class.options.php:435
-msgid "Skip Importing Posts"
-msgstr ""
-
-#: class.options.php:436
-msgid "A CSV list of post ids to not import, like '1,2,3'."
-msgstr ""
-
-#: class.options.php:444
-msgid "Add Flickr Link in Description?"
+#: class.options.php:438
+msgid "Uses media title as the caption."
 msgstr ""
 
 #: class.options.php:445
+msgid "Add Flickr Link in Description?"
+msgstr ""
+
+#: class.options.php:446
 msgid "Adds a back link to the original Flickr image in the description field."
 msgstr ""
 
-#: class.options.php:451
+#: class.options.php:452
 msgid "Flickr Link Text"
 msgstr ""
 
-#: class.options.php:453
+#: class.options.php:454
 msgid "Photo by"
 msgstr ""
 
-#: class.options.php:460
+#: class.options.php:461
 msgid "Include Flickr Author Attribution?"
 msgstr ""
 
-#: class.options.php:467
+#: class.options.php:468
 msgid "Flickr Author Attribution Text"
 msgstr ""
 
-#: class.options.php:469
+#: class.options.php:470
 msgid "Photo by "
 msgstr ""
 
-#: class.options.php:475
+#: class.options.php:476
 msgid "Flickr Author Attribution Wrap Class"
 msgstr ""
 
-#: class.options.php:476
+#: class.options.php:477
 msgid ""
 "Attribution  wrap span tag class. e.g. Providing `flickr-attribution` "
 "results in `&lt;span class=\"flickr-attribution\"&gt;|&lt;/span&gt;`"
 msgstr ""
 
-#: class.options.php:483
+#: class.options.php:484
+msgid "Posts to Import"
+msgstr ""
+
+#: class.options.php:485
+msgid "A CSV list of post ids to import, like '1,2,3'."
+msgstr ""
+
+#: class.options.php:492
+msgid "Skip Importing Posts"
+msgstr ""
+
+#: class.options.php:493
+msgid "A CSV list of post ids to not import, like '1,2,3'."
+msgstr ""
+
+#: class.options.php:500
 msgid "Import Limit"
 msgstr ""
 
-#: class.options.php:484
+#: class.options.php:501
 msgid ""
 "Useful for testing import on a limited amount of posts. 0 or blank means "
 "unlimited."
 msgstr ""
 
-#: class.options.php:492
-msgid "Debug Mode"
+#: class.options.php:509
+msgid "Debug Mode?"
 msgstr ""
 
-#: class.options.php:493
+#: class.options.php:510
 msgid ""
 "Bypass Ajax controller to handle posts_to_import directly for testing "
 "purposes"
 msgstr ""
 
-#: class.options.php:499
+#: class.options.php:516
 msgid "Flickr API Key"
 msgstr ""
 
-#: class.options.php:500
+#: class.options.php:517
 msgid ""
 "<a href=\"http://www.flickr.com/services/api/\">Flickr API Documentation</a>"
 msgstr ""
 
-#: class.options.php:507
+#: class.options.php:524
 msgid "Flickr API Secret"
 msgstr ""
 
-#: class.options.php:517
+#: class.options.php:534
 msgid "Example Text Input"
 msgstr ""
 
-#: class.options.php:518
+#: class.options.php:535
 msgid "This is a description for the text input."
 msgstr ""
 
-#: class.options.php:525
+#: class.options.php:542
 msgid "Example Textarea Input"
 msgstr ""
 
-#: class.options.php:526
+#: class.options.php:543
 msgid "This is a description for the textarea input."
 msgstr ""
 
-#: class.options.php:534
+#: class.options.php:551
 msgid "Example Checkbox"
 msgstr ""
 
-#: class.options.php:535
+#: class.options.php:552
 msgid "This is a description for the checkbox."
 msgstr ""
 
-#: class.options.php:549
+#: class.options.php:566
 msgid "Example Radio"
 msgstr ""
 
-#: class.options.php:550
+#: class.options.php:567
 msgid "This is a description for the radio buttons."
 msgstr ""
 
-#: class.options.php:562
+#: class.options.php:579
 msgid "Example Select"
 msgstr ""
 
-#: class.options.php:563
+#: class.options.php:580
 msgid "This is a description for the drop-down."
 msgstr ""
 
-#: class.options.php:579
+#: class.options.php:596
 msgid "Header Logo"
 msgstr ""
 
-#: class.options.php:580
+#: class.options.php:597
 msgid "Enter the URL to your logo for the plugin header."
 msgstr ""
 
-#: class.options.php:587
+#: class.options.php:604
 msgid "Favicon"
 msgstr ""
 
-#: class.options.php:588
+#: class.options.php:605
 msgid ""
 "Enter the URL to your custom favicon. It should be 16x16 pixels in size."
 msgstr ""
 
-#: class.options.php:594
+#: class.options.php:611
 msgid "Custom Styles"
 msgstr ""
 
-#: class.options.php:595
+#: class.options.php:612
 msgid "Enter any custom CSS here to apply it to your plugin."
 msgstr ""
 
-#: class.options.php:607
+#: class.options.php:624
 msgid "Reset plugin"
 msgstr ""
 
-#: class.options.php:611
+#: class.options.php:628
 msgid ""
 "Check this box and click \"Save Changes\" below to reset plugin options to "
 "their defaults."
@@ -467,19 +478,19 @@ msgid ""
 "successfully processed in %4$s seconds."
 msgstr ""
 
-#: flickr-shortcode-importer.php:984
+#: flickr-shortcode-importer.php:1003
 msgid "Source file not found: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:1013
+#: flickr-shortcode-importer.php:1032
 msgid "The originally uploaded image file cannot be found at %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:1028
+#: flickr-shortcode-importer.php:1047
 msgid "Unknown failure reason."
 msgstr ""
 
-#: flickr-shortcode-importer.php:1041
+#: flickr-shortcode-importer.php:1060
 msgid ""
 "&quot;%1$s&quot; Post ID %2$s failed to be processed. The error message was: "
 "%3$s"

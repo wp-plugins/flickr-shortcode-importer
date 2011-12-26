@@ -673,7 +673,7 @@ EOD;
 			$markup				= $this->render_photo($photo, $args);
 		} elseif ( $photo['media'] == 'video' && in_array( $args['thumbnail'], array('video_player','site_mp4') ) ) {
 			$mode				= ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash';
-			$video_id			= $this->import_flickr_media( null, $photo, $mode);
+			$video_id			= $this->import_flickr_media( $photo, $mode);
 			$markup				= $this->RenderVideo($this->flickr_id, $mode);
 		}
 
@@ -682,14 +682,8 @@ EOD;
 
 	
 	function render_photo( $photo, $args = false ) {
-		// pull original Flickr image
-		$src					= $this->flickr->buildPhotoURL( $photo, 'original' );
-		if ( fsi_get_options( 'debug_mode' ) ) {
-			print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-		}
-
 		// add image to media library
-		$image_id				= $this->import_flickr_media( $src, $photo );
+		$image_id				= $this->import_flickr_media( $photo );
 		if ( fsi_get_options( 'debug_mode' ) ) {
 			print_r($image_id); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 		}
@@ -865,7 +859,7 @@ EOD;
 	}
 	
 
-	function import_flickr_media( $src, $photo, $mode = true ) {
+	function import_flickr_media( $photo, $mode = true ) {
 		global $wpdb;
 
 		$set_title				= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
@@ -886,7 +880,32 @@ EOD;
 		$caption				= fsi_get_options( 'set_caption' ) ? $title : '';
 		$desc					= html_entity_decode( $photo['description'] );
 		$date					= $photo['dates']['taken'];
+
+		$sizes					= $this->flickr->photos_getSizes( $photo['id'] );
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($sizes); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
+
+		$src					= false;
+
 		if ( true === $mode ) {
+			$image_import_size	= fsi_get_options( 'image_import_size', 'Large' );
+			// check that requested image size exists & grab source url
+			// array is in smallest to largest image size ordering
+			foreach ( $sizes as $size ) {
+				if ( 'photo' == $size['media'] ) {
+					$src		= $size['source'];
+					if ( $image_import_size == $size['label'] ) {
+						break;
+					}
+				}
+			}
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r($image_import_size); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+				var_dump($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			}
+
+			// Flickr saves images as jpg
 			$ext				= '.jpg';
 
 			if ( fsi_get_options( 'replace_file_name' ) ) {
@@ -904,7 +923,7 @@ EOD;
 				return null;
 			}
 
-			$sizes				= $this->flickr->photos_getSizes( $photo['id'] );
+			reset( $sizes );
 			foreach( $sizes as $v ) {
 				if ( 'html5' == $mode && $v['label'] == 'Site MP4' ) {
 					$video		= $v;

@@ -1,10 +1,10 @@
 === Flickr Shortcode Importer ===
 Contributors: comprock
-Donate link: http://peimic.com/about-peimic/donate/
-Tags: flickr,featured image,import,media library,photo
+Donate link: http://typo3vagabond.com/about-typo3-vagabond/donate/
+Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -19,7 +19,7 @@ Flickr-sourced A/IMG tagged media is converted into [flickr] and then imported a
 
 Image attribution links can be added if enabled via Settings.
 
-This plugin is handy for transitioning from plugin `wordpress-flickr-manager` to your own Media Library because you have CDN services or want to move off of third party software.
+This plugin is handy for transitioning from plugin `wordpress-flickr-manager` and `flickr-gallery` to your own Media Library because you have CDN services or want to move off of third party software.
 
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand via the post revision tool.
 
@@ -88,6 +88,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Make sure you have enough disk space. Figure on about 1 GB per 1,000 photos given your using Scissors-continued and have a maximum image size of 1280 x 1024. If your images can be larger, then you'll probably need 1 GB per 250 photos imported.
 
 = Thank You =
+* A big thank you to Željko Aščić of http://www.touristplayground.com/ for feedback and ideas.
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
 * [flickr] shortcode handling code copied from Trent Gardner's very fine Flickr Manager plugin.
 * Hat's off to Alison Barret for her Settings API tutorials and class My_Theme_Options.
@@ -126,6 +127,9 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+-
+
+= 1.6.1 =
 * Import Flickr video - optional rendering as video/object/embed tag using Flickr src or locally
 * Add option Replace Filename with Image Title?
 * Add option Image Import Size
@@ -140,7 +144,6 @@ Is your disk quota large enough? See Warnings in Description for help.
 * Remove option Image Link Size - redundant
 * Add [flickr-gallery] screenshot
 * Add image wrap and attribution screenshot
--
 
 = 1.6.0 =
 * Remove repeated comment

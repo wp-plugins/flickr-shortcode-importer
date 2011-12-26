@@ -371,6 +371,14 @@ EOD;
 			'std'     => 1
 		);
 		
+		$this->settings['replace_file_name'] = array(
+			'section' => 'general',
+			'title'   => __( 'Replace Filename with Image Title?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Mainly for SEO purposes. This option replaces the imported media filename with the media\'s title. For non-images, this is always done.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 1
+		);
+		
 		$this->settings['image_wrap_class'] = array(
 			'title'   => __( 'Image Wrap Class' , 'flickr-shortcode-importer'),
 			'desc'   => __( 'Image wrap span tag class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),

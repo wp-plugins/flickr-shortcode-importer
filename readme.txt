@@ -33,6 +33,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Force Set Featured Image
 * Remove First Flickr Shortcode
 * Make Nice Image Title?
+* Replace Filename with Image Title?
 * Image Wrap Class
 * Default Image Alignment
 * Default Image Size
@@ -121,6 +122,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Add option Replace Filename with Image Title?
 * Import Flickr video - optional rendering as video/object/embed tag using Flickr src or locally
 -
 

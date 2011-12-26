@@ -887,9 +887,23 @@ EOD;
 		$desc					= html_entity_decode( $photo['description'] );
 		$date					= $photo['dates']['taken'];
 		if ( true === $mode ) {
-			$file				= basename( $src );
-			$file				= str_replace( '?zz=1', '', $file );
+			$ext				= '.jpg';
+
+			if ( fsi_get_options( 'replace_file_name' ) ) {
+				$file				= preg_replace( '#[^\w]#', '-', $title );
+				$file				= preg_replace( '#-{2,}#', '-', $file );
+				$file				.= $ext;
+			} else {
+				$file				= basename( $src );
+				$file				= str_replace( '?zz=1', '', $file );
+			}
 		} else {
+			if ( fsi_get_options( 'skip_videos' ) ) {
+				// TODO can video import from Flickr be made to work?
+				$this->video_source	= $src;
+				return null;
+			}
+
 			$sizes				= $this->flickr->photos_getSizes( $photo['id'] );
 			foreach( $sizes as $v ) {
 				if ( 'html5' == $mode && $v['label'] == 'Site MP4' ) {
@@ -901,14 +915,10 @@ EOD;
 					$ext		= '.swf';
 					break;
 				}
+				// TODO what about unknown here?
 			}
 
 			$src				= $video['source'];
-			if ( fsi_get_options( 'skip_videos' ) ) {
-				// TODO can video import from Flickr be made to work?
-				$this->video_source	= $src;
-				return null;
-			}
 
 			$file				= preg_replace( '#[^\w]#', '-', $title );
 			$file				= preg_replace( '#-{2,}#', '-', $file );

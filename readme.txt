@@ -123,7 +123,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 9. Before Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 10. After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 11. Before Flickr Shortcode Importer for [flickr-gallery]
-12. Image wrap class and Flickr attribution sample
+12. Image SEO filename, image wrap class and Flickr attribution sample
 
 == Changelog ==
 = trunk =

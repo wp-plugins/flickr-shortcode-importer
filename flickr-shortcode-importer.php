@@ -5,10 +5,10 @@ Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 Version: 1.6.1
 Author: Michael Cannon
-Author URI: http://peimic.com/contact-peimic/
+Author URI: http://typo3vagabond.com/about-typo3-vagabond/
 License: GPL2
 
-Copyright 2011  Michael Cannon  (email : michael@peimic.com)
+Copyright 2011  Michael Cannon  (email : michael@typo3vagabond.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
@@ -1077,7 +1077,7 @@ EOD;
 	 * Returns string of a filename or string converted to a spaced extension
 	 * less header type string.
 	 *
-	 * @author Michael Cannon <michael@peimic.com>
+	 * @author Michael Cannon <michael@typo3vagabond.com>
 	 * @param string filename or arbitrary text
 	 * @return mixed string/boolean
 	 */

@@ -78,14 +78,13 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * `<img class="alignnone" src="http://farm3.static.flickr.com/2768/4334303694_37785d0f0d.jpg" alt="Khan Sao Road, Bangkok, Thailand" width="500" height="375" />`
 
 = Warnings =
-* Using your own Flickr API Key might be necessary. Test a single import and see the results before setting your own.
 * Backup your database before importing. You can use revision to revert individual posts, but doing so in mass is a major PITA.
-* It's strongly recommended to deactivate plugins like WordSocial, WP Smush.it and similar to prevent extended import times. You can always enable them and run them enmasse later.
-* Flickr-sourced IMG tags will now be linked to the attachment page.
 * During my own imports, a post with one [flickr] entry could take a minute. Then posts with many [flickr] entries, several Flickr-source'd A/IMG tags and [flickset] with 30 or so photos took over 10-minutes to import.
-* During that importing time, it'll look like nothing is happening. The progress bar only moves after each import succeeds or fails.
+* During import, it might look like nothing is happening. The progress bar only moves after each import succeeds or fails.
 * I recommend setting the limit in options to 1 and then testing your installation. That sure makes for easier recovery in case something goes wrong. If something doesn't work, report it, http://wordpress.org/extend/plugins/flickr-shortcode-importer/.
+* It's strongly recommended to deactivate plugins like WordSocial, WP Smush.it and similar to prevent extended import times. You can always enable them and run them enmasse later.
 * Make sure you have enough disk space. Figure on about 1 GB per 1,000 photos given your using Scissors-continued and have a maximum image size of 1280 x 1024. If your images can be larger, then you'll probably need 1 GB per 250 photos imported.
+* Using your own Flickr API Key might be necessary. Test a single import and see the results before setting your own.
 
 = Thank You =
 * A big thank you to Željko Aščić of http://www.touristplayground.com/ for feedback and ideas.
@@ -101,7 +100,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 
 == Frequently Asked Questions ==
 = Can I sponsor changes? =
-Yes. Any sponsoring would be greatly welcome. Please [donate](http://peimic.com/about-peimic/donate/ "Help sponsor Flickr Shortcode Importer") and let me know what's wanted
+Yes. Any sponsoring would be greatly welcome. Please [donate](http://typo3vagabond.com/about-typo3-vagabond/donate/ "Help sponsor Flickr Shortcode Importer") and let me know what's wanted
 
 = Help, it doesn't work =
 Please leave a forum entry detailing exactly what error message you received, whether or not you attempted and succeeded with a 1 item import, a copy of post content and any other steps needed to replicate your troubles. Don't forget the WP and PHP versions.

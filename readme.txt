@@ -125,10 +125,12 @@ Is your disk quota large enough? See Warnings in Description for help.
 10. After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 11. Before Flickr Shortcode Importer for [flickr-gallery]
 12. Image SEO filename, image wrap class and Flickr attribution sample
+13. Edit post screen [flickr] Importer option
 
 == Changelog ==
 = trunk =
 * Enable importing from edit page and post screen
+* Add screenshot 13
 -
 
 = 1.6.1 =

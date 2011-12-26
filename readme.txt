@@ -120,6 +120,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 8. After Flickr Shortcode Importer for [flickrset] & [flickr-gallery]
 9. Before Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
 10. After Flickr Shortcode Importer for Flickr-sourced A/IMG Tag
+11. Before Flickr Shortcode Importer for [flickr-gallery]
 
 == Changelog ==
 = trunk =

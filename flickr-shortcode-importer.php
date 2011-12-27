@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.7.0
+Version: 1.7.1
 Author: Michael Cannon
 Author URI: http://typo3vagabond.com/about-typo3-vagabond/
 License: GPL2
@@ -68,7 +68,8 @@ class Flickr_Shortcode_Importer {
 	function post_flickr_import_meta_box( $post ) {
 		wp_nonce_field( 'flickr_import', 'flickr-shortcode-importer' );
 		echo '<label for="flickr_import" class="selectit">';
-		echo '<input name="flickr_import" type="checkbox" id="flickr_import" value="1" ' . checked($post->flickr_import, 0) . ' /> ';
+		$checked				= get_post_meta( $post->ID, 'process_flickr_shortcode', true );
+		echo '<input name="flickr_import" type="checkbox" id="flickr_import" value="1" ' . checked( $checked, 1, false ) . ' /> ';
 		echo __( 'Import [flickr] content', 'flickr-shortcode-importer' );
 		echo '</label>';
 	}
@@ -1197,7 +1198,11 @@ function fsi_save_post( $post_id ) {
 	if ( ! wp_verify_nonce( $_POST['flickr-shortcode-importer'], 'flickr_import' ) )
 		return;
 
-	if ( empty( $_POST['flickr_import'] ) )
+	// save checkbox or not
+	$checked					= ( isset( $_POST['flickr_import'] ) && ! empty( $_POST['flickr_import'] ) ) ? 1 : 0;
+	update_post_meta( $post_id, 'process_flickr_shortcode', $checked );
+
+	if ( ! $checked )
 		return;
 
 	remove_action( 'save_post', 'fsi_save_post', 99 );

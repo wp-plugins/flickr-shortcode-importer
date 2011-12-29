@@ -526,6 +526,9 @@ EOD;
 		$secret					= fsi_get_options( 'flickr_api_secret' );
 		$this->flickr			= new phpFlickr( $api_key, $secret );
 
+		// TODO append license info
+		// helper photos_licenses_getInfo
+
 		// only use our shortcode handlers to prevent messing up post content 
 		remove_all_shortcodes();
 		add_shortcode( 'flickr-gallery', array( &$this, 'shortcode_flickr_gallery' ) );
@@ -714,6 +717,9 @@ EOD;
 	function process_flickr_media( $photo, $args = false ) {
 		$markup					= '';
 
+		// TODO check license
+		// <photo id="2733" secret="123456" server="12" isfavorite="0" license="3"
+
 		if ( 'photo' == $photo['media'] ) {
 			$markup				= $this->render_photo($photo, $args);
 		} elseif ( $photo['media'] == 'video' && in_array( $args['thumbnail'], array('video_player','site_mp4') ) ) {
@@ -781,17 +787,18 @@ EOD;
 
 			$do_attribution		= fsi_get_options( 'flickr_image_attribution' );
 			if ( $do_attribution ) {
-				$attribution_text	= fsi_get_options( 'flickr_image_attribution_text', __( 'Photo by ' , 'flickr-shortcode-importer') );
 				$wrap_class			= fsi_get_options( 'flickr_image_attribution_wrap_class' );
 				if ( $wrap_class ) {
 					$markup			.= '<span class="'. $wrap_class . '">';
 				}
 
-				$attribution_link	= ' <a href="' . $photo['urls']['url'][0]['_content'];
+				$attribution_text	= fsi_get_options( 'flickr_image_attribution_text', __( 'Photo by ' , 'flickr-shortcode-importer') );
+				$markup			.= $attribution_text;
+
+				$attribution_link	= '<a href="' . $photo['urls']['url'][0]['_content'];
 				$username			= $photo['owner']['username'];
 				$attribution_link	.= '">' . $username . '</a>';
 
-				$markup			.= $attribution_text;
 				$markup			.= $attribution_link;
 
 				if ( $wrap_class ) {
@@ -1030,8 +1037,8 @@ EOD;
 		}
 
 		if ( fsi_get_options( 'flickr_link_in_desc' ) ) {
-			$desc				.= "\n" . fsi_get_options( 'flickr_link_text', __( 'Photo by' , 'flickr-shortcode-importer') );
-			$link				= ' <a href="' . $photo['urls']['url'][0]['_content'];
+			$desc				.= "\n" . fsi_get_options( 'flickr_link_text', __( 'Photo by ' , 'flickr-shortcode-importer') );
+			$link				= '<a href="' . $photo['urls']['url'][0]['_content'];
 
 			if( $this->flickset_id ) {
 				$link			.= 'in/set-' . $this->flickset_id . '/';

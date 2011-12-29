@@ -459,7 +459,7 @@ EOD;
 		$this->settings['flickr_link_text'] = array(
 			'title'   => __( 'Flickr Link Text' , 'flickr-shortcode-importer'),
 			'desc'    => __( '' , 'flickr-shortcode-importer'),
-			'std'     => __( 'Photo by' , 'flickr-shortcode-importer'),
+			'std'     => __( 'Photo by ' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
 			'section' => 'general'
 		);

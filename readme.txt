@@ -129,6 +129,9 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Consistent `Photo by ` text string
+* Rearrange attribution_link and attribution_text
+* screen-meta-links endif fix
 -
 
 = 1.7.1 =

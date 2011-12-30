@@ -28,7 +28,7 @@ class FSI_Settings {
 		$this->sections['api']   		= __( 'Flickr API' , 'flickr-shortcode-importer');
 		$this->sections['selection']	= __( 'Posts Selection' , 'flickr-shortcode-importer');
 		$this->sections['testing']		= __( 'Testing Options' , 'flickr-shortcode-importer');
-		$this->sections['reset']        = __( 'Reset to Defaults' , 'flickr-shortcode-importer');
+		$this->sections['reset']        = __( 'Reset/Restore' , 'flickr-shortcode-importer');
 		$this->sections['about']        = __( 'About Flickr Shortcode Importer' , 'flickr-shortcode-importer');
 		
 		add_action( 'admin_menu', array( &$this, 'add_pages' ) );
@@ -448,26 +448,10 @@ EOD;
 			'std'     => 0
 		);
 		
-		$this->settings['flickr_link_in_desc'] = array(
-			'section' => 'general',
-			'title'   => __( 'Add Flickr Link in Description?' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Adds a back link to the original Flickr image in the description field.' , 'flickr-shortcode-importer'),
-			'type'    => 'checkbox',
-			'std'     => 0
-		);
-		
-		$this->settings['flickr_link_text'] = array(
-			'title'   => __( 'Flickr Link Text' , 'flickr-shortcode-importer'),
-			'desc'    => __( '' , 'flickr-shortcode-importer'),
-			'std'     => __( 'Photo by ' , 'flickr-shortcode-importer'),
-			'type'    => 'text',
-			'section' => 'general'
-		);
-		
 		$this->settings['flickr_image_attribution'] = array(
 			'section' => 'general',
 			'title'   => __( 'Include Flickr Author Attribution?' , 'flickr-shortcode-importer'),
-			'desc'    => __( '' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Appends Flickr username, linked back to Flickr image to the imported Flickr image.' , 'flickr-shortcode-importer'),
 			'type'    => 'checkbox',
 			'std'     => 0
 		);
@@ -484,6 +468,38 @@ EOD;
 			'title'   => __( 'Flickr Author Attribution Wrap Class' , 'flickr-shortcode-importer'),
 			'desc'   => __( 'If set, a span tag is wrapped around the attribution with the given class. e.g. Providing `flickr-attribution` results in `&lt;span class="flickr-attribution"&gt;|&lt;/span&gt;`' , 'flickr-shortcode-importer'),
 			'std'     => __( '' , 'flickr-shortcode-importer'),
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
+		$this->settings['flickr_link_in_desc'] = array(
+			'section' => 'general',
+			'title'   => __( 'Add Flickr Attribution to Description?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Like `Include Flickr Author Attribution` but appends the image description.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0
+		);
+		
+		$this->settings['flickr_link_text'] = array(
+			'title'   => __( 'Flickr Attribution Text' , 'flickr-shortcode-importer'),
+			'desc'    => __( '' , 'flickr-shortcode-importer'),
+			'std'     => __( 'Photo by ' , 'flickr-shortcode-importer'),
+			'type'    => 'text',
+			'section' => 'general'
+		);
+		
+		$this->settings['flickr_image_license'] = array(
+			'section' => 'general',
+			'title'   => __( 'Add Image License to Description?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Append image license and link to image description.' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0
+		);
+		
+		$this->settings['flickr_image_license_text'] = array(
+			'title'   => __( 'Flickr Image License Text' , 'flickr-shortcode-importer'),
+			'desc'    => __( '' , 'flickr-shortcode-importer'),
+			'std'     => __( 'License ' , 'flickr-shortcode-importer'),
 			'type'    => 'text',
 			'section' => 'general'
 		);
@@ -626,6 +642,14 @@ EOD;
 				
 		/* Reset
 		===========================================*/
+		
+		$this->settings['force_reimport'] = array(
+			'section' => 'reset',
+			'title'   => __( 'Reimport Flickr Source Images' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0,
+			'desc'    => __( 'Needed when changing the Flickr image import size from prior imports.' , 'flickr-shortcode-importer')
+		);
 		
 		$this->settings['reset_plugin'] = array(
 			'section' => 'reset',

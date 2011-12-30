@@ -42,11 +42,13 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Link Image to Attachment Page?
 * Image Wrap Class
 * Set Captions
-* Add Flickr Link in Description?
-* Flickr Link Text
 * Include Flickr Author Attribution?
 * Flickr Author Attribution Text
 * Flickr Author Attribution Wrap Class
+* Add Flickr Link in Description?
+* Flickr Link Text
+* Add Image License to Description?	
+* Flickr Image License Text
 
 **Posts Selection**
 
@@ -63,7 +65,9 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Flickr API Key
 * Flickr API Secret
 
-**Reset to Defaults**
+**Reset/Restore**
+* Reimport Flickr Source Images
+* Restore plugin
 
 = Handled shortcode & media samples =
 * [flickr size="small" float="left"]http://www.flickr.com/photos/dancoulter/2619594365/[/flickr] (image)
@@ -132,6 +136,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 * Consistent `Photo by ` text string
 * Rearrange attribution_link and attribution_text
 * screen-meta-links endif fix
+* Revise Reset heading verbiage
+* Reorder options
+* Enable license appending to image description
+* Add image reimport option
 -
 
 = 1.7.1 =

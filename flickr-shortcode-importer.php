@@ -526,8 +526,18 @@ EOD;
 		$secret					= fsi_get_options( 'flickr_api_secret' );
 		$this->flickr			= new phpFlickr( $api_key, $secret );
 
-		// TODO append license info
-		// helper photos_licenses_getInfo
+		$this->licenses			= array();
+		$licenses				= $this->flickr->photos_licenses_getInfo();
+		foreach ( $licenses as $license ) {
+			$this->licenses[ $license['id'] ]	= array(
+				'name'	=> $license['name'],
+				'url'	=> $license['url']
+			);
+		}
+		sort( $this->licenses );
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($this->licenses); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+		}
 
 		// only use our shortcode handlers to prevent messing up post content 
 		remove_all_shortcodes();
@@ -717,14 +727,11 @@ EOD;
 	function process_flickr_media( $photo, $args = false ) {
 		$markup					= '';
 
-		// TODO check license
-		// <photo id="2733" secret="123456" server="12" isfavorite="0" license="3"
-
 		if ( 'photo' == $photo['media'] ) {
 			$markup				= $this->render_photo($photo, $args);
 		} elseif ( $photo['media'] == 'video' && in_array( $args['thumbnail'], array('video_player','site_mp4') ) ) {
 			$mode				= ($args['thumbnail'] == 'site_mp4') ? 'html5': 'flash';
-			$video_id			= $this->import_flickr_media( $photo, $mode);
+			$video_id			= $this->import_flickr_media($photo, $mode);
 			$markup				= $this->RenderVideo($this->flickr_id, $mode);
 		}
 
@@ -785,8 +792,7 @@ EOD;
 			// remaining [flickr] converted to locally reference image
 			$markup				= $image_link;
 
-			$do_attribution		= fsi_get_options( 'flickr_image_attribution' );
-			if ( $do_attribution ) {
+			if ( fsi_get_options( 'flickr_image_attribution' ) ) {
 				$wrap_class			= fsi_get_options( 'flickr_image_attribution_wrap_class' );
 				if ( $wrap_class ) {
 					$markup			.= '<span class="'. $wrap_class . '">';
@@ -960,7 +966,6 @@ EOD;
 			}
 			if ( fsi_get_options( 'debug_mode' ) ) {
 				print_r($image_import_size); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-				var_dump($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 			}
 
 			// Flickr saves images as jpg
@@ -1016,6 +1021,12 @@ EOD;
 		";
 		$dup					= $wpdb->get_var( $query );
 
+		if ( $dup && fsi_get_options( 'force_reimport' ) ) {
+			// delete prior imports
+			wp_delete_attachment( $dup, true );
+			$dup				= false;
+		}
+
 		if ( $dup ) {
 			if ( true !== $mode ) {
 				$this->video_source	= wp_get_attachment_url( $dup );
@@ -1047,6 +1058,27 @@ EOD;
 			$username			= $photo['owner']['username'];
 			$link				.= '">' . $username . '</a>';
 			$desc				.= $link;
+		}
+
+		if ( fsi_get_options( 'flickr_image_license' ) ) {
+			// append license info
+			// <photo id="2733" secret="123456" server="12" isfavorite="0" license="3"
+			// no license All rights reserved, any license Some rights reserved
+			$license			= $photo['license'];
+			$desc				.= "\n" . fsi_get_options( 'flickr_image_license_text', __( 'License ' , 'flickr-shortcode-importer') );
+			if ( $license ) {
+				$link				= '<a href="' . $this->licenses[$license]['url'];
+				$link				.= '" title="' . $this->licenses[$license]['name'];
+
+				$link				.= '">' . $this->licenses[$license]['name'] . '</a>';
+			} else {
+				$link				= $this->licenses[$license]['name'];
+			}
+			$desc				.= $link;
+		}
+
+		if ( fsi_get_options( 'debug_mode' ) ) {
+			print_r($desc); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 		}
 
 		$file_move				= wp_upload_bits( $file, null, file_get_contents( $src ) );

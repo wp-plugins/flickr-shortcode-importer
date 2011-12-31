@@ -569,6 +569,10 @@ EOD;
 			&& ( ! has_post_thumbnail( $this->post_id ) || fsi_get_options( 'force_set_featured_image' ) ) ) {
 			$updated			= update_post_meta( $this->post_id, "_thumbnail_id", $this->featured_id );
 		}
+
+		if ( fsi_get_options( 'force_reimport' ) ) {
+			update_fsi_options( 'force_reimport', 0 );
+		}
 	}
 
 	
@@ -1025,7 +1029,7 @@ EOD;
 		$dup					= $wpdb->get_var( $query );
 
 		if ( $dup && fsi_get_options( 'force_reimport' ) ) {
-			// delete prior imports
+			// delete prior import
 			wp_delete_attachment( $dup, true );
 			$dup				= false;
 		}

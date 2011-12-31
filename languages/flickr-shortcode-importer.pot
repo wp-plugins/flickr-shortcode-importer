@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flickr Shortcode Importer 1.7.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/flickr-shortcode-importer\n"
-"POT-Creation-Date: 2011-12-31 11:43:03+00:00\n"
+"POT-Creation-Date: 2011-12-31 11:55:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -213,7 +213,7 @@ msgid "Flickr Author Attribution Text"
 msgstr ""
 
 #: class.options.php:462 class.options.php:486
-#: flickr-shortcode-importer.php:804 flickr-shortcode-importer.php:1054
+#: flickr-shortcode-importer.php:808 flickr-shortcode-importer.php:1058
 msgid "Photo by "
 msgstr ""
 
@@ -253,7 +253,7 @@ msgstr ""
 msgid "Flickr Image License Text"
 msgstr ""
 
-#: class.options.php:502 flickr-shortcode-importer.php:1071
+#: class.options.php:502 flickr-shortcode-importer.php:1075
 msgid "License "
 msgstr ""
 
@@ -520,19 +520,19 @@ msgid ""
 "successfully processed in %4$s seconds."
 msgstr ""
 
-#: flickr-shortcode-importer.php:1096
+#: flickr-shortcode-importer.php:1100
 msgid "Source file not found: %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:1125
+#: flickr-shortcode-importer.php:1129
 msgid "The originally uploaded image file cannot be found at %s"
 msgstr ""
 
-#: flickr-shortcode-importer.php:1140
+#: flickr-shortcode-importer.php:1144
 msgid "Unknown failure reason."
 msgstr ""
 
-#: flickr-shortcode-importer.php:1153
+#: flickr-shortcode-importer.php:1157
 msgid ""
 "&quot;%1$s&quot; Post ID %2$s failed to be processed. The error message was: "
 "%3$s"

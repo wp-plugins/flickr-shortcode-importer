@@ -772,4 +772,15 @@ function fsi_get_options( $option, $default = false ) {
 	else
 		return false;
 }
+
+function update_fsi_options( $option, $value = null ) {
+	$options					= get_option( 'fsi_options' );
+
+	if ( ! is_array( $options ) ) {
+		$options				= array();
+	}
+
+	$options[$option]			= $value;
+	update_option( 'fsi_options', $options );
+}
 ?>

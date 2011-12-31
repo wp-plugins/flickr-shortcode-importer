@@ -133,6 +133,8 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Add update_fsi_options function
+* Turn off force_reimport after usage
 -
 
 = 1.7.3 =

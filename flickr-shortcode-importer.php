@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.7.3
+Version: 1.7.4
 Author: Michael Cannon
 Author URI: http://typo3vagabond.com/about-typo3-vagabond/
 License: GPL2
@@ -1029,6 +1029,9 @@ EOD;
 		$dup					= $wpdb->get_var( $query );
 
 		if ( $dup && fsi_get_options( 'force_reimport' ) ) {
+			print_r('force_reimport'); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($dup); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 			// delete prior import
 			wp_delete_attachment( $dup, true );
 			$dup				= false;

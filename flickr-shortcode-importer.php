@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.7.4
+Version: 1.7.5
 Author: Michael Cannon
 Author URI: http://typo3vagabond.com/about-typo3-vagabond/
 License: GPL2
@@ -933,6 +933,7 @@ EOD;
 	function import_flickr_media( $photo, $mode = true ) {
 		global $wpdb;
 
+		$photo_id				= $photo['id'];
 		$set_title				= isset( $photo['set_title'] ) ? $photo['set_title'] : '';
 		$title					= $photo['title'];
 
@@ -952,7 +953,7 @@ EOD;
 		$desc					= html_entity_decode( $photo['description'] );
 		$date					= $photo['dates']['taken'];
 
-		$sizes					= $this->flickr->photos_getSizes( $photo['id'] );
+		$sizes					= $this->flickr->photos_getSizes( $photo_id );
 		if ( fsi_get_options( 'debug_mode' ) ) {
 			print_r($sizes); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 		}
@@ -1023,8 +1024,8 @@ EOD;
 			SELECT m.post_id
 			FROM $wpdb->postmeta m
 			WHERE 1 = 1
-				AND m.meta_key LIKE '_flickr_src'
-				AND m.meta_value LIKE '$src'
+				AND m.meta_key LIKE '_flickr_photo_id'
+				AND m.meta_value LIKE '$photo_id'
 		";
 		$dup					= $wpdb->get_var( $query );
 
@@ -1132,7 +1133,7 @@ EOD;
 			$this->die_json_error_msg( $this->post_id, sprintf( __( 'The originally uploaded image file cannot be found at %s', 'flickr-shortcode-importer' ), esc_html( $filename ) ) );
 
 		// help keep track of what's been imported already
-		update_post_meta( $image_id, '_flickr_src', $src );
+		update_post_meta( $image_id, '_flickr_photo_id', $photo_id );
 
 		if ( true === $mode ) {
 			$metadata			= wp_generate_attachment_metadata( $image_id, $filename );

@@ -241,6 +241,10 @@ if ( !isset($ws_screen_meta_links_versions) ){
 } 
 $ws_screen_meta_links_versions['1.1'] = 'wsScreenMetaLinks11';
 
+endif;
+
+if ( ! function_exists( 'add_screen_meta_link' ) ) :
+
 /**
  * Add a new link to the screen meta area.
  * 

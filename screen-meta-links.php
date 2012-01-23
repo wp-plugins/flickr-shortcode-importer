@@ -243,8 +243,6 @@ $ws_screen_meta_links_versions['1.1'] = 'wsScreenMetaLinks11';
 
 endif;
 
-if ( ! function_exists( 'add_screen_meta_link' ) ) :
-
 /**
  * Add a new link to the screen meta area.
  * 
@@ -268,7 +266,5 @@ function add_screen_meta_link($id, $text, $href, $page, $attributes = null){
 	
 	$instance->add_screen_meta_link($id, $text, $href, $page, $attributes);
 }
-
-endif;
 
 ?>

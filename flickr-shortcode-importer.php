@@ -3,12 +3,12 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.7.6
+Version: 1.7.7
 Author: Michael Cannon
 Author URI: http://typo3vagabond.com/about-typo3-vagabond/
 License: GPL2
 
-Copyright 2011  Michael Cannon  (email : michael@typo3vagabond.com)
+Copyright 2012  Michael Cannon  (email : michael@typo3vagabond.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 // Load dependencies
 require_once( 'lib/inc.flickr.php' );
-require_once( 'class.options.php' );
+require_once( 'flickr-shortcode-importer.settings.php' );
 
 if ( ! function_exists( 'add_screen_meta_link' ) ) {
 	require_once( 'screen-meta-links.php' );
@@ -40,25 +40,26 @@ class Flickr_Shortcode_Importer {
 
 	// Plugin initialization
 	function Flickr_Shortcode_Importer() {
-		if ( ! function_exists( 'admin_url' ) )
-			return false;
-
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's "localization" folder and name it "flickr-shortcode-importer-[value in wp-config].mo"
 		load_plugin_textdomain( 'flickr-shortcode-importer', false, '/flickr-shortcode-importer/languages/' );
 
-		add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueues' ) );
+		$role_enable_post_widget	= fsi_get_options( 'role_enable_post_widget' );
+		if ( current_user_can( $role_enable_post_widget ) ) {
+			add_action( 'add_meta_boxes', array( &$this, 'flickr_import_meta_boxes' ) );
+		}
+
 		add_action( 'wp_ajax_importflickrshortcode', array( &$this, 'ajax_process_shortcode' ) );
-
-		add_filter( 'plugin_action_links', array( &$this, 'add_plugin_action_links' ), 10, 2 );
-
-		add_action( 'add_meta_boxes', array( &$this, 'flickr_import_meta_boxes' ) );
-		
-		$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('Settings', 'flickr-shortcode-importer').'</a>';
         
 		// needed to include has_post_thumbnail code
 		add_theme_support( 'post-thumbnails' );
+
+		if ( function_exists( 'admin_url' ) ) {
+			$this->options_link		= '<a href="'.get_admin_url().'options-general.php?page=fsi-options">'.__('Settings', 'flickr-shortcode-importer').'</a>';
+			add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueues' ) );
+			add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
+			add_filter( 'plugin_action_links', array( &$this, 'add_plugin_action_links' ), 10, 2 );
+		}
 	}
 
 

@@ -70,6 +70,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Flickr API Secret
 
 **Reset/Restore**
+
 * Reimport Flickr Source Images
 * Restore plugin
 

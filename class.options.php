@@ -28,6 +28,7 @@ class FSI_Settings {
 		$this->sections['api']   		= __( 'Flickr API' , 'flickr-shortcode-importer');
 		$this->sections['selection']	= __( 'Posts Selection' , 'flickr-shortcode-importer');
 		$this->sections['testing']		= __( 'Testing Options' , 'flickr-shortcode-importer');
+		$this->sections['posts']		= __( 'Post Options' , 'flickr-shortcode-importer');
 		$this->sections['reset']        = __( 'Reset/Restore' , 'flickr-shortcode-importer');
 		$this->sections['about']        = __( 'About Flickr Shortcode Importer' , 'flickr-shortcode-importer');
 		
@@ -552,6 +553,21 @@ EOD;
 			'section' => 'api'
 		);
 		
+		$this->settings['role_enable_post_widget'] = array(
+			'section' => 'posts',
+			'title'   => __( 'Post [flickr] Import Widget?' , 'flickr-shortcode-importer'),
+			'desc'    => __( 'Minimum role to enable for [flickr] Import widget on posts and page edit screens.' , 'flickr-shortcode-importer'),
+			'type'    => 'select',
+			'std'     => 'level_1',
+			'choices' => array(
+				''			=> 'Disable',
+				'level_10'	=> 'Administrator',
+				'level_7'	=> 'Editor',
+				'level_4'	=> 'Author',
+				'level_1'	=> 'Contributor',
+			)
+		);
+
 		// Here for reference
 		if ( false ) {
 		$this->settings['example_text'] = array(

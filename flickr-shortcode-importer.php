@@ -5,7 +5,7 @@ Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 Version: 1.7.7
 Author: Michael Cannon
-Author URI: http://typo3vagabond.com/about-typo3-vagabond/
+Author URI: http://typo3vagabond.com/about-typo3-vagabond/hire-michael/
 License: GPL2
 
 Copyright 2012  Michael Cannon  (email : michael@typo3vagabond.com)

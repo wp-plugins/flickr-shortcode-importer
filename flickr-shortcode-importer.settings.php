@@ -567,6 +567,26 @@ EOD;
 				'level_1'	=> 'Contributor',
 			)
 		);
+				
+		/* Reset
+		===========================================*/
+		
+		$this->settings['force_reimport'] = array(
+			'section' => 'reset',
+			'title'   => __( 'Reimport Flickr Source Images' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0,
+			'desc'    => __( 'Needed when changing the Flickr image import size from prior imports.' , 'flickr-shortcode-importer')
+		);
+		
+		$this->settings['reset_plugin'] = array(
+			'section' => 'reset',
+			'title'   => __( 'Reset plugin' , 'flickr-shortcode-importer'),
+			'type'    => 'checkbox',
+			'std'     => 0,
+			'class'   => 'warning', // Custom class for CSS
+			'desc'    => __( 'Check this box and click "Save Changes" below to reset plugin options to their defaults.' , 'flickr-shortcode-importer')
+		);
 
 		// Here for reference
 		if ( false ) {
@@ -627,54 +647,6 @@ EOD;
 			)
 		);
 		}
-		
-		/* Appearance
-		===========================================*/
-		
-		$this->settings['header_logo'] = array(
-			'section' => 'appearance',
-			'title'   => __( 'Header Logo' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Enter the URL to your logo for the plugin header.' , 'flickr-shortcode-importer'),
-			'type'    => 'text',
-			'std'     => ''
-		);
-		
-		$this->settings['favicon'] = array(
-			'section' => 'appearance',
-			'title'   => __( 'Favicon' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Enter the URL to your custom favicon. It should be 16x16 pixels in size.' , 'flickr-shortcode-importer'),
-			'type'    => 'text',
-			'std'     => ''
-		);
-		
-		$this->settings['custom_css'] = array(
-			'title'   => __( 'Custom Styles' , 'flickr-shortcode-importer'),
-			'desc'    => __( 'Enter any custom CSS here to apply it to your plugin.' , 'flickr-shortcode-importer'),
-			'std'     => '',
-			'type'    => 'textarea',
-			'section' => 'appearance',
-			'class'   => 'code'
-		);
-				
-		/* Reset
-		===========================================*/
-		
-		$this->settings['force_reimport'] = array(
-			'section' => 'reset',
-			'title'   => __( 'Reimport Flickr Source Images' , 'flickr-shortcode-importer'),
-			'type'    => 'checkbox',
-			'std'     => 0,
-			'desc'    => __( 'Needed when changing the Flickr image import size from prior imports.' , 'flickr-shortcode-importer')
-		);
-		
-		$this->settings['reset_plugin'] = array(
-			'section' => 'reset',
-			'title'   => __( 'Reset plugin' , 'flickr-shortcode-importer'),
-			'type'    => 'checkbox',
-			'std'     => 0,
-			'class'   => 'warning', // Custom class for CSS
-			'desc'    => __( 'Check this box and click "Save Changes" below to reset plugin options to their defaults.' , 'flickr-shortcode-importer')
-		);
 		
 	}
 	

@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 // Load dependencies
 require_once( 'lib/inc.flickr.php' );
-require_once( 'flickr-shortcode-importer.settings.php' );
+require_once( 'settings.flickr-shortcode-importer.php' );
 
 if ( ! function_exists( 'add_screen_meta_link' ) ) {
 	require_once( 'screen-meta-links.php' );

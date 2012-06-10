@@ -98,6 +98,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Using your own Flickr API Key might be necessary. Test a single import and see the results before setting your own.
 
 = Thank You =
+* Thank you for tobylewis for his file_get_contents_curl and custom post types contributions.
 * A big thank you to Željko Aščić of http://www.touristplayground.com/ for feedback and ideas.
 * Initial code is modeled after Viper007Bond's class based Regenerate Thumbnails plugin. The AJAX status and single auto-submission operations were a big help.
 * [flickr] shortcode handling code copied from Trent Gardner's very fine Flickr Manager plugin.
@@ -139,6 +140,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 == Changelog ==
 = trunk =
 -
+
+= 1.7.8 =
+* file_get_contents alternate using curl
+* Custom post type support
 
 = 1.7.7 =
 * Post [flickr] Import Widget? - Thank you Roy Halpin for the idea

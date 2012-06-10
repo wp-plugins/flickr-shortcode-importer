@@ -983,7 +983,7 @@ EOD;
 			// Flickr saves images as jpg
 			$ext				= '.jpg';
 
-			if ( fsi_get_options( 'replace_file_name' ) ) {
+			if ( ! empty( $title ) && fsi_get_options( 'replace_file_name' ) ) {
 				$file				= preg_replace( '#[^\w]#', '-', $title );
 				$file				= preg_replace( '#-{2,}#', '-', $file );
 				$file				.= $ext;
@@ -1096,7 +1096,7 @@ EOD;
 			print_r($desc); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 		}
 
-		$file_move				= wp_upload_bits( $file, null, file_get_contents( $src ) );
+		$file_move				= wp_upload_bits( $file, null, $this->file_get_contents_curl( $src ) );
 		$filename				= $file_move['file'];
 
 		if ( fsi_get_options( 'debug_mode' ) ) {
@@ -1157,6 +1157,24 @@ EOD;
 		}
 
 		return $image_id;
+	}
+
+
+	// Thank you Tobylewis
+	// http://wordpress.org/support/topic/plugin-flickr-shortcode-importer-file_get_contents-with-url-isp-does-not-support?replies=2#post-2878241
+	function file_get_contents_curl( $url ) {
+		$ch						= curl_init();
+
+		curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
+		curl_setopt( $ch, CURLOPT_HEADER, 0 );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_URL, $url );
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+
+		$data					= curl_exec( $ch );
+		curl_close( $ch );
+
+		return $data;
 	}
 
 

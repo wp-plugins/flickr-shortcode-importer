@@ -568,6 +568,17 @@ EOD;
 			)
 		);
 				
+		$post_types				= get_post_types( array( 'public' => true ), 'objects' );
+		foreach( $post_types as $post_type => $ptype_obj ) {
+			$this->settings[ 'enable_post_widget_' . $post_type ] = array(
+				'section' => 'posts',
+				'title'   => __( 'Enable for ' . $ptype_obj->labels->name, 'flickr-shortcode-importer'),
+				'desc'    => __( '' , 'flickr-shortcode-importer'),
+ 				'type'    => 'checkbox',
+				'std'     => ( 'attachment' != $post_type ) ? 1 : 0,
+			);
+		}
+
 		/* Reset
 		===========================================*/
 		

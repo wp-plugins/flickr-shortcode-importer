@@ -4,7 +4,7 @@ Donate link: http://typo3vagabond.com/about-typo3-vagabond/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.0.0
 Tested up to: 3.3
-Stable tag: 1.7.8
+Stable tag: 1.7.9
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -63,6 +63,10 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 **Post Options**
 
 * Post [flickr] Import Widget?
+* Enable for Pages
+* Enable for Posts
+* Enable for Media
+* Enable for custom post types - if any
 
 **Flickr API**
 
@@ -140,6 +144,10 @@ Is your disk quota large enough? See Warnings in Description for help.
 == Changelog ==
 = trunk =
 -
+
+= 1.7.9 =
+* Support custom post types
+* Revise admin_init to init with is_admin check
 
 = 1.7.8 =
 * Use admin_init

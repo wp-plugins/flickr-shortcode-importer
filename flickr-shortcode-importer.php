@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.7.8
+Version: 1.7.9
 Author: Michael Cannon
 Author URI: http://typo3vagabond.com/about-typo3-vagabond/hire-michael/
 License: GPL2
@@ -37,6 +37,7 @@ class Flickr_Shortcode_Importer {
 	var $menu_id;
 	var $flickr_id				= false;
 	var $flickset_id			= false;
+	var $post_types				= null;
 
 	// Plugin initialization
 	function Flickr_Shortcode_Importer() {
@@ -64,8 +65,13 @@ class Flickr_Shortcode_Importer {
 
 
 	function flickr_import_meta_boxes() {
-		add_meta_box( 'flickr_import', __( '[flickr] Importer', 'flickr-shortcode-importer' ), array( &$this, 'post_flickr_import_meta_box' ), 'page', 'side' );
-		add_meta_box( 'flickr_import', __( '[flickr] Importer', 'flickr-shortcode-importer' ), array( &$this, 'post_flickr_import_meta_box' ), 'post', 'side' );
+		$this->post_types		= get_post_types( array( 'public' => true ), 'names' );
+
+		foreach( $this->post_types AS $post_type ) {
+			if ( fsi_get_options( 'enable_post_widget_' . $post_type ) ) {
+				add_meta_box( 'flickr_import', __( '[flickr] Importer', 'flickr-shortcode-importer' ), array( &$this, 'post_flickr_import_meta_box' ), $post_type, 'side' );
+			}
+		}
 	}
 
 
@@ -173,13 +179,13 @@ EOD;
 					SELECT ID
 					FROM $wpdb->posts
 					WHERE 1 = 1
-					AND ( post_type = 'post' OR post_type = 'page' )
-					AND post_parent = 0
-					AND (
-						post_content LIKE '%[flickr %'
-						OR post_content LIKE '%[flickrset %'
-						$flickr_source_where
-					)
+						AND post_type IN ('" . implode( "','", $this->post_types ) . "')
+						AND post_parent = 0
+						AND (
+							post_content LIKE '%[flickr %'
+							OR post_content LIKE '%[flickrset %'
+							$flickr_source_where
+						)
 					";
 
 				$include_ids		= fsi_get_options( 'posts_to_import' );
@@ -481,8 +487,10 @@ EOD;
 	function process_flickr_shortcode( $post_id ) {
 		$this->post_id			= (int) $post_id;
 		$post					= get_post( $this->post_id );
-
-		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) )  )
+		
+		if ( is_null( $this->post_types ) )
+			$this->post_types	= get_post_types( array( 'public' => true ), 'names' );
+		if ( ! $post || ! in_array( $post->post_type, $this->post_types )  )
 			return;
 
 		if ( fsi_get_options( 'import_flickr_sourced_tags' ) ) {
@@ -490,7 +498,7 @@ EOD;
 			$post				= get_post( $this->post_id );
 		}
 
-		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) ) || ! stristr( $post->post_content, '[flickr' ) )
+		if ( ! $post || ! in_array( $post->post_type, $this->post_types ) || ! stristr( $post->post_content, '[flickr' ) )
 			return;
 
 	   	$this->_process_shortcode( $post );
@@ -507,7 +515,7 @@ EOD;
 
 		$post					= get_post( $this->post_id );
 
-		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) )  )
+		if ( ! $post || ! in_array( $post->post_type, $this->post_types )  )
 			return;
 
 		if ( fsi_get_options( 'import_flickr_sourced_tags' ) ) {
@@ -515,7 +523,7 @@ EOD;
 			$post				= get_post( $this->post_id );
 		}
 
-		if ( ! $post || ! in_array( $post->post_type, array( 'post', 'page' ) ) || ! stristr( $post->post_content, '[flickr' ) )
+		if ( ! $post || ! in_array( $post->post_type, $this->post_types ) || ! stristr( $post->post_content, '[flickr' ) )
 			die( json_encode( array( 'error' => sprintf( __( "Failed import: %s doesn't contain [flickr].", 'flickr-shortcode-importer' ), esc_html( $_REQUEST['id'] ) ) ) ) );
 		
 	   	$this->_process_shortcode( $post );
@@ -1162,6 +1170,7 @@ EOD;
 
 	// Thank you Tobylewis
 	// http://wordpress.org/support/topic/plugin-flickr-shortcode-importer-file_get_contents-with-url-isp-does-not-support?replies=2#post-2878241
+	// file_get_contents support on some shared systems is turned off
 	function file_get_contents_curl( $url ) {
 		$ch						= curl_init();
 
@@ -1250,11 +1259,14 @@ EOD;
 
 // Start up this plugin
 function Flickr_Shortcode_Importer() {
+	if ( ! is_admin() )
+		return;
+
 	global $Flickr_Shortcode_Importer;
 	$Flickr_Shortcode_Importer	= new Flickr_Shortcode_Importer();
 }
 
-add_action( 'admin_init', 'Flickr_Shortcode_Importer' );
+add_action( 'init', 'Flickr_Shortcode_Importer' );
 
 
 function fsi_save_post( $post_id ) {

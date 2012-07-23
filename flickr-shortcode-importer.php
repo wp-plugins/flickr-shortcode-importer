@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.7.9
+Version: 1.7.10
 Author: Michael Cannon
 Author URI: http://typo3vagabond.com/about-typo3-vagabond/hire-michael/
 License: GPL2
@@ -173,6 +173,9 @@ class Flickr_Shortcode_Importer {
 						)
 EOD;
 				}
+				
+				if ( is_null( $this->post_types ) )
+					$this->post_types	= get_post_types( array( 'public' => true ), 'names' );
 
 				// Directly querying the database is normally frowned upon, but all of the API functions will return the full post objects which will suck up lots of memory. This is best, just not as future proof.
 				$query			= "

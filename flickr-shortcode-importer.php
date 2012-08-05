@@ -3,7 +3,7 @@
 Plugin Name: Flickr Shortcode Importer
 Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
-Version: 1.7.10
+Version: 1.7.11
 Author: Michael Cannon
 Author URI: http://typo3vagabond.com/about-typo3-vagabond/hire-michael/
 License: GPL2
@@ -45,7 +45,10 @@ class Flickr_Shortcode_Importer {
 		// Place it in this plugin's "localization" folder and name it "flickr-shortcode-importer-[value in wp-config].mo"
 		load_plugin_textdomain( 'flickr-shortcode-importer', false, '/flickr-shortcode-importer/languages/' );
 
+		$this->flickr_import_post_types();
+
 		$role_enable_post_widget	= fsi_get_options( 'role_enable_post_widget' );
+
 		if ( current_user_can( $role_enable_post_widget ) ) {
 			add_action( 'add_meta_boxes', array( &$this, 'flickr_import_meta_boxes' ) );
 		}
@@ -64,9 +67,17 @@ class Flickr_Shortcode_Importer {
 	}
 
 
-	function flickr_import_meta_boxes() {
-		$this->post_types		= get_post_types( array( 'public' => true ), 'names' );
+	function flickr_import_post_types() {
+		$post_types				= get_post_types( array( 'public' => true ), 'names' );
+		$this->post_types		= array();
 
+		foreach( $post_types AS $post_type ) {
+			$this->post_types[]	= $post_type;
+		}
+	}
+
+
+	function flickr_import_meta_boxes() {
 		foreach( $this->post_types AS $post_type ) {
 			if ( fsi_get_options( 'enable_post_widget_' . $post_type ) ) {
 				add_meta_box( 'flickr_import', __( '[flickr] Importer', 'flickr-shortcode-importer' ), array( &$this, 'post_flickr_import_meta_box' ), $post_type, 'side' );
@@ -151,6 +162,8 @@ class Flickr_Shortcode_Importer {
 				$this->post_id		= $post_id;
 				$this->ajax_process_shortcode();
 			}
+
+			exit( __LINE__ . ':' . basename( __FILE__ ) . " DONE<br />\n" );	
 		}
 
 		// If the button was clicked
@@ -174,9 +187,6 @@ class Flickr_Shortcode_Importer {
 EOD;
 				}
 				
-				if ( is_null( $this->post_types ) )
-					$this->post_types	= get_post_types( array( 'public' => true ), 'names' );
-
 				// Directly querying the database is normally frowned upon, but all of the API functions will return the full post objects which will suck up lots of memory. This is best, just not as future proof.
 				$query			= "
 					SELECT ID
@@ -491,8 +501,6 @@ EOD;
 		$this->post_id			= (int) $post_id;
 		$post					= get_post( $this->post_id );
 		
-		if ( is_null( $this->post_types ) )
-			$this->post_types	= get_post_types( array( 'public' => true ), 'names' );
 		if ( ! $post || ! in_array( $post->post_type, $this->post_types )  )
 			return;
 
@@ -514,6 +522,8 @@ EOD;
 			error_reporting( 0 ); // Don't break the JSON result
 			header( 'Content-type: application/json' );
 			$this->post_id		= (int) $_REQUEST['id'];
+		} else {
+			print_r($this->post_id); echo "\n<br />"; echo '' . __LINE__ . ':' . basename( __FILE__ )  . "\n<br />";	
 		}
 
 		$post					= get_post( $this->post_id );
@@ -703,11 +713,15 @@ EOD;
 			print_r($photos); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 		}
 
-		set_time_limit( 120 * count( $photos ) );
-		
-		foreach( $photos as $entry ) {
-			$args['id']			= $entry['id'];
-			$this->shortcode_flickr( $args );
+		if ( ! empty( $photos ) ) {
+			set_time_limit( 120 * count( $photos ) );
+			
+			foreach( $photos as $entry ) {
+				$args['id']		= $entry['id'];
+				$this->shortcode_flickr( $args );
+			}
+		} elseif ( fsi_get_options( 'debug_mode' ) ) {
+			echo 'No photos found to import<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
 		}
 		
 		$markup					= '[gallery]';
@@ -1045,9 +1059,12 @@ EOD;
 		$dup					= $wpdb->get_var( $query );
 
 		if ( $dup && fsi_get_options( 'force_reimport' ) ) {
-			print_r('force_reimport'); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-			print_r($dup); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
-			print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			if ( fsi_get_options( 'debug_mode' ) ) {
+				print_r('force_reimport'); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+				print_r($dup); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+				print_r($src); echo '<br />'; echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';	
+			}
+
 			// delete prior import
 			wp_delete_attachment( $dup, true );
 			$dup				= false;

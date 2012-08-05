@@ -4,7 +4,7 @@ Donate link: http://typo3vagabond.com/about-typo3-vagabond/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.0.0
 Tested up to: 3.4.1
-Stable tag: 1.7.10
+Stable tag: 1.7.11
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -144,6 +144,11 @@ Is your disk quota large enough? See Warnings in Description for help.
 == Changelog ==
 = trunk =
 -
+
+= 1.7.11 =
+* Init internal post_types
+* Debug import routine via [ponyandmeow.com](http://ponyandmeow.com/)
+* Detect for no photos in flickrset
 
 = 1.7.10 =
 * Post type value bug fix

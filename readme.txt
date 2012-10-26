@@ -143,6 +143,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Remove in2code reference
 -
 
 = 1.7.11 =

@@ -3,8 +3,8 @@ Contributors: comprock
 Donate link: http://aihr.us/about-aihrus/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.0.0
-Tested up to: 3.4.1
-Stable tag: 1.7.11
+Tested up to: 3.5.0
+Stable tag: 1.8.0
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -145,6 +145,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 = trunk =
 * TBD
 
+= 1.8.0 =
 * Aihrus branding
 * `fsi_save_post` condition check
 * Remove in2code reference

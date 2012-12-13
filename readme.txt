@@ -1,6 +1,6 @@
 === Flickr Shortcode Importer ===
 Contributors: comprock
-Donate link: http://typo3vagabond.com/about-typo3-vagabond/donate/
+Donate link: http://aihr.us/about-aihrus/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.0.0
 Tested up to: 3.4.1
@@ -116,7 +116,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 
 == Frequently Asked Questions ==
 = Can I sponsor changes? =
-Yes. Any sponsoring would be greatly welcome. Please [donate](http://typo3vagabond.com/about-typo3-vagabond/donate/ "Help sponsor Flickr Shortcode Importer") and let me know what's wanted
+Yes. Any sponsoring would be greatly welcome. Please [donate](http://aihr.us/about-aihrus/donate/ "Help sponsor Flickr Shortcode Importer") and let me know what's wanted
 
 = Help, it doesn't work =
 Please leave a forum entry detailing exactly what error message you received, whether or not you attempted and succeeded with a 1 item import, a copy of post content and any other steps needed to replicate your troubles. Don't forget the WP and PHP versions.
@@ -143,8 +143,11 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* TBD
+
+* Aihrus branding
+* `fsi_save_post` condition check
 * Remove in2code reference
--
 
 = 1.7.11 =
 * Init internal post_types

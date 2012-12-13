@@ -5,10 +5,10 @@ Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
 Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 Version: 1.7.11
 Author: Michael Cannon
-Author URI: http://typo3vagabond.com/about-typo3-vagabond/hire-michael/
+Author URI: http://aihr.us/about-aihrus/michael-cannons-resume/
 License: GPL2
 
-Copyright 2012  Michael Cannon  (email : michael@typo3vagabond.com)
+Copyright 2012  Michael Cannon  (email : mc@aihr.us)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
@@ -1223,7 +1223,7 @@ EOD;
 	 * Returns string of a filename or string converted to a spaced extension
 	 * less header type string.
 	 *
-	 * @author Michael Cannon <michael@typo3vagabond.com>
+	 * @author Michael Cannon <mc@aihr.us>
 	 * @param string filename or arbitrary text
 	 * @return mixed string/boolean
 	 */
@@ -1296,6 +1296,9 @@ function fsi_save_post( $post_id ) {
 		return;
 
 	if ( ! is_numeric( $post_id ) )
+		return;
+
+	if ( empty( $_POST['flickr-shortcode-importer'] ) )
 		return;
 
 	// check that post is wanting the flickr codes imported

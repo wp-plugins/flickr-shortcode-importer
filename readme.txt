@@ -143,7 +143,8 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
-* TBD
+* Copyright year update
+* TODO Add media ids to gallery shortcode insertion
 
 = 1.8.0 =
 * Aihrus branding
@@ -394,3 +395,4 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == TODO ==
 * Add estimated time remaining notice
+* Add media ids to gallery shortcode insertion

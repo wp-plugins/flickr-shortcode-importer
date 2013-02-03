@@ -4,7 +4,7 @@ Donate link: http://aihr.us/about-aihrus/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.0.0
 Tested up to: 3.5.0
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 
 Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
 
@@ -143,8 +143,12 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+
+= 1.8.1 =
+* Author URL update
 * Copyright year update
 * TODO Add media ids to gallery shortcode insertion
+* Update POT
 
 = 1.8.0 =
 * Aihrus branding

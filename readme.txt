@@ -143,6 +143,7 @@ Is your disk quota large enough? See Warnings in Description for help.
 
 == Changelog ==
 = trunk =
+* Update POT
 
 = 1.8.1 =
 * Author URL update

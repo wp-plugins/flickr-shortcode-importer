@@ -834,7 +834,7 @@ EOD;
 					$markup			.= '<span class="'. $wrap_class . '">';
 				}
 
-				$attribution_text	= fsi_get_options( 'flickr_image_attribution_text', __( 'Photo by ' , 'flickr-shortcode-importer') );
+				$attribution_text	= fsi_get_options( 'flickr_image_attribution_text', __( 'Photo by ', 'flickr-shortcode-importer' ) );
 				$markup			.= $attribution_text;
 
 				$attribution_link	= '<a href="' . $photo['urls']['url'][0]['_content'];
@@ -1091,7 +1091,7 @@ EOD;
 		}
 
 		if ( fsi_get_options( 'flickr_link_in_desc' ) ) {
-			$desc				.= "\n" . fsi_get_options( 'flickr_link_text', __( 'Photo by ' , 'flickr-shortcode-importer') );
+			$desc				.= "\n" . fsi_get_options( 'flickr_link_text', __( 'Photo by ', 'flickr-shortcode-importer' ) );
 			$link				= '<a href="' . $photo['urls']['url'][0]['_content'];
 
 			if( $this->flickset_id ) {
@@ -1108,7 +1108,7 @@ EOD;
 			// <photo id="2733" secret="123456" server="12" isfavorite="0" license="3"
 			// no license All rights reserved, any license Some rights reserved
 			$license			= $photo['license'];
-			$desc				.= "\n" . fsi_get_options( 'flickr_image_license_text', __( 'License ' , 'flickr-shortcode-importer') );
+			$desc				.= "\n" . fsi_get_options( 'flickr_image_license_text', __( 'License ', 'flickr-shortcode-importer' ) );
 			if ( $license ) {
 				$link				= '<a href="' . $this->licenses[$license]['url'];
 				$link				.= '" title="' . $this->licenses[$license]['name'];

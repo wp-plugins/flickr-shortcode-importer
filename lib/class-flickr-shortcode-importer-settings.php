@@ -49,9 +49,9 @@ class Flickr_Shortcode_Importer_Settings {
 
 
 	public function __construct() {
-		add_action( 'admin_init', array( &$this, 'admin_init' ) );
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-		add_action( 'init', array( &$this, 'init' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'init', array( $this, 'init' ) );
 		load_plugin_textdomain( 'flickr-shortcode-importer', false, '/flickr-shortcode-importer/languages/' );
 	}
 
@@ -444,8 +444,8 @@ class Flickr_Shortcode_Importer_Settings {
 	public function admin_menu() {
 		$admin_page = add_options_page( esc_html__( 'Flickr Shortcode Importer Settings', 'flickr-shortcode-importer' ), esc_html__( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ), 'manage_options', self::ID, array( 'Flickr_Shortcode_Importer_Settings', 'display_page' ) );
 
-		add_action( 'admin_print_scripts-' . $admin_page, array( &$this, 'scripts' ) );
-		add_action( 'admin_print_styles-' . $admin_page, array( &$this, 'styles' ) );
+		add_action( 'admin_print_scripts-' . $admin_page, array( $this, 'scripts' ) );
+		add_action( 'admin_print_styles-' . $admin_page, array( $this, 'styles' ) );
 
 		add_screen_meta_link(
 			'fsi-importer-link',
@@ -480,7 +480,7 @@ class Flickr_Shortcode_Importer_Settings {
 
 		self::$defaults[$id] = $std;
 
-		add_settings_field( $id, $title, array( &$this, 'display_setting' ), self::ID, $section, $field_args );
+		add_settings_field( $id, $title, array( $this, 'display_setting' ), self::ID, $section, $field_args );
 	}
 
 
@@ -567,7 +567,7 @@ class Flickr_Shortcode_Importer_Settings {
 	public function display_about_section() {
 		echo '
 			<div id="about" style="width: 70%; min-height: 225px;">
-				<p><img class="alignright size-medium" title="Michael in Red Square, Moscow, Russia" src="' . WP_PLUGIN_URL . '/flickr-shortcode-importer/media/michael-cannon-red-square-300x2251.jpg" alt="Michael in Red Square, Moscow, Russia" width="300" height="225" /><a href="http://wordpress.org/extend/plugins/flickr-shortcode-importer/">Flickr Shortcode Importer</a> is by <a href="http://aihr.us/about-aihrus/michael-cannon-resume/">Michael Cannon</a>. He\'s <a title="Lot\'s of stuff about Peichi Liu…" href="http://peimic.com/t/peichi-liu/">Peichi’s</a> smiling man, an adventurous <a title="Water rat" href="http://www.chinesehoroscope.org/chinese_zodiac/rat/" target="_blank">water-rat</a>, <a title="Axelerant – Open Source. Engineered." href="http://axelerant.com/who-we-are">chief people officer</a>, <a title="Aihrus – website support made easy since 1999" href="http://aihr.us/about-aihrus/">chief technology officer</a>, <a title="Road biker, cyclist, biking; whatever you call, I love to ride" href="http://peimic.com/c/biking/">cyclist</a>, <a title="Michael\'s poetic like literary ramblings" href="http://peimic.com/t/poetry/">poet</a>, <a title="World Wide Opportunities on Organic Farms" href="http://peimic.com/t/WWOOF/">WWOOF’er</a> and <a title="My traveled to country list, is more than my age." href="http://peimic.com/c/travel/">world traveler</a>.</p>
+				<p><img class="alignright size-medium" title="Michael in Red Square, Moscow, Russia" src="' . WP_PLUGIN_URL . '/flickr-shortcode-importer/media/michael-cannon-red-square-300x2251.jpg" alt="Michael in Red Square, Moscow, Russia" width="300" height="225" /><a href="http://wordpress.org/extend/plugins/flickr-shortcode-importer/">Flickr Shortcode Importer</a> is by <a href="http://aihr.us/about-aihrus/michael-cannon-resume/">Michael Cannon</a>. He\'s <a title="Lot\'s of stuff about Peichi Liu…" href="http://peimic.com/t/peichi-liu/">Peichi’s</a> smiling man, an adventurous <a title="Water rat" href="http://www.chinesehoroscope.org/chinese_zodiac/rat/" target="_blank">water-rat</a>, <a title="Axelerant – Open Source. Engineered." href="http://axelerant.com/who-we-are">chief people officer</a>, <a title="Road biker, cyclist, biking; whatever you call, I love to ride" href="http://peimic.com/c/biking/">cyclist</a>, <a title="Aihrus – website support made easy since 1999" href="http://aihr.us/about-aihrus/">full stack developer</a>, <a title="Michael\'s poetic like literary ramblings" href="http://peimic.com/t/poetry/">poet</a>, <a title="World Wide Opportunities on Organic Farms" href="http://peimic.com/t/WWOOF/">WWOOF’er</a> and <a title="My traveled to country list, is more than my age." href="http://peimic.com/c/travel/">world traveler</a>.</p>
 			</div>
 		';
 	}
@@ -713,13 +713,13 @@ class Flickr_Shortcode_Importer_Settings {
 
 
 	public function register_settings() {
-		register_setting( self::ID, self::ID, array( &$this, 'validate_settings' ) );
+		register_setting( self::ID, self::ID, array( $this, 'validate_settings' ) );
 
 		foreach ( self::$sections as $slug => $title ) {
 			if ( $slug == 'about' )
-				add_settings_section( $slug, $title, array( &$this, 'display_about_section' ), self::ID );
+				add_settings_section( $slug, $title, array( $this, 'display_about_section' ), self::ID );
 			else
-				add_settings_section( $slug, $title, array( &$this, 'display_section' ), self::ID );
+				add_settings_section( $slug, $title, array( $this, 'display_section' ), self::ID );
 		}
 
 		foreach ( self::$settings as $id => $setting ) {
@@ -735,7 +735,10 @@ class Flickr_Shortcode_Importer_Settings {
 
 
 	public function styles() {
-		wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+		if ( ! is_ssl() )
+			wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+		else
+			wp_enqueue_style( 'jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 	}
 
 

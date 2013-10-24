@@ -2,6 +2,16 @@
 
 ## master
 
+## 2.0.1
+* Add media ids to gallery shortcode insertion
+* Add screenshot 14. Imported [flickr-gallery] photoset as [gallery] with media ids
+* Change $2 donation request to $5
+* Revise ci rules
+* Travis ignore WordPress.WhiteSpace.ControlStructureSpacing - false positives
+* Update &$this to $this
+* Update bio
+* Use https jQuery transport
+
 ## 2.0.0
 * Add setting options for Flickr User ID and Images Per Page
 * Coding standards updates

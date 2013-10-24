@@ -3,7 +3,7 @@
  * Plugin Name: Flickr Shortcode Importer
  * Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
  * Description: Imports [flickr], [flickrset], [flickr-gallery] shortcode and Flickr-sourced A/IMG tagged media into the Media Library.
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author: Michael Cannon
  * Author URI: http://aihr.us/about-aihrus/michael-cannon-resume/
  * License: GPLv2 or later
@@ -26,22 +26,23 @@
 class Flickr_Shortcode_Importer {
 	const ID          = 'flickr-shortcode-importer';
 	const PLUGIN_FILE = 'flickr-shortcode-importer/flickr-shortcode-importer.php';
-	const VERSION     = '2.0.0';
+	const VERSION     = '2.0.1';
 
 	private static $base = null;
 
 	public static $donate_button = '';
 	public static $flickr_id     = false;
 	public static $flickset_id   = false;
+	public static $media_ids     = array();
 	public static $menu_id       = null;
 	public static $post_types    = null;
 	public static $settings_link = '';
 
 
 	public function __construct() {
-		add_action( 'admin_init', array( &$this, 'admin_init' ) );
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-		add_action( 'init', array( &$this, 'init' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'init', array( $this, 'init' ) );
 		self::$base = plugin_basename( __FILE__ );
 	}
 
@@ -49,11 +50,11 @@ class Flickr_Shortcode_Importer {
 	public function admin_init() {
 		$role_enable = fsi_get_option( 'role_enable_post_widget' );
 		if ( ! empty( $role_enable ) && current_user_can( $role_enable ) )
-			add_action( 'add_meta_boxes', array( &$this, 'flickr_import_meta_boxes' ) );
+			add_action( 'add_meta_boxes', array( $this, 'flickr_import_meta_boxes' ) );
 
 		$this->update();
-		add_filter( 'plugin_action_links', array( &$this, 'plugin_action_links' ), 10, 2 );
-		add_filter( 'plugin_row_meta', array( &$this, 'plugin_row_meta' ), 10, 2 );
+		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
+		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 		add_theme_support( 'post-thumbnails' );
 		self::$settings_link = '<a href="' . get_admin_url() . 'options-general.php?page=' . Flickr_Shortcode_Importer_Settings::ID . '">' . esc_html__( 'Settings', 'flickr-shortcode-importer' ) . '</a>';
 	}
@@ -72,7 +73,7 @@ class Flickr_Shortcode_Importer {
 		}
 
 		$this->flickr_import_post_types();
-		add_action( 'wp_ajax_ajax_process_shortcode', array( &$this, 'ajax_process_shortcode' ) );
+		add_action( 'wp_ajax_ajax_process_shortcode', array( $this, 'ajax_process_shortcode' ) );
 		load_plugin_textdomain( self::ID, false, 'flickr-shortcode-importer/languages' );
 		self::$donate_button = <<<EOD
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -98,10 +99,10 @@ EOD;
 
 
 	public function admin_menu() {
-		self::$menu_id = add_management_page( esc_html__( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ), esc_html__( '[flickr] Importer', 'flickr-shortcode-importer' ), 'manage_options', 'flickr-shortcode-importer', array( &$this, 'user_interface' ) );
+		self::$menu_id = add_management_page( esc_html__( 'Flickr Shortcode Importer', 'flickr-shortcode-importer' ), esc_html__( '[flickr] Importer', 'flickr-shortcode-importer' ), 'manage_options', 'flickr-shortcode-importer', array( $this, 'user_interface' ) );
 
-		add_action( 'admin_print_scripts-' . self::$menu_id, array( &$this, 'scripts' ) );
-		add_action( 'admin_print_styles-' . self::$menu_id, array( &$this, 'styles' ) );
+		add_action( 'admin_print_scripts-' . self::$menu_id, array( $this, 'scripts' ) );
+		add_action( 'admin_print_styles-' . self::$menu_id, array( $this, 'styles' ) );
 
 		add_screen_meta_link(
 			'fsi-settings-link',
@@ -155,7 +156,7 @@ EOD;
 
 
 	public function admin_notices_0_0_1() {
-		$content  = '<div class="updated"><p>';
+		$content  = '<div class="updated fade"><p>';
 		$content .= sprintf( __( 'If your Flickr Shortcode Importer display has gone to funky town, please <a href="%s">read the FAQ</a> about possible CSS fixes.', 'flickr-shortcode-importer' ), 'https://aihrus.zendesk.com/entries/23722573-Major-Changes-Since-2-10-0' );
 		$content .= '</p></div>';
 
@@ -164,8 +165,8 @@ EOD;
 
 
 	public function admin_notices_donate() {
-		$content  = '<div class="updated"><p>';
-		$content .= sprintf( esc_html__( 'Please donate $2 towards development and support of this Flickr Shortcode Importer plugin. %s', 'flickr-shortcode-importer' ), self::$donate_button );
+		$content  = '<div class="updated fade"><p>';
+		$content .= sprintf( esc_html__( 'Please donate $5 towards development and support of this Flickr Shortcode Importer plugin. %s', 'flickr-shortcode-importer' ), self::$donate_button );
 		$content .= '</p></div>';
 
 		echo $content;
@@ -212,7 +213,7 @@ EOD;
 	public function flickr_import_meta_boxes() {
 		foreach ( self::$post_types as $post_type ) {
 			if ( fsi_get_option( 'enable_post_widget_' . $post_type ) )
-				add_meta_box( 'flickr_import', esc_html__( '[flickr] Importer', 'flickr-shortcode-importer' ), array( &$this, 'post_flickr_import_meta_box' ), $post_type, 'side' );
+				add_meta_box( 'flickr_import', esc_html__( '[flickr] Importer', 'flickr-shortcode-importer' ), array( $this, 'post_flickr_import_meta_box' ), $post_type, 'side' );
 		}
 	}
 
@@ -589,7 +590,7 @@ EOD;
 
 	<p><?php printf( esc_html__( 'Please review your %s before proceeding.', 'flickr-shortcode-importer' ), self::$settings_link ); ?></p>
 
-	<p><?php _e( 'To begin, just press the button below.', 'flickr-shortcode-importer ', 'flickr-shortcode-importer' ); ?></p>
+	<p><?php _e( 'To begin, just press the button below.', 'flickr-shortcode-importer' ); ?></p>
 
 	<p><input type="submit" class="button hide-if-no-js" name="flickr-shortcode-importer" id="flickr-shortcode-importer" value="<?php _e( 'Import Flickr Shortcode', 'flickr-shortcode-importer' ) ?>" /></p>
 
@@ -671,9 +672,9 @@ EOD;
 
 		// only use our shortcode handlers to prevent messing up post content
 		remove_all_shortcodes();
-		add_shortcode( 'flickr-gallery', array( &$this, 'shortcode_flickr_gallery' ) );
-		add_shortcode( 'flickr', array( &$this, 'shortcode_flickr' ) );
-		add_shortcode( 'flickrset', array( &$this, 'shortcode_flickrset' ) );
+		add_shortcode( 'flickr-gallery', array( $this, 'shortcode_flickr_gallery' ) );
+		add_shortcode( 'flickr', array( $this, 'shortcode_flickr' ) );
+		add_shortcode( 'flickrset', array( $this, 'shortcode_flickrset' ) );
 
 		// Don't overwrite Featured Images
 		$this->featured_id = false;
@@ -744,6 +745,8 @@ EOD;
 
 	// process each [flickr-gallery] entry from plugin flickr-gallery
 	public function shortcode_flickr_gallery( $args ) {
+		self::$media_ids = array();
+
 		// attributes for passing to flickr directly
 		$attr = $args;
 		unset( $attr['mode'] );
@@ -798,7 +801,11 @@ EOD;
 			echo '' . __LINE__ . ':' . basename( __FILE__ )  . '<br />';
 		}
 
-		$markup            = '[gallery]';
+		if ( empty( self::$media_ids ) )
+			$markup = '[gallery]';
+		else
+			$markup = '[gallery ids="' . implode( ',', self::$media_ids ) . '"]';
+
 		$this->flickset_id = false;
 
 		return $markup;
@@ -807,6 +814,8 @@ EOD;
 
 	// process each [flickrset] entry
 	public function shortcode_flickrset( $args ) {
+		self::$media_ids = array();
+
 		$this->flickset_id = $args['id'];
 		$import_limit      = ( $args['photos'] ) ? $args['photos'] : -1;
 		$info              = $this->flickr->photosets_getInfo( $this->flickset_id );
@@ -826,7 +835,11 @@ EOD;
 				break;
 		}
 
-		$markup            = '[gallery]';
+		if ( empty( self::$media_ids ) )
+			$markup = '[gallery]';
+		else
+			$markup = '[gallery ids="' . implode( ',', self::$media_ids ) . '"]';
+
 		$this->flickset_id = false;
 
 		return $markup;
@@ -850,6 +863,8 @@ EOD;
 	public function render_photo( $photo, $args = false ) {
 		// add image to media library
 		$image_id = $this->import_flickr_media( $photo );
+
+		self::$media_ids[] = $image_id;
 
 		// if first image, set as featured
 		if ( ! $this->featured_id )

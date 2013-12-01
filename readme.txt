@@ -5,7 +5,7 @@ Donate link: http://aihr.us/about-aihrus/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.4
 Tested up to: 3.8.0
-Stable tag: 2.0.1
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,7 +137,7 @@ See the FAQ for further localization tips.
 
 = Support =
 
-Please visit the [Flickr Shortcode Importer Knowledge Base](https://aihrus.zendesk.com/categories/20116727-Flickr-Shortcode-Importer) for frequently asked questions, offering ideas, or getting support.
+Please visit the [Flickr Shortcode Importer Support Forums](http://wordpress.org/support/plugin/flickr-shortcode-importer) for frequently asked questions, offering ideas, or getting support.
 
 If you want to contribute and I hope you do, visit the [Flickr Shortcode Importer Github repository](https://github.com/michael-cannon/flickr-shortcode-importer).
 
@@ -161,7 +161,7 @@ If you want to contribute and I hope you do, visit the [Flickr Shortcode Importe
 
 == Frequently Asked Questions ==
 
-Please visit the [Flickr Shortcode Importer Knowledge Base](https://aihrus.zendesk.com/categories/20116727-Flickr-Shortcode-Importer) for frequently asked questions, offering ideas, or getting support.
+Please visit the [Flickr Shortcode Importer Support Forums](http://wordpress.org/support/plugin/flickr-shortcode-importer) for frequently asked questions, offering ideas, or getting support.
 
 
 == Screenshots ==

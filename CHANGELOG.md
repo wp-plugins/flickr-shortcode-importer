@@ -2,6 +2,25 @@
 
 ## master
 
+## 2.1.0
+* Add option Set Descriptions
+* Aihrus Framework version 1.1.4
+* Clean up FAQ
+* Convert TODO to https://github.com/michael-cannon/flickr-shortcode-importer/issues
+* Correct [ gallery] tag inclusion
+* RESOLVE PHP Strict Standards:  call_user_func_array() expects parameter 1 to be a valid callback, non-static method Flickr_Shortcode_Importer::activation() should not be called statically
+* RESOLVES #3 After importing via post "Import [flickr] content", it's not unchecked
+* RESOLVES #4 Import of image description
+* RESOLVES #5 https URLs fails
+* RESOLVES #6 Migrate from FlickrManager fails?
+* RESOLVES dan-coulter/phpflickr#38 unexpected 'unset'
+* Revise readme installation
+* Revise readme structure
+* Specify a “Text Domain” and “Domain Path”
+* Update file structure
+* Update [PHP Wrapper for the Flickr API](https://github.com/dan-coulter/phpflickr)
+* Use Codeship.io than Travis CI
+
 ## 2.0.3
 * Correct support forums location
 * transformmed > transformed

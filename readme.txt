@@ -4,8 +4,8 @@ Contributors: comprock
 Donate link: http://aihr.us/about-aihrus/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.4
-Tested up to: 3.8.0
-Stable tag: 2.0.3
+Tested up to: 4.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Import can be run directly from edit page and post screens.
 
 The first [flickr] image found in post content is set as the post's Featured Image and removed from the post content. The remaining [flickr] shortcodes are then transformed as image links to their attachment page.  
 
-[flickrset] and [flickr-gallery] shortcodes are converted to [gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
+[flickrset] and [flickr-gallery] shortcodes are converted to [ gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
 
 Flickr-sourced A/IMG tagged media is converted into [flickr] and then imported as normal. Great for finally bringing into your control all of those media items you've been using, but now Flickr is giving you 'Image is unavaiable' for. A/IMG tag is processed before IMG to prevent unexpected results.
 
@@ -30,13 +30,13 @@ This plugin is handy for transitioning from plugin `wordpress-flickr-manager` an
 
 There is no restore functionality. Backup beforehand or be prepared to revert every transformed post by hand via the post revision tool.
 
-= Features =
+= Primary Features =
 
 * API
 * Automatically adds media ids to newly inserted gallery shortcodes
 * Flickr-sourced A/IMG tagged media imported into WordPress
 * Media of [flick] shortcodes are imported and converted to locally hosted A/IMG
-* Media of [flickrset] and [flickr-gallery] shortcodes are imported and converted to [gallery]
+* Media of [flickrset] and [flickr-gallery] shortcodes are imported and converted to [ gallery]
 * Settings export/import
 * Settings screen
 
@@ -73,6 +73,7 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 * Link Image to Attachment Page? - If set, post single view images are linked to attachment pages. Otherwise the image links to its source file.
 * Image Wrap Class - If set, a span tag is wrapped around the image with the given class. Also wraps attribution if enabled. e.g. Providing `flickr-image` results in `&lt;span class="flickr-image"&gt;|&lt;/span&gt;`
 * Set Captions - Uses media title as the caption.
+* Set Descriptions - Include Flickr descriptions in media information.
 * Include Flickr Author Attribution? - Appends Flickr username, linked back to Flickr image to the imported Flickr image.
 * Flickr Author Attribution Text
 * Flickr Author Attribution Wrap Class - If set, a span tag is wrapped around the attribution with the given class. e.g. Providing `flickr-attribution` results in `&lt;span class="flickr-attribution"&gt;|&lt;/span&gt;`
@@ -118,6 +119,10 @@ dget on posts and page edit screens.
 
 == Installation ==
 
+= Requirements =
+
+* TBD
+
 = Install Methods =
 
 * Through WordPress Admin > Plugins > Add New, Search for "Flickr Shortcode Importer"
@@ -131,7 +136,7 @@ dget on posts and page edit screens.
 * Download and unzip [`flickr-shortcode-importer.zip`](http://downloads.wordpress.org/plugin/flickr-shortcode-importer.zip) locally
 	* Using FTP, upload directory `flickr-shortcode-importer` to your website's `/wp-content/plugins/` directory
 
-= Activatation Options =
+= Activation Options =
 
 * Activate the "Flickr Shortcode Importer" plugin after uploading
 * Activate the "Flickr Shortcode Importer" plugin through WordPress Admin > Plugins
@@ -149,7 +154,7 @@ dget on posts and page edit screens.
 	* Select plugins for update, click "Update Plugins"
 * Using FTP
 	* Download and unzip [`flickr-shortcode-importer.zip`](http://downloads.wordpress.org/plugin/flickr-shortcode-importer.zip) locally
-	* FTP, upload directory `flickr-shortcode-importer` to your website's `/wp-content/plugins/` directory
+	* Upload directory `flickr-shortcode-importer` to your website's `/wp-content/plugins/` directory
 	* Be sure to overwrite your existing `flickr-shortcode-importer` folder contents
 
 
@@ -162,9 +167,9 @@ dget on posts and page edit screens.
 
 = Still Stuck or Want Something Done? Get Support! =
 
-1. [Open Flickr Shortcode Importer Issues](https://github.com/michael-cannon/flickr-shortcode-importer/issues) - review and submit bug reports and enhancement requests
-1. [Flickr Shortcode Importer Support on WordPress](http://wordpress.org/support/plugin/flickr-shortcode-importer) - ask questions and review responses
-1. [Contribute Code to Flickr Shortcode Importer](https://github.com/michael-cannon/flickr-shortcode-importer/blob/master/CONTRIBUTING.md)
+1. [Open Issues](https://github.com/michael-cannon/flickr-shortcode-importer/issues) - review and submit bug reports and enhancement requests
+1. [Support on WordPress](http://wordpress.org/support/plugin/flickr-shortcode-importer) - ask questions and review responses
+1. [Contribute Code](https://github.com/michael-cannon/flickr-shortcode-importer/blob/master/CONTRIBUTING.md)
 1. [Beta Testers Needed](http://aihr.us/become-beta-tester/) - get the latest Flickr Shortcode Importer version
 
 
@@ -183,7 +188,7 @@ dget on posts and page edit screens.
 11. Before Flickr Shortcode Importer for [flickr-gallery]
 12. Image SEO filename, image wrap class and Flickr attribution sample
 13. Edit post screen [flickr] Importer option
-14. Imported [flickr-gallery] photoset as [gallery] with media ids
+14. Imported [flickr-gallery] photoset as [ gallery] with media ids
 
 [gallery]
 

@@ -295,8 +295,11 @@ EOD;
 						AND post_parent = 0
 						AND (
 							post_content LIKE '%[flickr %'
+							OR post_content LIKE '%[flickr]%'
 							OR post_content LIKE '%[flickrset %'
+							OR post_content LIKE '%[flickrset]%'
 							OR post_content LIKE '%[flickr-gallery %'
+							OR post_content LIKE '%[flickr-gallery]%'
 							$flickr_source_where
 						)
 				";
@@ -639,7 +642,6 @@ EOD;
 		}
 
 		$post = get_post( $this->post_id );
-
 		if ( ! $post || ! in_array( $post->post_type, self::$post_types )  )
 			return;
 
@@ -735,6 +737,9 @@ EOD;
 		set_time_limit( 120 );
 
 		$photo = $this->flickr->photos_getInfo( $this->flickr_id );
+		if ( false === $photo ) {
+			return '';
+		}
 		$photo = $photo['photo'];
 		if ( ! empty( $args['set_title'] ) ) {
 			$photo['set_title'] = $args['set_title'];
@@ -1005,11 +1010,12 @@ EOD;
 
 
 	public function import_flickr_media( $photo, $mode = true ) {
+		error_log( print_r( func_get_args(), true ) . ':' . __LINE__ . ':' . basename( __FILE__ ) );
 		global $wpdb;
 
 		$photo_id  = $photo['id'];
-		$set_title = ! empty( $photo['set_title'] ) ? $photo['set_title'] : '';
-		$title     = $photo['title'];
+		$set_title = ! empty( $photo['set_title']['_content'] ) ? $photo['set_title']['_content'] : '';
+		$title     = ! empty( $photo['title']['_content'] ) ? $photo['title']['_content'] : '';
 
 		if ( fsi_get_option( 'make_nice_image_title' ) ) {
 			// if title is a filename, use set_title - menu order instead
@@ -1028,7 +1034,8 @@ EOD;
 		$desc             = '';
 		$set_descriptions = fsi_get_option( 'set_descriptions' );
 		if ( $set_descriptions ) {
-			$desc = html_entity_decode( $photo['description'] );
+			$desc = ! empty( $photo['description']['_content'] ) ? $photo['description']['_content'] : '';
+			$desc = html_entity_decode( $desc );
 		}
 
 		$date = $photo['dates']['taken'];

@@ -2,6 +2,12 @@
 
 ## master
 
+## 2.1.1
+* Clean up 2.0.3 directories from SVN
+* RESOLVE Bulk import [flickr] shortcoded media
+* RESOLVE Check for photo data '_content' field
+* RESOLVE Return no content in case getPhotoInfo fails
+
 ## 2.1.0
 * Add option Set Descriptions
 * Aihrus Framework version 1.1.4

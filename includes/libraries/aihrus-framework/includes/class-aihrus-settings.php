@@ -1,27 +1,26 @@
 <?php
-/*
-	Copyright 2014 Michael Cannon (email: mc@aihr.us)
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as
-	published by the Free Software Foundation.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+/**
+ * Aihrus Framework
+ * Copyright (C) 2015 Axelerant
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 
 /**
  * Aihrus Framework settings helper class
  *
  * Based upon http://alisothegeek.com/2011/01/wordpress-settings-api-tutorial-1/
  */
-
 require_once ABSPATH . 'wp-admin/includes/template.php';
 
 if ( class_exists( 'Aihrus_Settings' ) ) {
@@ -50,6 +49,8 @@ abstract class Aihrus_Settings {
 	);
 
 	private static $settings_saved = false;
+
+	public static $suggest_id = 0;
 
 	public function __construct() {}
 
@@ -85,6 +86,7 @@ abstract class Aihrus_Settings {
 				'desc' => esc_html__( 'These are your current settings in a serialized format. Copy the contents to make a backup of your settings.' ),
 				'std' => $serialized_options,
 				'widget' => 0,
+				'show_code' => false,
 			);
 		}
 
@@ -94,6 +96,7 @@ abstract class Aihrus_Settings {
 			'type' => 'textarea',
 			'desc' => esc_html__( 'Paste new serialized settings here to overwrite your current configuration.' ),
 			'widget' => 0,
+			'show_code' => false,
 		);
 
 		$desc = esc_html__( 'Delete all %s data and options from database on plugin deletion. Even if this option isn\'t checked, WordPress will still give a data deletion warning.' );
@@ -105,6 +108,7 @@ abstract class Aihrus_Settings {
 			'class' => 'warning',
 			'desc' => sprintf( $desc, static::NAME ),
 			'widget' => 0,
+			'show_code' => false,
 		);
 
 		static::$settings['reset_defaults'] = array(
@@ -112,7 +116,8 @@ abstract class Aihrus_Settings {
 			'title' => esc_html__( 'Reset to Defaults?' ),
 			'type' => 'checkbox',
 			'class' => 'warning',
-			'desc' => esc_html__( 'Check this box to reset options to their defaults' ),
+			'desc' => esc_html__( 'Check this box to reset options to their defaults.' ),
+			'show_code' => false,
 		);
 	}
 
@@ -124,8 +129,9 @@ abstract class Aihrus_Settings {
 
 		$do_backwards = false;
 		if ( 'backwards' == $mode ) {
-			if ( ! empty( $old_version ) )
+			if ( ! empty( $old_version ) ) {
 				$do_backwards = true;
+			}
 		}
 
 		foreach ( static::$settings as $id => $parts ) {
@@ -133,8 +139,9 @@ abstract class Aihrus_Settings {
 			if ( $do_backwards ) {
 				$version = ! empty( $parts['backwards']['version'] ) ? $parts['backwards']['version'] : false;
 				if ( ! empty( $version ) ) {
-					if ( $old_version < $version )
+					if ( $old_version < $version ) {
 						$std = $parts['backwards']['std'];
+					}
 				}
 			}
 
@@ -190,7 +197,7 @@ abstract class Aihrus_Settings {
 			'type' => $type,
 		);
 
-		static::$defaults[$id] = $std;
+		static::$defaults[ $id ] = $std;
 
 		add_settings_field( $id, $title, array( static::$class, 'display_setting' ), static::ID, $section, $field_args );
 	}
@@ -217,16 +224,16 @@ abstract class Aihrus_Settings {
 	public static function do_settings_sections( $page ) {
 		global $wp_settings_sections, $wp_settings_fields;
 
-		if ( ! isset( $wp_settings_sections ) || ! isset( $wp_settings_sections[$page] ) ) {
+		if ( ! isset( $wp_settings_sections ) || ! isset( $wp_settings_sections[ $page ] ) ) {
 			return;
 		}
 
-		foreach ( (array) $wp_settings_sections[$page] as $section ) {
+		foreach ( (array) $wp_settings_sections[ $page ] as $section ) {
 			if ( $section['callback'] ) {
 				call_user_func( $section['callback'], $section );
 			}
 
-			if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[$page] ) || ! isset( $wp_settings_fields[$page][$section['id']] ) ) {
+			if ( ! isset( $wp_settings_fields ) || ! isset( $wp_settings_fields[ $page ] ) || ! isset( $wp_settings_fields[ $page ][ $section['id'] ] ) ) {
 				continue;
 			}
 
@@ -241,24 +248,17 @@ abstract class Aihrus_Settings {
 
 
 	public static function display_about() {
-		$name = str_replace( ' Settings', '', static::NAME );
-		$text = __( '<img class="alignright size-medium" src="%1$simages/michael-cannon-red-square-300x2251.jpg" alt="Michael in Red Square, Moscow, Russia" width="300" height="225" /><a href="%2$s">%3$s</a> is by <a href="%4$s">Michael Cannon</a>. He\'s <a href="%5$s">Peichi’s</a> smiling man, an adventurous <a href="%6$s" target="_blank">water-rat</a>, <a href="%7$s">chief people officer</a>, <a href="%8$s">cyclist</a>, <a href="%9$s">full stack developer</a>, <a href="%10$s">poet</a>, <a href="%11$s">WWOOF’er</a> and <a href="%12$s">world traveler</a>.' );
+		$text  = __( '<img class="size-medium" src="%5$s" alt="Axelerant 2015 Retreat in Goa" width="640" height="327" /><p>We at Axelerant have transformed ourselves from being a simple Drupal development company into a thriving incubator for products and services related to DevOps, Drupal, ecommerce, project development, release management, WordPress, and 24/7 support. Inside Axelerant, we focus on talent that’s giving, open, passionate, process oriented, and self­directed. Our clients tend to be design agencies, media publishers, and other IT organizations.</p><h2>Vision</h2><p>Axelerant, making happiness possible</p><h2>Mission</h2><p>We’re an incubator for innovative products and services created to make the world a happier place.</p><h2>Core Values</h2><ul><li><b>Passion</b> – Our passion is so strong, we’re self­directed to make the difficult easy.</li><li><b>Openness</b> – We’re so honest and painstaking in our discussions that there are no questions left, and standards are created.</li><li><b>Giving</b> – We’re excited to share our results to inspire all to surpass them.</li></ul><p>Read more about…</p><ul><li><a href="%1$s">Axelerant Team Members</a></li><li><a href="%2$s">Drupal Give</a></li><li><a href="%3$s">How We Work</a></li><li><a href="%4$s">Testimonials</a></li><li><a href="%6$s">Careers</a></li></ul>' );
 
 		echo '<div id="about" style="width: 70%; min-height: 225px;"><p>';
 		echo sprintf(
 			$text,
-			static::$plugin_assets,
-			esc_url( static::$plugin_url ),
-			$name,
-			esc_url( 'http://aihr.us/resume/' ),
-			esc_url( 'http://peimic.com/t/peichi-liu/' ),
-			esc_url( 'http://www.chinesehoroscope.org/chinese_zodiac/rat/' ),
-			esc_url( 'http://axelerant.com/who-we-are' ),
-			esc_url( 'http://peimic.com/c/biking/' ),
-			esc_url( 'http://aihr.us/about-aihrus/' ),
-			esc_url( 'http://peimic.com/t/poetry/' ),
-			esc_url( 'http://peimic.com/t/WWOOF/' ),
-			esc_url( 'http://peimic.com/c/travel/' )
+			esc_url( '//axelerant.com/about-axelerant/axelerant-team-members/' ),
+			esc_url( '//www.axelerant.com/drupalgive' ),
+			esc_url( '//axelerant.com/about-axelerant/how-we-work/' ),
+			esc_url( '//axelerant.com/about-axelerant/testimonials/' ),
+			esc_url( '//axelerant.com/wp-content/uploads/2015/02/IGP7228-2015-01-22-at-05-18-02.jpg' ),
+			esc_url( '//axelerant.com/careers/' )
 		);
 		echo '</p></div>';
 	}
@@ -294,20 +294,20 @@ abstract class Aihrus_Settings {
 		if ( ! $disable_donate ) {
 			echo '<p>' .
 				sprintf(
-				__( 'If you like this plugin, please <a href="%1$s" title="Donate for Good Karma"><img src="%2$s" border="0" alt="Donate for Good Karma" /></a> or <a href="%3$s" title="purchase premium WordPress plugins from Aihrus ">purchase the Premium version</a> to help fund further development and <a href="%4$s" title="Support forums">support</a>.' ),
-				esc_url( 'http://aihr.us/about-aihrus/donate/' ),
+				__( 'If you like this plugin, please <a href="%1$s" title="Donate for Good Karma"><img src="%2$s" border="0" alt="Donate for Good Karma" /></a> or <a href="%3$s" title="purchase premium WordPress plugins from Axelerant ">purchase the Premium version</a> to help fund further development and <a href="%4$s" title="Support forums">support</a>.' ),
+				esc_url( '//axelerant.com/about-axelerant/donate/' ),
 				esc_url( 'https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif' ),
-				esc_url( 'http://aihr.us/store/' ),
-				esc_url( 'https://aihrus.zendesk.com/home' )
+				esc_url( '//axelerant.com/store/' ),
+				esc_url( 'https://nodedesk.zendesk.com' )
 			) .
 				'</p>';
 		}
 
 		echo '<p class="copyright">' .
 			sprintf(
-			__( 'Copyright &copy;%1$s <a href="%2$s">Aihrus</a>.' ),
+			__( 'Copyright &copy;%1$s <a href="%2$s">Axlerant</a>.' ),
 			date( 'Y' ),
-			esc_url( 'http://aihr.us' )
+			esc_url( '//axelerant.com' )
 		) .
 			'</p>';
 
@@ -317,22 +317,30 @@ abstract class Aihrus_Settings {
 	}
 
 
+	/**
+	 *
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+	 */
 	public static function display_setting( $args = array(), $do_echo = true, $input = null ) {
 		$content = '';
 
 		extract( $args );
 
+		$maxlength   = ! empty( $maxlength ) ? 'maxlength="' . $maxlength . '"' : null;
+		$placeholder = ! empty( $placeholder ) ? $placeholder : $std;
+
 		if ( is_null( $input ) ) {
 			$options = get_option( static::ID );
 		} else {
 			$options      = array();
-			$options[$id] = $input;
+			$options[ $id ] = $input;
 		}
 
-		if ( ! isset( $options[$id] ) && $type != 'checkbox' ) {
-			$options[$id] = $std;
-		} elseif ( ! isset( $options[$id] ) ) {
-			$options[$id] = 0;
+		if ( ! isset( $options[ $id ] ) && 'checkbox' != $type ) {
+			$options[ $id ] = $std;
+		} elseif ( ! isset( $options[ $id ] ) ) {
+			$options[ $id ] = 0;
 		}
 
 		$field_class = '';
@@ -344,7 +352,7 @@ abstract class Aihrus_Settings {
 		$choices     = array_map( 'esc_attr', $choices );
 		$field_class = esc_attr( $field_class );
 		$id          = esc_attr( $id );
-		$field_value = esc_attr( $options[$id] );
+		$field_value = esc_attr( $options[ $id ] );
 		$std         = esc_attr( $std );
 
 		switch ( $type ) {
@@ -353,10 +361,6 @@ abstract class Aihrus_Settings {
 
 				if ( ! empty( $desc ) ) {
 					$content .= '<label for="' . $id . '"><span class="description">' . $desc . '</span></label>';
-				}
-
-				if ( $show_code ) {
-					$content .= '<br /><code>' . $id . '</code>';
 				}
 				break;
 
@@ -370,7 +374,7 @@ abstract class Aihrus_Settings {
 				break;
 
 			case 'heading':
-				$content .= '</td></tr><tr valign="top"><td colspan="2"><h4>' . $desc . '</h4>';
+				$content .= '</td></tr><tr valign="top"><td colspan="2"><h3>' . $desc . '</h3>';
 				break;
 
 			case 'hidden':
@@ -403,10 +407,6 @@ abstract class Aihrus_Settings {
 				if ( ! empty( $desc ) ) {
 					$content .= '<br /><span class="description">' . $desc . '</span>';
 				}
-
-				if ( $show_code ) {
-					$content .= '<br /><code>' . $id . '</code>';
-				}
 				break;
 
 			case 'readonly':
@@ -418,24 +418,14 @@ abstract class Aihrus_Settings {
 				break;
 
 			case 'rich_editor':
-				global $wp_version;
-				
-				$field_value = $options[$id];
+				$field_value = $options[ $id ];
 
-				if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
-					ob_start();
-					wp_editor( $field_value, static::ID . '[' . $id . ']', array( 'textarea_name' => static::ID . '[' . $id . ']' ) );
-					$content = ob_get_clean();
-				} else {
-					$content = '<textarea class="large-text" rows="10" id="' . static::ID . '[' . $id . ']" name="' . static::ID . '[' . $id . ']">' . esc_textarea( $field_value ) . '</textarea>';
-				}
+				ob_start();
+				wp_editor( $field_value, static::ID . '[' . $id . ']', array( 'textarea_name' => static::ID . '[' . $id . ']' ) );
+				$content = ob_get_clean();
 
 				if ( ! empty( $desc ) ) {
 					$content .= '<br /><span class="description">' . $desc . '</span>';
-				}
-
-				if ( $show_code ) {
-					$content .= '<br /><code>' . $id . '</code>';
 				}
 				break;
 
@@ -451,42 +441,40 @@ abstract class Aihrus_Settings {
 				if ( ! empty( $desc ) ) {
 					$content .= '<br /><span class="description">' . $desc . '</span>';
 				}
-
-				if ( $show_code ) {
-					$content .= '<br /><code>' . $id . '</code>';
-				}
 				break;
 
 			case 'text':
-				$content .= '<input class="regular-text' . $field_class . '" type="text" id="' . $id . '" name="' . static::ID . '[' . $id . ']" placeholder="' . $std . '" value="' . $field_value . '" />';
+				$suggest_id = 'suggest_' . self::$suggest_id++;
+				$content   .= '<input class="regular-text' . $field_class . ' ' . $suggest_id . '" type="text" id="' . $id . '" name="' . static::ID . '[' . $id . ']" placeholder="' . $placeholder . '" value="' . $field_value . '" ' . $maxlength . ' />';
+
+				if ( ! empty( $suggest ) ) {
+					$content .= static::get_suggest( $id, $suggest_id );
+				}
 
 				if ( ! empty( $desc ) ) {
 					$content .= '<br /><span class="description">' . $desc . '</span>';
-				}
-
-				if ( $show_code ) {
-					$content .= '<br /><code>' . $id . '</code>';
 				}
 				break;
 
 			case 'textarea':
-				$content .= '<textarea class="' . $field_class . '" id="' . $id . '" name="' . static::ID . '[' . $id . ']" placeholder="' . $std . '" rows="5" cols="30">' . $field_value . '</textarea>';
+				$content .= '<textarea class="' . $field_class . '" id="' . $id . '" name="' . static::ID . '[' . $id . ']" placeholder="' . $placeholder . '" ' . $maxlength . ' rows="5" cols="30">' . $field_value . '</textarea>';
 
 				if ( ! empty( $desc ) ) {
 					$content .= '<br /><span class="description">' . $desc . '</span>';
 				}
+				break;
 
-				if ( $show_code ) {
-					$content .= '<br /><code>' . $id . '</code>';
-				}
+			case 'content':
+				$content .= $desc . '</td></tr>';
 				break;
 
 			default:
 				break;
 		}
 
-		if ( ! $do_echo )
+		if ( ! $do_echo ) {
 			return $content;
+		}
 
 		echo $content;
 	}
@@ -496,7 +484,7 @@ abstract class Aihrus_Settings {
 		register_setting( static::ID, static::ID, array( static::$class, 'validate_settings' ) );
 
 		foreach ( static::$sections as $slug => $title ) {
-			if ( $slug == 'about' ) {
+			if ( 'about' == $slug ) {
 				add_settings_section( $slug, $title, array( static::$class, 'display_about' ), static::ID );
 			} else {
 				add_settings_section( $slug, $title, array( static::$class, 'display_section' ), static::ID );
@@ -527,8 +515,6 @@ abstract class Aihrus_Settings {
 	 * @SuppressWarnings(PHPMD.Superglobals)
 	 */
 	public static function validate_settings( $input, $options = null, $do_errors = false ) {
-		$errors = array();
-
 		$null_options = false;
 		if ( is_null( $options ) ) {
 			$null_options = true;
@@ -558,6 +544,18 @@ abstract class Aihrus_Settings {
 				}
 			}
 		}
+
+		return self::do_validate_settings( $input, $options, $do_errors, $null_options );
+	}
+
+
+	/**
+	 *
+	 *
+	 * @SuppressWarnings(PHPMD.Superglobals)
+	 */
+	public static function do_validate_settings( $input, $options = null, $do_errors = false, $null_options = true ) {
+		$errors = array();
 
 		foreach ( $options as $id => $parts ) {
 			$default     = $parts['std'];
@@ -711,8 +709,9 @@ abstract class Aihrus_Settings {
 
 			case 'trim':
 				$options = explode( "\n", $input[ $id ] );
-				foreach ( $options as $key => $value )
+				foreach ( $options as $key => $value ) {
 					$options[ $key ] = trim( $value );
+				}
 
 				$input[ $id ] = implode( "\n", $options );
 				break;
@@ -831,6 +830,63 @@ abstract class Aihrus_Settings {
 		foreach ( static::$styles as $style ) {
 			echo $style;
 		}
+	}
+
+
+	/**
+	 * Let values like false, 'false', 0, 'off', and 'no' to be true. Else, false
+	 */
+	public static function is_false( $value = null, $return_boolean = false ) {
+		if ( false === $value || 'false' == strtolower( $value ) || 0 == $value || 'off' == strtolower( $value ) || 'no' == strtolower( $value ) ) {
+			if ( $return_boolean ) {
+				return true;
+			} else {
+				return 1;
+			}
+		} else {
+			if ( $return_boolean ) {
+				return false;
+			} else {
+				return 0;
+			}
+		}
+	}
+
+
+	public static function get_suggest( $id, $suggest_id ) {
+		wp_enqueue_script( 'suggest' );
+
+		switch ( $id ) {
+			case 'category':
+				$taxonomy = 'category';
+				break;
+
+			case 'tags':
+				$taxonomy = 'post_tag';
+				break;
+		}
+
+		$ajax_url   = site_url() . '/wp-admin/admin-ajax.php';
+		$suggest_js = "suggest( '{$ajax_url}?action=ajax-tag-search&tax={$taxonomy}', { delay: 500, minchars: 2, multiple: true, multipleSep: ', ' } )";
+
+		$scripts = <<<EOD
+<script type="text/javascript">
+jQuery(document).ready( function() {
+	jQuery( '.{$suggest_id}' ).{$suggest_js};
+});
+</script>
+EOD;
+
+		return $scripts;
+	}
+
+
+	public static function get_sections() {
+		if ( empty( static::$sections ) ) {
+			static::sections();
+		}
+
+		return static::$sections;
 	}
 
 

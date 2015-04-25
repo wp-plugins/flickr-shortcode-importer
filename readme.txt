@@ -1,6 +1,6 @@
 === Flickr Shortcode Importer ===
 
-Contributors: comprock,saurabhd
+Contributors: comprock, saurabhd
 Donate link: http://axelerant.com/about-axelerant/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.4

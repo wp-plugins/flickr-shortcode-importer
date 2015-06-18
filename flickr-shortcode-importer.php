@@ -3,9 +3,9 @@
  * Plugin Name: Flickr Shortcode Importer
  * Plugin URI: http://wordpress.org/extend/plugins/flickr-shortcode-importer/
  * Description: Flickr Shortcode Importer by Axelerant imports [flickr], [flickrset], [flickr-gallery] shortcodes and Flickr-sourced media into the Media Library.
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Axelerant
- * Author URI: http://axelerant.com/
+ * Author URI: https://axelerant.com/
  * License: GPLv2 or later
  * Text Domain: flickr-shortcode-importer
  * Domain Path: /languages
@@ -13,7 +13,7 @@
 
 
 /**
- * Copyright 2015 Axelerant (email: info@axelerant.com)
+ * Copyright 2015 Axelerant
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
  * published by the Free Software Foundation.
@@ -27,29 +27,37 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
-if ( ! defined( 'FSI_AIHR_VERSION' ) )
-	define( 'FSI_AIHR_VERSION', '1.2.0' );
+if ( ! defined( 'FSI_AIHR_VERSION' ) ) {
+	define( 'FSI_AIHR_VERSION', '1.2.2' );
+}
 
-if ( ! defined( 'FSI_BASE' ) )
+if ( ! defined( 'FSI_BASE' ) ) {
 	define( 'FSI_BASE', plugin_basename( __FILE__ ) );
+}
 
-if ( ! defined( 'FSI_DIR' ) )
+if ( ! defined( 'FSI_DIR' ) ) {
 	define( 'FSI_DIR', plugin_dir_path( __FILE__ ) );
+}
 
-if ( ! defined( 'FSI_DIR_INC' ) )
+if ( ! defined( 'FSI_DIR_INC' ) ) {
 	define( 'FSI_DIR_INC', FSI_DIR . 'includes/' );
+}
 
-if ( ! defined( 'FSI_DIR_LIB' ) )
+if ( ! defined( 'FSI_DIR_LIB' ) ) {
 	define( 'FSI_DIR_LIB', FSI_DIR_INC . 'libraries/' );
+}
 
-if ( ! defined( 'FSI_NAME' ) )
+if ( ! defined( 'FSI_NAME' ) ) {
 	define( 'FSI_NAME', 'Testimonials by Axelerant' );
+}
 
-if ( ! defined( 'FSI_VERSION' ) )
-	define( 'FSI_VERSION', '2.2.0' );
+if ( ! defined( 'FSI_VERSION' ) ) {
+	define( 'FSI_VERSION', '2.2.1' );
+}
 
 require_once FSI_DIR_INC . 'requirements.php';
 

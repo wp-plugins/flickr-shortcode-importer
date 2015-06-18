@@ -1,6 +1,6 @@
 <?php
 /*
-	Copyright 2015 Axelerant (email: info@axelerant.com)
+	Copyright 2015 Axelerant
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -21,7 +21,7 @@ require_once FSI_DIR_LIB . 'aihrus-framework/aihrus-framework.php';
 
 function fsi_requirements_check( $force_check = false ) {
 	$check_okay = get_transient( 'fsi_requirements_check' );
-	if ( empty( $force_check ) && $check_okay !== false ) {
+	if ( empty( $force_check ) && false !== $check_okay ) {
 		return $check_okay;
 	}
 

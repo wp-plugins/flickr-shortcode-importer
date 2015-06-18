@@ -2,6 +2,10 @@
 
 ## master
 
+## 2.2.1
+* Require Aihrus Framework version 1.2.2
+* Update store branding
+
 ## 2.2.0
 * Aihrus Framework version 1.2.0
 * RESOLVE static referencing of $this->flickset_id

@@ -5,7 +5,7 @@ Donate link: https://axelerant.com/about-axelerant/donate/
 Tags: flickr,import,featured image,photo,image,video
 Requires at least: 3.9.2
 Tested up to: 4.3.0
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,7 @@ The first [flickr] image found in post content is set as the post's Featured Ima
 
 [flickrset] and [flickr-gallery] shortcodes are converted to [ gallery] after the Flickr set images have been added to the Media Library. If 'Set Featured Image' is checked in Options, then the first image of the [flickrset] is used as such.
 
-Flickr-sourced A/IMG tagged media is converted into [flickr] and then imported as normal. Great for finally bringing into your control all of those media items you've been using, but now Flickr is giving you 'Image is unavaiable' for. A/IMG tag is processed before IMG to prevent unexpected results.
+Flickr-sourced A/IMG tagged media is converted into [flickr] and then imported as normal. Great for finally bringing into your control all of those media items you've been using, but now Flickr is giving you 'Image is unavailable' for. A/IMG tag is processed before IMG to prevent unexpected results.
 
 Image attribution links can be added if enabled via Settings.
 
@@ -44,7 +44,6 @@ There is no restore functionality. Backup beforehand or be prepared to revert ev
 
 * [flickr size="small" float="left"]http://www.flickr.com/photos/dancoulter/2619594365/[/flickr] (image)
 * [flickr height="300" width="400"]http://www.flickr.com/photos/dancoulter/2422361554/[/flickr] (video)
-* WARNING: Video media imported, but doesn't seem to work
 * [flickr id="5348222727" thumbnail="small" overlay="false" size="large" group="" align="none"]
 * [flickrset id="72157631107721746" thumbnail="small" photos="" overlay="true" size="large"]
 * [flickr-gallery mode="photoset" photoset="72157626302265777"]
@@ -121,7 +120,10 @@ dget on posts and page edit screens.
 
 = Requirements =
 
-* TBD
+* PHP 5.3+ [Read notice](https://nodedesk.zendesk.com/hc/en-us/articles/202331041) – Since 2.16.0
+* WordPress 3.6+
+* [jQuery 1.10+](https://nodedesk.zendesk.com/hc/en-us/articles/202244022)
+
 
 = Install Methods =
 
